@@ -1,0 +1,202 @@
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+--
+-- Host: localhost    Database: skillstorm_db
+-- ------------------------------------------------------
+-- Server version	8.0.43
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `challenges`
+--
+
+DROP TABLE IF EXISTS `challenges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `challenges` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `challenge_name` varchar(255) NOT NULL,
+  `description` text,
+  `category` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `challenges`
+--
+
+LOCK TABLES `challenges` WRITE;
+/*!40000 ALTER TABLE `challenges` DISABLE KEYS */;
+INSERT INTO `challenges` VALUES (1,'Global Oratory and Communication Certificate',NULL,'Global Open Challenges','2026-06-20 14:35:42','2026-06-20 14:35:42'),(2,'Advanced Research Publication',NULL,'Global Mastery Battles','2026-06-20 14:39:42','2026-06-20 14:39:42'),(3,'Entrepreneurship and Innovation Accelerator',NULL,'Global Open Challenges','2026-06-22 08:38:33','2026-06-22 08:38:33'),(4,'Diplomatic Policy Leadership',NULL,'Global Mastery Battles','2026-06-22 09:20:01','2026-06-22 09:20:01'),(5,'Legal Advocacy Professional',NULL,'Global Mastery Battles','2026-07-28 09:47:03','2026-07-28 09:47:03'),(6,'Digital Media Strategy',NULL,'Global Mastery Battles','2026-08-03 06:47:30','2026-08-03 06:47:30'),(7,'Executive Project Management',NULL,'Global Mastery Battles','2026-08-04 06:28:03','2026-08-04 06:28:03'),(8,'Digital Systems Architecture',NULL,'Global Mastery Battles','2026-08-04 06:29:05','2026-08-04 06:29:05'),(9,'Investment Banking Elite',NULL,'Global Mastery Battles','2026-08-04 06:38:56','2026-08-04 06:38:56'),(10,'Global Communication Mastery',NULL,'Global Mastery Battles','2026-08-04 07:59:02','2026-08-04 07:59:02');
+/*!40000 ALTER TABLE `challenges` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `courses`
+--
+
+DROP TABLE IF EXISTS `courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `courses` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `difficulty` enum('Beginner','Intermediate','Advanced') DEFAULT 'Intermediate',
+  `pricing` enum('Free','Paid') DEFAULT 'Free',
+  `visibility` enum('Public','Private') DEFAULT 'Public',
+  `is_public` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `image` varchar(255) DEFAULT NULL,
+  `about_the_track` text,
+  `phase1` varchar(255) DEFAULT NULL,
+  `final` varchar(255) DEFAULT NULL,
+  `extras` varchar(255) DEFAULT NULL,
+  `lessons` json DEFAULT NULL,
+  `what_will_i_learn` text,
+  `target_audience` text,
+  `duration_hours` int DEFAULT NULL,
+  `duration_mins` int DEFAULT NULL,
+  `materials_included` text,
+  `requirements` text,
+  `lectures` int DEFAULT '0',
+  `students_max` int DEFAULT '0',
+  `level` varchar(255) DEFAULT 'All Levels',
+  `language` varchar(255) DEFAULT 'English',
+  `certificate` varchar(255) DEFAULT 'Yes',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `courses`
+--
+
+LOCK TABLES `courses` WRITE;
+/*!40000 ALTER TABLE `courses` DISABLE KEYS */;
+INSERT INTO `courses` VALUES (2,'Diplomatic Policy Leadership','<h2><br></h2><i><b>Dive into governance, diplomacy, and global relations — from public policy and civic leadership to persuasive debate and campaign strategy.</b></i><div><br></div>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Advanced','Paid','Public',1,'2026-07-28 12:29:32','2026-08-03 06:40:36','https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80','','Submit a policy pitch or debate video for shortlisting','Shine in live negotiations and panel diplomacy rounds','Policy templates and access to virtual youth summits','[{\"title\": \"Lesson 1\", \"video\": \"http://localhost:5001/uploads/1785735475539-TT.mp4\", \"duration\": \"10\", \"syllabus\": \"Introduction to global governance and the fundamentals of public policy creation.\"}, {\"title\": \"Lesson 2\", \"video\": \"http://localhost:5001/uploads/1785735482384-TT.mp4\", \"syllabus\": \"Effective debate techniques and strategies for persuasive diplomatic communication.\"}]','Promotes peace and stability.\nStrengthens international relationships.\nEncourages economic growth through trade and partnerships.\nHelps address global challenges such as climate change, terrorism, and pandemics.','Students',10,25,'Foreign Policy: The goals and strategies of a country\'s international relations.\nDiplomacy: The methods used to achieve those foreign policy goals through negotiation and communication.','',2,0,'All Levels','English','Yes'),(3,'Legal Advocacy Professional','Understand justice systems, legal research, case writing, and courtroom communication.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Advanced','Paid','Public',1,'2026-07-28 12:29:32','2026-08-03 05:20:43','https://images.unsplash.com/photo-1556761175-4b46a572b786?w=500&q=80','','Submit a mock-trial or advocacy video','Face live legal argument sessions with expert judges','Legal writing guides and virtual courtroom workshops','[{\"title\": \"Lesson 1\", \"video\": \"http://localhost:5001/uploads/1785734427306-TT.mp4\", \"syllabus\": \"Overview of the justice system, legal research methods, and case analysis.\"}, {\"title\": \"Lesson 2\", \"video\": \"http://localhost:5001/uploads/1785734437721-TS.mp4\", \"syllabus\": \"Drafting legal documents and mastering courtroom communication skills.\"}]','','',11,0,'','',7,0,'All Levels','English','Yes'),(4,'Advanced Research Publication','Apply real-world science and engineering skills — from research design to data storytelling.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Advanced','Paid','Public',1,'2026-07-28 12:29:32','2026-08-03 06:05:16','https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80','','Submit a research abstract or visualisation','Defend your findings live before academic judges','Research toolkits and academic publishing resources','[{\"title\": \"Lesson 1\", \"video\": \"http://localhost:5001/uploads/1785737106902-TS.mp4\", \"syllabus\": \"Fundamentals of research design, methodology, and ethical considerations.\"}, {\"title\": \"Lesson 2\", \"video\": \"http://localhost:5001/uploads/1785737114155-TT.mp4\", \"syllabus\": \"Data analysis and translating findings into compelling narratives for publication.\"}]','','',10,0,'','',8,0,'All Levels','English','Yes'),(5,'Digital Media Strategy','Create high-impact media content — mastering storytelling, editing, branding, and campaign strategy.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Intermediate','Paid','Public',1,'2026-07-28 12:29:32','2026-08-03 06:04:52','https://images.unsplash.com/photo-1542744094-3a31f272c490?w=500&q=80','','Submit a digital media piece or article','Present your live strategy to industry professionals','Media starter packs and virtual journalism labs','[{\"title\": \"Lesson 1\", \"video\": \"http://localhost:5001/uploads/1785737084102-TS.mp4\", \"syllabus\": \"Principles of digital storytelling and establishing a strong brand identity.\"}, {\"title\": \"Lesson 2\", \"video\": \"http://localhost:5001/uploads/1785737090467-TT.mp4\", \"syllabus\": \"Campaign strategy, audience targeting, and content editing techniques.\"}]','','',10,0,'','',10,0,'All Levels','English','Yes'),(6,'Entrepreneurial Visionary Accelerator','Turn ideas into ventures — explore innovation, market research, finance basics, and pitching mastery.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Intermediate','Paid','Public',1,'2026-07-28 12:29:32','2026-08-01 18:08:47','https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80','','Submit a business pitch video','Pitch live to industry guests and investors','Business plan templates and mentorship opportunities','[{\"title\": \"Lesson 1\", \"syllabus\": \"Ideation, market research, and identifying viable business opportunities.\"}, {\"title\": \"Lesson 2\", \"syllabus\": \"Financial basics for startups and crafting an irresistible investor pitch.\"}]','','',7,0,'','',7,0,'All Levels','English','Yes'),(7,'Executive Project Management','Master leadership, time management, risk handling, and execution excellence.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Intermediate','Paid','Public',1,'2026-07-28 12:29:32','2026-08-01 18:08:59','https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=80','','Submit a project plan or simulation','Perform live project briefs under real constraints','Leadership frameworks and project templates','[{\"title\": \"Lesson 1\", \"syllabus\": \"Core principles of project management, scope definition, and time management.\"}, {\"title\": \"Lesson 2\", \"syllabus\": \"Risk assessment, mitigation strategies, and leading teams to execution.\"}]','','',4,0,'','',4,0,'All Levels','English','Yes'),(8,'Global Communication Mastery','Develop confident communication through structured speech, presentation, and persuasive dialogue.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Intermediate','Paid','Public',1,'2026-07-28 12:29:32','2026-08-01 18:09:17','https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&q=80','','Submit a communication analysis video','Participate in live panel discussions','Public speaking guides and debate resources','[{\"title\": \"Lesson 1\", \"syllabus\": \"Foundations of public speaking and structuring persuasive presentations.\"}, {\"title\": \"Lesson 2\", \"syllabus\": \"Engaging audiences in dialogue, answering tough questions, and panel mastery.\"}]','','',12,0,'','',12,0,'All Levels','English','Yes'),(9,'Digital Systems Architecture','Design the future — from coding logic and software design to complex system building.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Advanced','Paid','Public',1,'2026-07-28 12:29:32','2026-08-01 18:09:37','https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&q=80','','Submit a system design architecture plan','Defend your architecture live before technical experts','Coding templates and cloud architecture credits','[{\"title\": \"Lesson 1\", \"syllabus\": \"Introduction to system design patterns and scalable software architecture.\"}, {\"title\": \"Lesson 2\", \"syllabus\": \"Cloud infrastructure basics, microservices, and securing digital systems.\"}]','','',8,0,'','',8,0,'All Levels','English','Yes'),(10,'Investment Banking Elite','Understand global finance — investment banking, markets, M&amp;A, ethics, and modelling.<br><br>Prepare yourself for an intense, rewarding experience. This track is designed to challenge your skills, foster teamwork, and provide actionable feedback from industry leaders.','Advanced','Paid','Public',1,'2026-07-28 12:29:32','2026-08-01 18:09:27','https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&q=80','','Submit a financial model or market analysis','Present a live M&A pitch to finance professionals','Financial modelling templates and industry reports','[{\"title\": \"Lesson 1\", \"syllabus\": \"Overview of investment banking, financial markets, and ethical standards.\"}, {\"title\": \"Lesson 2\", \"syllabus\": \"Financial modeling techniques, valuation, and Mergers & Acquisitions (M&A).\"}]','','',6,0,'','',6,0,'All Levels','English','Yes');
+/*!40000 ALTER TABLE `courses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `registrations`
+--
+
+DROP TABLE IF EXISTS `registrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `registrations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(255) NOT NULL,
+  `age` int NOT NULL,
+  `country` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `parent_name` varchar(255) DEFAULT NULL,
+  `parent_email` varchar(255) DEFAULT NULL,
+  `parent_consent` tinyint(1) DEFAULT '0',
+  `payment_amount` decimal(10,2) DEFAULT '1.00',
+  `challenge_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `video_path` varchar(255) DEFAULT NULL,
+  `poster_path` varchar(255) DEFAULT NULL,
+  `summary` text,
+  `teams_data` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `registrations`
+--
+
+LOCK TABLES `registrations` WRITE;
+/*!40000 ALTER TABLE `registrations` DISABLE KEYS */;
+INSERT INTO `registrations` VALUES (1,'Swaroop',25,'India','Ernakulam','123@123','123456',NULL,NULL,1,1.00,'Global Oratory and Communication Certificate, Digital Media Strategy, Executive Project Management, Digital Systems Architecture','2026-06-20 14:35:42',NULL,NULL,NULL,'{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}'),(2,'Salman',22,'Angola','ss','sa@gmail.com','123456',NULL,NULL,0,1.00,'Advanced Research Publication, Diplomatic Policy Leadership, Investment Banking Elite','2026-06-20 14:39:42',NULL,NULL,NULL,'{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}'),(3,'Malavika',18,'Australia','kollam','ma@gmail.com','789456',NULL,NULL,1,1.00,'Global Oratory and Communication Certificate, Executive Project Management','2026-06-20 16:54:17',NULL,NULL,NULL,'{}'),(4,'Riju',28,'Albania','kottayam','ri@gmail.com','123456',NULL,NULL,1,1.00,'Entrepreneurship and Innovation Accelerator, Global Communication Mastery, Digital Systems Architecture','2026-06-22 08:38:33',NULL,NULL,NULL,'{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}'),(7,'shalu',22,'Cuba','aa','sh@gmail.com','789456','ee','rr',1,1.00,'Legal Advocacy Professional','2026-07-28 10:46:57',NULL,NULL,NULL,NULL),(8,'a',22,'Angola','ss','a@gmail.com','123456',NULL,NULL,1,1.00,'Legal Advocacy Professional','2026-07-31 05:11:09',NULL,NULL,NULL,NULL),(10,'Nandan',22,'Germany','susu','nam@gmail.com','123456',NULL,NULL,1,1.00,'Legal Advocacy Professional, Advanced Research Publication, Digital Media Strategy','2026-08-03 05:36:15',NULL,NULL,NULL,'{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}'),(11,'swaroop',23,'India','susu','swa@gmail.com','123456',NULL,NULL,1,1.00,'Legal Advocacy Professional','2026-08-04 09:58:03',NULL,NULL,NULL,NULL),(12,'sww',23,'Germany','susu','sww@gmail.com','123456',NULL,NULL,1,1.00,'Digital Systems Architecture','2026-08-04 10:02:46',NULL,NULL,NULL,NULL),(13,'swww',21,'Germany','susu','swww@gmail.com','123456',NULL,NULL,1,1.00,'Digital Systems Architecture','2026-08-04 10:03:55',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `registrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `submissions`
+--
+
+DROP TABLE IF EXISTS `submissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `submissions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `registration_id` varchar(100) NOT NULL,
+  `video_path` varchar(500) NOT NULL,
+  `poster_path` varchar(500) DEFAULT NULL,
+  `summary` text,
+  `status` varchar(50) DEFAULT 'pending',
+  `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `challenge_name` varchar(255) DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_reg` (`registration_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `submissions`
+--
+
+LOCK TABLES `submissions` WRITE;
+/*!40000 ALTER TABLE `submissions` DISABLE KEYS */;
+INSERT INTO `submissions` VALUES (1,'OC-2024-78934','1782119270960-643393753.mp4','1782119271069-871226617.jpg','sdfjkertyuiodfjkcvbnm nsdtydufyuff','pending','2026-06-22 09:07:51',NULL,NULL),(2,'7','/uploads/1785236124025-TT.mp4','/uploads/1785236124092-WIN_20260702_09_44_39_Pro.jpg','','Submitted','2026-07-28 10:55:24','Legal Advocacy Professional','Global Mastery Battles');
+/*!40000 ALTER TABLE `submissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(50) DEFAULT 'user',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'superadmin','superadmin','superadmin','2026-06-19 10:55:02');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-08-04 16:57:46
