@@ -1,0 +1,1021 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <h2>SkillStorm Admin</h2>
+    </div>
+    <nav class="nav-menu">
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'dashboard'" 
+        (click)="switchTab('dashboard')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+        </span>
+        <span>Overview</span>
+      </button>
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'registrations'" 
+        (click)="switchTab('registrations')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </span>
+        <span>Registrations</span>
+      </button>
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'users'" 
+        (click)="switchTab('users')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </span>
+        <span>System Users</span>
+      </button>
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'courses'" 
+        (click)="switchTab('courses')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+        </span>
+        <span>Courses</span>
+      </button>
+    </nav>
+    <div class="logout-container">
+      <button class="logout-btn" (click)="logout()">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </span>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="topbar">
+      <h1>{{ activeTab === 'dashboard' ? 'Dashboard Overview' : (activeTab === 'registrations' ? 'Registration Entries' : (activeTab === 'courses' ? 'Course Management' : 'System Users')) }}</h1>
+      <div class="admin-profile">
+        <span class="admin-name">Super Admin</span>
+        <div class="avatar">SA</div>
+      </div>
+    </header>
+
+    <div class="content-wrapper" *ngIf="!isLoading">
+      
+      <!-- Dashboard Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'dashboard'">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon registrations-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <h3>Total Registrations</h3>
+              <p class="stat-value">{{ stats.totalRegistrations }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon users-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="stat-info">
+              <h3>System Users</h3>
+              <p class="stat-value">{{ stats.totalUsers }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon challenges-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v6a5 5 0 0 1-10 0V4Z"></path><path d="M3 4h4v6a2 2 0 0 0 2 2h0"></path><path d="M21 4h-4v6a2 2 0 0 1-2 2h0"></path></svg>
+            </div>
+            <div class="stat-info">
+              <h3>Active Challenges</h3>
+              <p class="stat-value">{{ stats.totalChallenges }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-section">
+          <h2>Recent Registrations</h2>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Challenge</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let reg of registrations | slice:0:5">
+                  <td>#{{ reg.id }}</td>
+                  <td>{{ reg.full_name }}</td>
+                  <td><span class="badge challenge-badge">{{ reg.challenge_name || 'N/A' }}</span></td>
+                  <td><span class="badge category-badge">{{ reg.category || 'N/A' }}</span></td>
+                  <td>{{ reg.created_at | date:'mediumDate' }}</td>
+                </tr>
+                <tr *ngIf="registrations.length === 0">
+                  <td colspan="5" class="empty-state">No registrations found.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registrations Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'registrations'">
+        
+        <!-- Registration Type Filters -->
+        <div class="type-filters">
+          <button class="type-filter-btn" [class.active]="selectedTypeFilter === 'all'" (click)="setTypeFilter('all')">
+            All Registrations <span class="count-badge">{{ registrationsCount.all }}</span>
+          </button>
+          <button class="type-filter-btn" [class.active]="selectedTypeFilter === 'school'" (click)="setTypeFilter('school')">
+            School Registrations <span class="count-badge school-count">{{ registrationsCount.school }}</span>
+          </button>
+          <button class="type-filter-btn" [class.active]="selectedTypeFilter === 'individual'" (click)="setTypeFilter('individual')">
+            Individual Registrations <span class="count-badge individual-count">{{ registrationsCount.individual }}</span>
+          </button>
+        </div>
+
+        <div class="table-container" style="margin-top: 20px;">
+          <table class="data-table full-width">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Participant Details</th>
+                <th>Location</th>
+                <th>Challenge & Category</th>
+                <th>Date Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reg of filteredRegistrations">
+                <td>#{{ reg.id }}</td>
+                <td>
+                  <div class="user-details">
+                    <strong>
+                      {{ reg.full_name }}
+                      <span class="type-badge" [ngClass]="reg.registration_type === 'school' ? 'school-badge' : 'individual-badge'">
+                        {{ reg.registration_type === 'school' ? 'School' : 'Individual' }}
+                      </span>
+                    </strong>
+                    <span class="meta">{{ reg.email }} {{ reg.registration_type === 'individual' ? '• Age ' + reg.age : '' }}</span>
+                  </div>
+                </td>
+                <td>{{ reg.city }}, {{ reg.country }}</td>
+                <td>
+                  <div class="user-details">
+                    <span class="badge challenge-badge">{{ reg.challenge_name || 'N/A' }}</span>
+                    <span class="badge category-badge" style="margin-top:4px;">{{ reg.category || 'N/A' }}</span>
+                  </div>
+                </td>
+                <td>{{ reg.created_at | date:'mediumDate' }}</td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="action-btn flex-center" (click)="viewParticipant(reg)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      View
+                    </button>
+                    <button class="action-btn flex-center" (click)="deleteParticipant(reg.id)" style="color: #e53e3e; border-color: rgba(229, 62, 62, 0.2); background: rgba(229, 62, 62, 0.05);" onmouseover="this.style.background='rgba(229, 62, 62, 0.1)'; this.style.borderColor='rgba(229, 62, 62, 0.3)';" onmouseout="this.style.background='rgba(229, 62, 62, 0.05)'; this.style.borderColor='rgba(229, 62, 62, 0.2)';">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredRegistrations.length === 0">
+                <td colspan="6" class="empty-state">No registrations found for the selected type.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Users Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'users'">
+        <div class="table-container">
+          <table class="data-table full-width">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td>#{{ user.id }}</td>
+                <td><strong>{{ user.username }}</strong></td>
+                <td><span class="badge role-badge" [ngClass]="user.role">{{ user.role | titlecase }}</span></td>
+                <td>{{ user.created_at | date:'mediumDate' }}</td>
+                <td>
+                  <button class="action-btn flex-center" (click)="editUser(user)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    Edit
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="users.length === 0">
+                <td colspan="5" class="empty-state">No users found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Courses Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'courses'">
+        
+        <!-- Course List View -->
+        <div *ngIf="!isAddingCourse && !isViewingCourse">
+          <!-- Sub Tabs Navigation -->
+        <div class="type-filters" style="margin-bottom: 24px;">
+          <button class="type-filter-btn" [class.active]="activeCourseTab === 'overview'" (click)="switchCourseTab('overview')">
+            Overview
+          </button>
+          <button class="type-filter-btn" [class.active]="activeCourseTab === 'topic'" (click)="switchCourseTab('topic')">
+            Topics
+          </button>
+        </div>
+
+        <!-- Overview Sub-Tab -->
+        <div *ngIf="activeCourseTab === 'overview'" class="fade-in">
+          <div class="stats-grid" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#fff7ed; color:#f97316;">
+                <!-- Book / Course icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="7" height="18"></rect><rect x="9" y="3" width="13" height="18"></rect></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Total Courses</h3>
+                <p class="stat-value">{{ courses.length }}</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:#f0fdf4; color:#16a34a;">
+                <!-- Shield / Published icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <div class="stat-info">
+                <h3>Published</h3>
+                <p class="stat-value">{{ publishedCoursesCount }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="table-container">
+            <div style="padding: 16px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2d3748;">Course Catalog <span style="font-size: 13px; font-weight: 400; color: #718096; margin-left: 8px;">{{ courses.length }} course{{ courses.length !== 1 ? 's' : '' }}</span></h3>
+              <button class="action-btn primary-btn flex-center" (click)="toggleAddCourse(true)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Course
+              </button>
+            </div>
+
+            <!-- Course table when courses exist -->
+            <table class="data-table" *ngIf="courses.length > 0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course Title</th>
+                  <th>Difficulty</th>
+                  <th>Pricing</th>
+                  <th>Visibility</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let course of courses; let i = index">
+                  <td style="color: #a0aec0; font-size: 13px;">#{{ courses.length - i }}</td>
+                  <td>
+                    <div class="user-details">
+                      <strong style="color: #2d3748;">{{ course.title }}</strong>
+                      <span class="meta" *ngIf="course.description">{{ getCourseDescriptionPreview(course.description) }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'challenge-badge': course.difficulty === 'Intermediate',
+                      'school-badge': course.difficulty === 'Beginner',
+                      'individual-badge': course.difficulty === 'Advanced'
+                    }">{{ course.difficulty }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="course.pricing === 'Free' ? 'consent-badge' : 'category-badge'">{{ course.pricing }}</span>
+                  </td>
+                  <td style="color: #4a5568; font-size: 14px;">{{ course.visibility }}</td>
+                  <td>
+                    <div style="display: flex; gap: 6px; flex-wrap: nowrap;">
+                      <button class="action-btn flex-center" (click)="viewCourse(course)" title="View">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        View
+                      </button>
+                      <button class="action-btn flex-center" (click)="editCourse(i)" title="Edit">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                        Edit
+                      </button>
+                      <button class="action-btn flex-center delete-btn" (click)="deleteCourse(i)" title="Delete">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Empty state when no courses -->
+            <div style="padding: 40px; text-align: center; color: #718096;" *ngIf="courses.length === 0">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 16px; margin-left: auto; margin-right: auto; display: block;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <p>No courses found. Add a new course to get started.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Topic Sub-Tab -->
+        <div *ngIf="activeCourseTab === 'topic'" class="fade-in">
+          
+          <!-- Course Selection List -->
+          <div *ngIf="!selectedCourseForTopic" class="table-container">
+            <div style="padding: 16px 24px; border-bottom: 1px solid #e2e8f0;">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #2d3748;">Select Course to Manage Topics</h3>
+            </div>
+            
+            <table class="data-table" *ngIf="courses.length > 0">
+              <thead>
+                <tr>
+                  <th>Course Title</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let course of courses; let i = index">
+                  <td>
+                    <div class="user-details">
+                      <strong style="color: #2d3748;">{{ course.title }}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="action-btn flex-center" (click)="viewCourse(course)" title="View">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        View
+                      </button>
+                      <button class="action-btn flex-center" (click)="selectCourseForTopic(course)" title="Add Topics">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Add
+                      </button>
+                      <button class="action-btn flex-center" (click)="deleteCourse(i)" title="Delete" style="color: #e53e3e; border-color: rgba(229,62,62,0.2); background: rgba(229,62,62,0.05);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div style="padding: 40px; text-align: center; color: #718096;" *ngIf="courses.length === 0">
+              <p>No courses found. Add a new course from Overview tab.</p>
+            </div>
+          </div>
+
+          <div *ngIf="selectedCourseForTopic" class="modal-overlay" (click)="closeTopicModal()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+              <div class="modal-header" style="justify-content: space-between; align-items: center; gap: 12px;">
+                  <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="action-btn flex-center" type="button" (click)="closeTopicModal()" style="background: transparent; border: 1px solid rgba(148, 163, 184, 0.3); color: #334155; padding: 10px 14px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                      Back
+                    </button>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                      <h2 style="margin: 0; font-size: 28px; font-weight: 700; color: #1f2937;">{{ selectedCourseForTopic.title }}</h2>
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="action-btn primary-btn" type="button" (click)="saveTopicChanges()">Save Topic</button>
+                    <button class="action-btn secondary-btn" type="button" (click)="addTopicLessonTab()">Add Topic</button>
+                  </div>
+                </div>
+
+              <div class="modal-body">
+                <div class="topic-window">
+                  <div class="topic-window-header">
+                    <div>
+                      <h3 class="topic-window-title">Lesson Builder</h3>
+                      <p class="topic-window-subtitle">Manage the course lessons and upload lesson videos from one window.</p>
+                    </div>
+                  </div>
+
+                  <div class="topic-lessons-grid">
+                    <div *ngIf="selectedCourseForTopic.lessons && selectedCourseForTopic.lessons.length > 0">
+                      <div *ngFor="let lesson of selectedCourseForTopic.lessons; let i = index" class="lesson-card">
+                        <div class="lesson-card-header">
+                          <div>
+                            <p class="lesson-card-label">Lesson {{ i + 1 }}</p>
+                            <strong class="lesson-card-title">{{ lesson.title || 'Lesson ' + (i + 1) }}</strong>
+                          </div>
+                          <button class="remove-btn" type="button" (click)="removeTopicLesson(i)">Remove</button>
+                        </div>
+
+                        <div class="lesson-card-meta">
+                          <input type="text" class="lesson-card-field lesson-input" [(ngModel)]="lesson.title" placeholder="Lesson {{ i + 1 }}" />
+                          <input type="text" class="lesson-card-field lesson-input" [(ngModel)]="lesson.duration" placeholder="Duration (e.g. 10 mins)" />
+                        </div>
+
+                        <div class="lesson-card-description">
+                          <label class="field-label" for="lesson-desc-{{ i }}">Brief description</label>
+                          <textarea id="lesson-desc-{{ i }}" class="lesson-textarea" [(ngModel)]="lesson.syllabus" placeholder="Lesson description"></textarea>
+                        </div>
+
+                        <div class="lesson-card-actions">
+                          <button class="upload-link" type="button" (click)="openTopicLessonVideoUploader(i)">Upload Lesson Video</button>
+                          <span *ngIf="lesson.video" class="video-status">Video uploaded</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="!selectedCourseForTopic.lessons || selectedCourseForTopic.lessons.length === 0" class="lesson-empty-state">
+                      <p>No lessons are present yet. Use Add Topic to begin building this course.</p>
+                    </div>
+                  </div>
+
+                  <div *ngIf="isAddingTopic" class="table-container topic-add-form">
+                    <h3 class="additional-section-title" style="margin-bottom: 24px;">Add New Topic</h3>
+                    <div class="additional-field">
+                      <label class="additional-label">Topic Title</label>
+                      <input type="text" class="additional-textarea" [(ngModel)]="newTopicData.title" placeholder="e.g. Introduction to the Course" style="padding: 10px 14px; height: auto; width: 100%;">
+                    </div>
+
+                    <div class="additional-field">
+                      <label class="additional-label">Description (Optional)</label>
+                      <textarea
+                        class="additional-textarea"
+                        [(ngModel)]="newTopicData.description"
+                        placeholder="Briefly describe what this topic covers"
+                        rows="3"
+                        style="width: 100%;"
+                      ></textarea>
+                    </div>
+
+                    <div class="additional-field">
+                      <label class="additional-label">Lesson Video (Optional)</label>
+                      <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="text" class="additional-textarea" [(ngModel)]="newTopicData.video" placeholder="Uploaded video URL" style="flex: 1;" readonly>
+                        <input type="file" #topicVideoUpload style="display: none;" (change)="onTopicVideoUpload($event)" accept="video/mp4,video/quicktime,video/webm">
+                        <button class="action-btn flex-center" type="button" (click)="topicVideoUpload.click()" style="padding: 10px 16px;">Upload Video</button>
+                      </div>
+                    </div>
+
+                    <div class="additional-field">
+                      <label class="additional-label">Topic Image (Optional)</label>
+                      <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="text" class="additional-textarea" [(ngModel)]="newTopicData.image" placeholder="Uploaded image URL" style="flex: 1;" readonly>
+                        <input type="file" #topicImageUpload style="display: none;" (change)="onTopicImageUpload($event)" accept="image/*">
+                        <button class="action-btn flex-center" type="button" (click)="topicImageUpload.click()" style="padding: 10px 16px;">Upload Image</button>
+                      </div>
+                      <div *ngIf="newTopicData.image" style="margin-top: 12px; max-width: 420px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; background: #fff;">
+                        <img [src]="newTopicData.image" alt="Topic image preview" style="width: 100%; display: block; object-fit: cover;">
+                      </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+                      <button class="action-btn flex-center" (click)="toggleAddTopic(false)">Cancel</button>
+                      <button class="action-btn primary-btn" (click)="saveTopic()">Save Topic</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input #lessonVideoUploadInput type="file" style="display: none;" (change)="onTopicLessonVideoUpload($event)" accept="video/mp4,video/quicktime,video/webm">
+            </div>
+          </div>
+        </div>
+
+
+        </div> <!-- End of Course List View -->
+
+        <!-- Add Course View -->
+        <div *ngIf="isAddingCourse" class="add-course-container fade-in">
+          
+          <div class="ac-header">
+            <button class="action-btn flex-center" (click)="toggleAddCourse(false)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Back to Courses
+            </button>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #2d3748;">{{ editingCourseIndex >= 0 ? 'Edit Course' : 'Add New Course' }}</h3>
+            <button class="action-btn primary-btn flex-center" (click)="saveCourse()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              {{ editingCourseIndex >= 0 ? 'Update Course' : 'Publish Course' }}
+            </button>
+          </div>
+
+          <div class="ac-layout">
+            
+            <!-- Main Content Area -->
+            <div class="ac-main">
+              <!-- Title Block -->
+              <div class="ac-block">
+                <label class="ac-label">Title <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
+                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.title" placeholder="e.g. Introduction to Programming">
+                <p class="ac-url-preview">
+                  Course URL: <a href="#">https://ufs.net.in/inmyacademy/courses/{{ newCourseData.title.toLowerCase().replace(' ', '-') }}</a>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; color: #a0aec0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </p>
+              </div>
+
+              <!-- Description Block -->
+              <div class="ac-block">
+                <label class="ac-label">Description <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
+                
+                <div class="ac-editor">
+                  <div class="ac-editor-top-actions">
+                  </div>
+                  
+                  <div class="ac-editor-toolbar">
+                    <div class="ac-toolbar-divider"></div>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('bold')"><b>B</b></button>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('italic')"><i>I</i></button>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('underline')"><span style="text-decoration: underline;">U</span></button>
+                  </div>
+                  <div contenteditable="true" #editorRef class="ac-editor-content" (input)="onEditorInput()" (mouseup)="saveSelection()" (keyup)="saveSelection()" (focus)="saveSelection()" style="min-height: 200px; padding: 12px; font-family: inherit; font-size: 14px; outline: none;"></div>
+                </div>
+              </div>
+
+              <div class="ac-block">
+                <label class="ac-label">What Will I Learn?</label>
+                <textarea
+                  class="ac-input"
+                  [(ngModel)]="newCourseData.what_will_i_learn"
+                  placeholder="Define the key takeaways from this course (list one benefit per line)"
+                  rows="4"
+                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
+                ></textarea>
+              </div>
+
+              <div class="ac-block">
+                <label class="ac-label">Phase 1</label>
+                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.phase1" placeholder="e.g. Submit a policy pitch or debate video for shortlisting">
+              </div>
+
+              <div class="ac-block">
+                <label class="ac-label">Final</label>
+                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.final" placeholder="e.g. Shine in live negotiations and panel diplomacy rounds">
+              </div>
+
+              <div class="ac-block">
+                <label class="ac-label">Extras</label>
+                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.extras" placeholder="e.g. Policy templates and access to virtual youth summits">
+              </div>
+
+
+              <div class="ac-block">
+                <label class="ac-label">Target Audience</label>
+                <textarea
+                  class="ac-input"
+                  [(ngModel)]="newCourseData.target_audience"
+                  placeholder="Specify the target audience that will benefit the most from the course. (One Line Per target audience)"
+                  rows="3"
+                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
+                ></textarea>
+              </div>
+
+
+              <div class="ac-block">
+                <label class="ac-label">Materials Included</label>
+                <textarea
+                  class="ac-input"
+                  [(ngModel)]="newCourseData.materials_included"
+                  placeholder="A list of assets you will be providing for the students in this course (One Per Line)"
+                  rows="4"
+                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
+                ></textarea>
+              </div>
+
+              <div class="ac-block">
+                <label class="ac-label">Requirements/Instructions</label>
+                <textarea
+                  class="ac-input"
+                  [(ngModel)]="newCourseData.requirements"
+                  placeholder="Additional requirements or special instructions for the students (One Per Line)"
+                  rows="3"
+                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
+                ></textarea>
+              </div>
+
+
+            </div> <!-- End Main Content -->
+
+            <!-- Sidebar Content Area -->
+            <div class="ac-sidebar">
+              <!-- Visibility Card -->
+              <div class="ac-card">
+                <label class="ac-label">Visibility</label>
+                <div class="ac-field">
+                  <select class="ac-input" style="font-weight: 500;" [(ngModel)]="newCourseData.visibility">
+                    <option value="Public">👁 Public</option>
+                    <option value="Private">🔒 Private</option>
+                  </select>
+                </div>
+                <p class="ac-subtext">Last updated on 28th July, 2026</p>
+                <div class="ac-field ac-schedule-field">
+                  <span style="font-size: 14px; font-weight: 500; color: #4a5568;">Schedule</span>
+                  <div class="ac-toggle-switch" [class.on]="false">
+                    <div class="ac-toggle-knob"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Featured Image Card -->
+              <div class="ac-card">
+                <label class="ac-label">Featured Image <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.image" placeholder="Image URL (e.g. https://images.unsplash.com/...)" style="flex: 1;">
+                  <input type="file" #featuredImageUpload style="display:none" (change)="onFeaturedImageUpload($event)" accept="image/*">
+                  <button class="ac-btn-small" style="background: #e2e8f0; color: #4a5568; padding: 0 12px; height: 42px;" (click)="triggerFeaturedImageUpload(featuredImageUpload)">Upload</button>
+                </div>
+                <div *ngIf="newCourseData.image" style="margin-top: 12px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+                  <img [src]="newCourseData.image" style="width: 100%; height: auto; display: block;" />
+                </div>
+              </div>
+
+              <!-- Course Meta Card -->
+              <div class="ac-card">
+                <label class="ac-label">Course Meta</label>
+                
+                <div class="ac-field">
+                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Duration (Hours)</label>
+                  <input type="number" class="ac-input" [(ngModel)]="newCourseData.duration_hours" placeholder="e.g. 120">
+                </div>
+
+                <div class="ac-field">
+                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Lectures</label>
+                  <input type="number" class="ac-input" [(ngModel)]="newCourseData.lectures" placeholder="e.g. 11">
+                </div>
+                
+                <div class="ac-field">
+                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Level</label>
+                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.level" placeholder="e.g. All Levels">
+                </div>
+                
+                <div class="ac-field">
+                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Language</label>
+                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.language" placeholder="e.g. English">
+                </div>
+                
+                <div class="ac-field">
+                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Certificate</label>
+                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.certificate" placeholder="e.g. Yes">
+                </div>
+              </div>
+
+
+
+              <!-- Pricing Model Card -->
+              <div class="ac-card">
+                <label class="ac-label">Pricing Model</label>
+                <div class="ac-radio-group">
+                  <label class="ac-radio-label">
+                    <input type="radio" name="pricing" value="Free" [(ngModel)]="newCourseData.pricing">
+                    <span class="ac-radio-custom"></span> Free
+                  </label>
+                  <label class="ac-radio-label">
+                    <input type="radio" name="pricing" value="Paid" [(ngModel)]="newCourseData.pricing">
+                    <span class="ac-radio-custom"></span> Paid
+                  </label>
+                </div>
+              </div>
+
+              <!-- Categories Card -->
+              <div class="ac-card" style="margin-bottom: 0;">
+                <label class="ac-label">Categories</label>
+                <div class="ac-upload-box" style="padding: 24px;">
+                  <div class="ac-spinner"></div>
+                </div>
+              </div>
+
+            </div> <!-- End Sidebar Content -->
+          </div>
+        </div>
+
+        <!-- View Course Full Page -->
+        <div *ngIf="isViewingCourse && selectedCourse" class="add-course-container fade-in">
+          <div class="ac-header">
+            <button class="action-btn flex-center" (click)="closeCourseModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Back to Courses
+            </button>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #2d3748;">{{ selectedCourse.title }}</h3>
+            <button class="action-btn primary-btn flex-center" (click)="editCourseById(selectedCourse.id); isViewingCourse = false">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              Edit Course
+            </button>
+          </div>
+
+          <div class="ac-layout">
+            <div class="ac-main">
+              <div class="ac-block">
+                <label class="ac-label">Description</label>
+                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;">
+                  <div [innerHTML]="sanitizeHtml(selectedCourse.description)"></div>
+                  <div *ngIf="selectedCourse.about_the_track" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #cbd5e0;" [innerHTML]="sanitizeHtml(selectedCourse.about_the_track)"></div>
+                </div>
+              </div>
+
+              <div class="ac-block" *ngIf="selectedCourse.lessons && selectedCourse.lessons.length > 0">
+                <label class="ac-label">Topics / Lessons</label>
+                <div style="display: grid; gap: 16px;">
+                  <div *ngFor="let lesson of selectedCourse.lessons; let j = index" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                    <div style="display: flex; justify-content: space-between; gap: 12px; align-items: flex-start;">
+                      <div>
+                        <h4 style="margin: 0 0 6px 0; font-size: 16px; font-weight: 700; color: #1f2937;">Lesson {{ j + 1 }}: {{ lesson.title || 'Untitled Topic' }}</h4>
+                        <p style="margin: 0; color: #64748b;">{{ lesson.syllabus || lesson.description || 'No description provided.' }}</p>
+                      </div>
+                      <span style="font-size: 13px; color: #4a5568; padding: 8px 12px; border-radius: 999px; background: #f8fafc;">Topic</span>
+                    </div>
+                    <div *ngIf="lesson.video" style="margin-top: 16px;">
+                      <video controls style="width: 100%; max-height: 260px; border-radius: 12px; background: #000;">
+                        <source [src]="lesson.video" type="video/mp4">
+                        Your browser does not support this video.
+                      </video>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ac-block" *ngIf="selectedCourse.phase1">
+                <label class="ac-label">Phase 1</label>
+                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.phase1)"></div>
+              </div>
+
+              <div class="ac-block" *ngIf="selectedCourse.final">
+                <label class="ac-label">Final</label>
+                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.final)"></div>
+              </div>
+
+              <div class="ac-block" *ngIf="selectedCourse.extras">
+                <label class="ac-label">Extras</label>
+                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.extras)"></div>
+              </div>
+            </div>
+
+            <div class="ac-sidebar">
+              <div class="ac-card">
+                <label class="ac-label">Course Details</label>
+                <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #718096; font-size: 14px;">Difficulty Level</span>
+                    <span class="badge" [ngClass]="{'challenge-badge': selectedCourse.difficulty === 'Intermediate', 'school-badge': selectedCourse.difficulty === 'Beginner', 'individual-badge': selectedCourse.difficulty === 'Advanced'}">{{ selectedCourse.difficulty }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #718096; font-size: 14px;">Pricing Model</span>
+                    <span class="badge" [ngClass]="selectedCourse.pricing === 'Free' ? 'consent-badge' : 'category-badge'">{{ selectedCourse.pricing }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #718096; font-size: 14px;">Visibility</span>
+                    <span style="font-size: 14px; font-weight: 500; color: #2d3748;">{{ selectedCourse.visibility }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #718096; font-size: 14px;">Public Course</span>
+                    <span style="font-size: 14px; font-weight: 500; color: #2d3748;">{{ selectedCourse.is_public ? 'Yes' : 'No' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="ac-card" *ngIf="selectedCourse.image" style="margin-top: 20px; padding: 0; overflow: hidden;">
+                <img [src]="selectedCourse.image" alt="Course image" style="width: 100%; height: 220px; object-fit: cover; display: block;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-spinner" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading dashboard data...</p>
+    </div>
+
+
+
+    <!-- Participant Modal -->
+    <div class="modal-overlay" *ngIf="selectedParticipant" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeModal()">×</button>
+        <div class="modal-header">
+          <h2>{{ selectedParticipant.registration_type === 'school' ? 'School Details' : 'Participant Details' }}</h2>
+          <span class="badge category-badge">{{ selectedParticipant.category || 'No Category' }}</span>
+        </div>
+        <div class="modal-body">
+          <div class="detail-group">
+            <label>{{ selectedParticipant.registration_type === 'school' ? 'School Name' : 'Full Name' }}</label>
+            <p>{{ selectedParticipant.full_name }}</p>
+          </div>
+          <div class="detail-group">
+            <label>{{ selectedParticipant.registration_type === 'school' ? 'School Email' : 'Email Address' }}</label>
+            <p>{{ selectedParticipant.email }}</p>
+          </div>
+          <div class="detail-group" *ngIf="selectedParticipant.registration_type === 'individual'">
+            <label>Age</label>
+            <p>{{ selectedParticipant.age }} years old</p>
+          </div>
+          <div class="detail-group">
+            <label>Location</label>
+            <p>{{ selectedParticipant.city }}, {{ selectedParticipant.country }}</p>
+          </div>
+          <div class="detail-group">
+            <label>Registered Challenge</label>
+            <p class="highlight-text">{{ selectedParticipant.challenge_name }}</p>
+          </div>
+          <div class="detail-group">
+            <label>Registration Date</label>
+            <p>{{ selectedParticipant.created_at | date:'medium' }}</p>
+          </div>
+          <div class="detail-group">
+            <label>Registration Type</label>
+            <p>
+              <span class="type-badge" style="margin-left:0; font-size: 13px;" [ngClass]="selectedParticipant.registration_type === 'school' ? 'school-badge' : 'individual-badge'">
+                {{ selectedParticipant.registration_type === 'school' ? 'School Registration' : 'Individual Registration' }}
+              </span>
+            </p>
+          </div>
+
+          <!-- Entry Details Section -->
+          <div class="entry-info-section" *ngIf="selectedParticipant.video_path || selectedParticipant.summary || selectedParticipant.poster_path">
+            <h3 style="margin: 0; font-size: 18px; color: #2d3748; font-weight: 600;">Entry Details & Attachments</h3>
+            
+            <div class="detail-group" *ngIf="selectedParticipant.summary" style="margin-top: 8px;">
+              <label>Participant's Short Summary</label>
+              <p style="background: #fff; padding: 16px; border-radius: 8px; font-style: italic; border: 1px solid #e2e8f0; line-height: 1.5; color: #4a5568;">
+                "{{ selectedParticipant.summary }}"
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 12px;">
+              <div class="detail-group" *ngIf="selectedParticipant.video_path">
+                <label>Uploaded Video</label>
+                <div style="margin-top: 8px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #000; display: flex; align-items: center; justify-content: center;">
+                  <video controls style="width: 100%; max-height: 300px; outline: none;">
+                    <source [src]="'http://localhost:5001' + selectedParticipant.video_path" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <a [href]="'http://localhost:5001' + selectedParticipant.video_path" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 14px; color: #ed8936; font-weight: 500; text-decoration: none;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  Open Video
+                </a>
+              </div>
+
+              <div class="detail-group" *ngIf="selectedParticipant.poster_path">
+                <label>Poster / Cover Image</label>
+                <div style="margin-top: 8px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #f7fafc; display: flex; align-items: center; justify-content: center; height: 100%; min-height: 200px;">
+                  <img [src]="'http://localhost:5001' + selectedParticipant.poster_path" alt="Entry Poster" style="width: 100%; max-height: 300px; object-fit: contain;">
+                </div>
+                <a [href]="'http://localhost:5001' + selectedParticipant.poster_path" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 14px; color: #ed8936; font-weight: 500; text-decoration: none;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  Open Image
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="parent-info-section" *ngIf="selectedParticipant.registration_type === 'individual' && selectedParticipant.parent_name">
+            <h3>Parent / Guardian Information</h3>
+            <div class="detail-group">
+              <label>Parent Name</label>
+              <p>{{ selectedParticipant.parent_name }}</p>
+            </div>
+            <div class="detail-group">
+              <label>Parent Email</label>
+              <p>{{ selectedParticipant.parent_email }}</p>
+            </div>
+            <div class="detail-group">
+              <label>Parental Consent</label>
+              <p>
+                <span class="badge" [ngClass]="selectedParticipant.parent_consent ? 'consent-badge' : 'role-badge'">
+                  {{ selectedParticipant.parent_consent ? 'Consent Granted' : 'Pending' }}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="parent-info-section" *ngIf="selectedParticipant.registration_type === 'school' && selectedParticipant.parent_name">
+            <h3>Coordinator Information</h3>
+            <div class="detail-group">
+              <label>Coordinator Name</label>
+              <p>{{ selectedParticipant.parent_name }}</p>
+            </div>
+            <div class="detail-group">
+              <label>Coordinator Email</label>
+              <p>{{ selectedParticipant.parent_email }}</p>
+            </div>
+          </div>
+
+          <div class="parent-info-section" *ngIf="selectedParticipant.parsedTeams && (selectedParticipant.parsedTeams.trailblazersCount > 0 || selectedParticipant.parsedTeams.visioneersCount > 0 || selectedParticipant.parsedTeams.strategistsCount > 0)">
+            <h3>Registered Teams</h3>
+            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.trailblazersCount > 0">
+              <label>Trailblazers Teams</label>
+              <p>{{ selectedParticipant.parsedTeams.trailblazersCount }}</p>
+            </div>
+            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.visioneersCount > 0">
+              <label>Visioneers Teams</label>
+              <p>{{ selectedParticipant.parsedTeams.visioneersCount }}</p>
+            </div>
+            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.strategistsCount > 0">
+              <label>Strategists Teams</label>
+              <p>{{ selectedParticipant.parsedTeams.strategistsCount }}</p>
+            </div>
+            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.studentNames && objectKeys(selectedParticipant.parsedTeams.studentNames).length > 0" style="grid-column: 1 / -1;">
+              <label>Student Names</label>
+              <div *ngFor="let team of getGroupedTeams(selectedParticipant.parsedTeams.studentNames)" style="margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin: 0 0 8px 0; color: #2d3748; font-size: 15px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">{{ team.teamName }}</h4>
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                  <li *ngFor="let member of team.members" style="margin-bottom: 6px; font-size: 14px; color: #4a5568; display: flex;">
+                    <strong style="width: 80px; flex-shrink: 0;">{{ member.label }}:</strong> <span>{{ member.name }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="action-btn primary-btn" (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal-overlay" *ngIf="selectedUser" (click)="closeUserModal()">
+      <div class="modal-content" style="max-width: 450px;" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeUserModal()">×</button>
+        <div class="modal-header">
+          <h2>Edit System User</h2>
+          <span class="badge role-badge" [ngClass]="selectedUser.role">{{ selectedUser.role | titlecase }}</span>
+        </div>
+        <div class="modal-body" style="grid-template-columns: 1fr;">
+          <div class="detail-group">
+            <label>Username</label>
+            <p>{{ selectedUser.username }}</p>
+          </div>
+          <div class="detail-group">
+            <label>System Role</label>
+            <select #roleSelect class="form-input" style="width: 100%; border: 1px solid #DDDDDD; border-radius: 6px; padding: 10px 14px; font-size: 15px; margin-top: 6px;">
+              <option value="user" [selected]="selectedUser.role === 'user'">User</option>
+              <option value="superadmin" [selected]="selectedUser.role === 'superadmin'">Super Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: space-between;">
+          <button class="action-btn" (click)="closeUserModal()">Cancel</button>
+          <button class="action-btn primary-btn" (click)="saveUser(roleSelect.value)">Save Changes</button>
+        </div>
+      </div>
+    </div>
+    <!-- Additional Info Modal -->
+    <div class="modal-overlay" *ngIf="viewingAdditionalCourse" (click)="closeAdditionalModal()">
+      <div class="modal-content" style="max-width: 600px;" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeAdditionalModal()">×</button>
+        <div class="modal-header">
+          <div>
+            <h2 style="margin: 0 0 4px 0;">{{ viewingAdditionalCourse.title }}</h2>
+            <p style="margin: 0; font-size: 14px; color: #718096;">Additional Information</p>
+          </div>
+        </div>
+        <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="detail-group">
+            <label style="font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase;">What Will I Learn?</label>
+            <p style="white-space: pre-wrap; font-size: 14px; color: #2d3748; margin-top: 4px; padding: 12px; background: #f7fafc; border-radius: 6px; border: 1px solid #e2e8f0;">{{ additionalData.what_will_i_learn || 'Not specified' }}</p>
+          </div>
+          <div class="detail-group">
+            <label style="font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase;">Target Audience</label>
+            <p style="white-space: pre-wrap; font-size: 14px; color: #2d3748; margin-top: 4px; padding: 12px; background: #f7fafc; border-radius: 6px; border: 1px solid #e2e8f0;">{{ additionalData.target_audience || 'Not specified' }}</p>
+          </div>
+          <div class="detail-group">
+            <label style="font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase;">Course Duration</label>
+            <p style="font-size: 14px; color: #2d3748; margin-top: 4px; font-weight: 500;">{{ additionalData.duration_hours }} hour(s) {{ additionalData.duration_mins }} min(s)</p>
+          </div>
+          <div class="detail-group">
+            <label style="font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase;">Materials Included</label>
+            <p style="white-space: pre-wrap; font-size: 14px; color: #2d3748; margin-top: 4px; padding: 12px; background: #f7fafc; border-radius: 6px; border: 1px solid #e2e8f0;">{{ additionalData.materials_included || 'Not specified' }}</p>
+          </div>
+          <div class="detail-group">
+            <label style="font-size: 13px; font-weight: 600; color: #718096; text-transform: uppercase;">Requirements/Instructions</label>
+            <p style="white-space: pre-wrap; font-size: 14px; color: #2d3748; margin-top: 4px; padding: 12px; background: #f7fafc; border-radius: 6px; border: 1px solid #e2e8f0;">{{ additionalData.requirements || 'Not specified' }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="action-btn primary-btn" (click)="closeAdditionalModal()">Close</button>
+        </div>
+      </div>
+    </div>
+    
+  </main>
+</div>

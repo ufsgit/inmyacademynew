@@ -1,0 +1,8 @@
+/* Challenge details styles */
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .footer-links-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

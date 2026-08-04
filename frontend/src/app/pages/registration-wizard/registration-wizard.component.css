@@ -1,0 +1,33 @@
+/* Custom style rules for Registration Wizard Component */
+a:hover {
+  color: #D20A00 !important;
+}
+button:hover {
+  opacity: 0.9;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .wizard-section {
+    padding: 100px 16px 40px 16px !important;
+  }
+  .wizard-card {
+    padding: 24px !important;
+  }
+  .category-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .category-row > div:last-child {
+    align-items: flex-start !important;
+    width: 100%;
+  }
+  /* For form inputs grid, which are display: grid; gap: ... */
+  /* Assuming there might be two-column grids in the step 3/4 */
+  .wizard-card > div[style*="display:flex"] {
+     /* We must be careful not to break everything. */
+  }
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

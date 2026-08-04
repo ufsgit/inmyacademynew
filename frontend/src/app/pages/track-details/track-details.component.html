@@ -1,0 +1,133 @@
+@if (!registerOnly) {
+<div class="track-details-page">
+<div class="track-details-container">
+  <div class="main-content" *ngIf="track">
+    <div class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">← Back</button>
+      <h1 class="track-title">{{ track.title }}</h1>
+    </div>
+    <div class="track-description" [innerHTML]="sanitizeHtml(track.description)"></div>
+
+    <div class="track-stages">
+      <div class="stage-card">
+        <span class="stage-badge">Phase 1</span>
+        <p class="stage-text">{{ track.phase1 }}</p>
+      </div>
+
+      <div class="stage-card">
+        <span class="stage-badge">Final</span>
+        <p class="stage-text">{{ track.final }}</p>
+      </div>
+    </div>
+
+    <div class="extras-section">
+      <strong>Extras:</strong> {{ track.extras }}
+    </div>
+
+    <div class="course-progress-card" *ngIf="track">
+      <div class="progress-label-row">
+        <strong>Course Progress</strong>
+        <span>{{ getLessonProgressLabel() }}</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" [style.width.%]="courseProgress"></div>
+      </div>
+      <p class="progress-text">{{ courseProgress }}% complete</p>
+    </div>
+
+    <h2 class="section-title" *ngIf="track.lessons && track.lessons.length > 0">Course Content</h2>
+    <div class="accordion" style="margin-bottom: 24px;" *ngIf="track.lessons && track.lessons.length > 0">
+      <div class="accordion-item-container" *ngFor="let lesson of track.lessons; let i = index">
+        <div class="accordion-item" (click)="toggleLesson(i)" [class.open]="openLessonIndex === i">
+          <span>{{ lesson.title || ('Topic ' + (i + 1)) }}</span>
+          <svg class="chevron" [class.rotated]="openLessonIndex === i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+        </div>
+        <div class="accordion-content" *ngIf="openLessonIndex === i">
+          <p>{{ lesson.syllabus || lesson.description || 'No details available for this topic.' }}</p>
+          <div class="lesson-actions">
+            <div *ngIf="lesson.video" class="lesson-video-action">
+              <button type="button" class="video-icon-btn" (click)="$event.stopPropagation(); toggleVideoPreview(i)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="video-icon-svg"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Preview Video
+              </button>
+            </div>
+          </div>
+          <div *ngIf="previewVideoIndex === i" class="lesson-video-preview">
+            <video controls style="width: 100%; max-height: 400px; border-radius: 12px; background: #000;" (ended)="onLessonVideoEnded(i)">
+              <source [src]="lesson.video" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title" *ngIf="track.what_will_i_learn">What Will I Learn?</h2>
+    <p class="description" style="white-space: pre-wrap;" *ngIf="track.what_will_i_learn">
+      {{ track.what_will_i_learn }}
+    </p>
+
+    <h2 class="section-title" *ngIf="track.target_audience">Target Audience</h2>
+    <p class="description" style="white-space: pre-wrap;" *ngIf="track.target_audience">
+      {{ track.target_audience }}
+    </p>
+
+    <h2 class="section-title" *ngIf="track.materials_included">Materials Included</h2>
+    <p class="description" style="white-space: pre-wrap;" *ngIf="track.materials_included">
+      {{ track.materials_included }}
+    </p>
+
+    <h2 class="section-title" *ngIf="track.requirements">Requirements/Instructions</h2>
+    <p class="description" style="white-space: pre-wrap;" *ngIf="track.requirements">
+      {{ track.requirements }}
+    </p>
+  </div>
+  <div class="main-content" *ngIf="!track">
+    <p class="description">Loading track details...</p>
+  </div>
+
+  <div class="sidebar">
+    <div class="enroll-card">
+      <h3 class="price">{{ track?.pricing === 'Free' ? 'Free' : 'Paid' }}</h3>
+      <button class="enroll-btn" type="button" (click)="purchaseCourse()">Enroll Now</button>
+      <p class="access-note">{{ track?.pricing === 'Free' ? 'Free access this course' : 'Premium course' }}</p>
+    </div>
+
+    <div class="details-card" *ngIf="track">
+      <div class="detail-row">
+        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span class="detail-label">Duration:</span>
+        <span class="detail-value">{{ track.duration_hours || 0 }} hours</span>
+      </div>
+      <div class="detail-row">
+        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span class="detail-label">Lectures:</span>
+        <span class="detail-value">{{ track.lectures || 0 }}</span>
+      </div>
+
+      <div class="detail-row">
+        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+        <span class="detail-label">Level:</span>
+        <span class="detail-value">{{ track.level || 'All Levels' }}</span>
+      </div>
+      <div class="detail-row">
+        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span class="detail-label">Language:</span>
+        <span class="detail-value">{{ track.language || 'English' }}</span>
+      </div>
+      <div class="detail-row">
+        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span class="detail-label">Certificate:</span>
+        <span class="detail-value">{{ track.certificate || 'Yes' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+} @else {
+  <app-registration-form 
+    [entryFee]="track?.pricing === 'Free' ? 0 : 25" 
+    [challengeName]="track?.title || 'Course Registration'" 
+    category="Global Mastery Battles">
+  </app-registration-form>
+}

@@ -1,0 +1,62 @@
+<div class="learning-lessons-page" *ngIf="!isLoading && track">
+  <div class="learning-header">
+    <button class="back-btn" type="button" (click)="router.navigate(['/courses'])">← Back to Dashboard</button>
+    <div>
+      <h1>{{ track.title }}</h1>
+      <p class="subtitle">{{ track.description }}</p>
+    </div>
+  </div>
+
+  <div class="learning-status">
+    <div>
+      <p class="progress-label">Course Progress</p>
+      <h2>{{ courseProgress }}%</h2>
+      <p>{{ getProgressLabel() }}</p>
+    </div>
+    <div class="course-summary">
+      <p><strong>Duration</strong>: {{ track.duration_hours || 0 }} hours</p>
+      <p><strong>Lectures</strong>: {{ getLessonCount() }}</p>
+      <p><strong>Level</strong>: {{ track.level || 'All Levels' }}</p>
+      <p><strong>Language</strong>: {{ track.language || 'English' }}</p>
+    </div>
+  </div>
+
+  <section class="lesson-description" *ngIf="track.what_will_i_learn">
+    <h3>What You Will Learn</h3>
+    <p>{{ track.what_will_i_learn }}</p>
+  </section>
+
+  <section class="course-content">
+    <h3>Lessons</h3>
+    <div *ngFor="let lesson of track.lessons; let i = index" class="lesson-card">
+      <div class="lesson-header" (click)="toggleLesson(i)">
+        <div>
+          <span class="lesson-number">Lesson {{ i + 1 }}</span>
+          <span class="lesson-title">{{ lesson.title || 'Lesson ' + (i + 1) }}</span>
+        </div>
+      </div>
+      <div *ngIf="openLessonIndex === i" class="lesson-body">
+        <p>{{ lesson.syllabus || lesson.description || 'No lesson details available.' }}</p>
+        <div *ngIf="lesson.video" class="video-actions">
+          <button class="play-btn" type="button" (click)="toggleVideoPreview(i)">
+            {{ previewVideoIndex === i ? 'Hide Video' : 'Watch Video' }}
+          </button>
+        </div>
+        <div *ngIf="previewVideoIndex === i" class="video-player">
+          <video controls preload="metadata" crossorigin="anonymous" [src]="lesson.video" style="width: 100%; max-height: 440px; border-radius: 12px; background: #000;" (ended)="onLessonVideoEnded(i)" (error)="onVideoError($event, lesson.video)">
+            Your browser does not support the video tag.
+          </video>
+          <p class="video-debug"><a [href]="lesson.video" target="_blank" rel="noopener noreferrer">Open video file</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div *ngIf="!isLoading && !track" class="loading-state">
+  <p>Course not found.</p>
+</div>
+
+<div *ngIf="isLoading" class="loading-state">
+  <p>Loading learning page...</p>
+</div>

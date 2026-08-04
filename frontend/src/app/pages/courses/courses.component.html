@@ -1,0 +1,266 @@
+<div class="courses-page">
+  <div class="container">
+
+    <div class="courses-dashboard">
+      <!-- ── Sidebar ── -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <button class="sidebar-link" [class.active]="activeTab === 'dashboard'" (click)="selectTab('dashboard')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h8V3H3v10z"/><path d="M13 21h8v-6h-8v6z"/><path d="M13 13h8V3h-8v10z"/><path d="M3 21h8v-4H3v4z"/></svg>
+            Dashboard
+          </button>
+          <button class="sidebar-link" [class.active]="activeTab === 'enrolled'" (click)="selectTab('enrolled')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Enrolled Courses
+          </button>
+          <button class="sidebar-link" [class.active]="activeTab === 'orders'" (click)="selectTab('orders')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 10h18"/><path d="M7 18h10"/><path d="M7 14h6"/></svg>
+            Order History
+          </button>
+          <button class="sidebar-link" [class.active]="activeTab === 'notifications'" (click)="selectTab('notifications')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notifications
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-link" [class.active]="activeTab === 'profile'" (click)="selectTab('profile')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Profile
+          </button>
+          <a routerLink="/" class="sidebar-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout
+          </a>
+        </nav>
+      </aside>
+
+      <!-- ── Content ── -->
+      <section class="content-area" [ngClass]="{ 'detail-view': activeTab === 'courseDetail' }">
+
+        <!-- DASHBOARD VIEW -->
+        @if (activeTab === 'dashboard') {
+          <div class="content-header">
+            <div>
+              <h1 class="content-title">Dashboard</h1>
+              <p class="content-subtitle">Your course summary at a glance</p>
+            </div>
+          </div>
+          <div class="dashboard-boxes">
+            <div class="stat-card stat-purple">
+              <div class="stat-info">
+                <p class="stat-label">Enrolled Courses</p>
+                <p class="stat-value">{{ purchasedCourses.length }}</p>
+              </div>
+            </div>
+            <div class="stat-card stat-blue">
+              <div class="stat-info">
+                <p class="stat-label">Active Courses</p>
+                <p class="stat-value">{{ inProgressCount }}</p>
+              </div>
+            </div>
+            <div class="stat-card stat-green">
+              <div class="stat-info">
+                <p class="stat-label">Completed Courses</p>
+                <p class="stat-value">{{ completedCount }}</p>
+              </div>
+            </div>
+          </div>
+        }
+
+
+
+        <!-- COURSES VIEW -->
+        @if (activeTab === 'all' || activeTab === 'enrolled') {
+          <div class="content-header">
+            <div>
+              <h1 class="content-title">My Courses</h1>
+              <p class="content-subtitle">Continue your learning journey</p>
+            </div>
+          </div>
+
+          <div *ngIf="isLoading" class="status-block">
+            <p>Loading courses...</p>
+          </div>
+
+          @if (!isLoading) {
+            <!-- Purchased Courses Section -->
+            @if (purchasedCourses.length > 0) {
+
+              <div class="course-grid">
+                @for (course of purchasedCourses; track course.id) {
+                  <div class="course-card">
+                    <div class="course-card-image">
+                      <img [src]="course.image" [alt]="course.title">
+
+                    </div>
+                    <div class="course-card-body">
+                      <div class="course-card-top-row">
+                        <div>
+                          <h3 class="course-card-title">{{ course.title }}</h3>
+                          <p class="course-card-lessons">{{ getLessonCount(course) }} Lessons</p>
+                        </div>
+                        <button class="course-card-menu" type="button" aria-label="Menu">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </button>
+                      </div>
+                      <div class="course-card-progress-info">
+                        <div class="course-progress-bar-top">
+                          <span class="course-progress-text">{{ course.completedCount || 0 }} / {{ getLessonCount(course) }} Lessons Completed</span>
+                          <span class="course-progress-number">{{ course.progress || 0 }}%</span>
+                        </div>
+                        <div class="course-progress-bar">
+                          <div class="course-progress-bar-fill" [style.width.%]="course.progress || 0"></div>
+                        </div>
+                      </div>
+                      <button class="course-card-btn" [class.completed]="course.progress === 100" type="button" (click)="goToCourse(course)">
+                        {{ course.progress === 100 ? 'Review Course' : 'Continue Learning' }}
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            @if (purchasedCourses.length === 0 && activeTab === 'enrolled') {
+              <div class="status-block">
+                <p>No enrolled courses yet. <a routerLink="/skillstorm/mastery-battles" style="color:#7c3aed;font-weight:700;">Enroll in a mastery course</a> to get started.</p>
+              </div>
+            }
+
+          }
+        }
+
+        <!-- COURSE DETAIL VIEW -->
+        @if (activeTab === 'courseDetail' && selectedCourse) {
+          <div class="course-detail-card">
+
+
+            <div class="course-detail-header">
+              <div class="course-detail-info">
+                <h2 class="course-detail-title">{{ selectedCourse.title }}</h2>
+                <p class="course-detail-text" [innerHTML]="selectedCourse.description"></p>
+              </div>
+            </div>
+
+            <div class="course-detail-stat-grid">
+              <div class="course-detail-stat-card">
+                <span class="course-meta-label">Course Progress</span>
+                <span class="course-meta-value">{{ selectedCourse.progress || 0 }}%</span>
+              </div>
+              <div class="course-detail-stat-card">
+                <span class="course-meta-label">Lectures</span>
+                <span class="course-meta-value">{{ selectedCourse.lessons?.length || 0 }}</span>
+              </div>
+              <div class="course-detail-stat-card">
+                <span class="course-meta-label">Level</span>
+                <span class="course-meta-value">{{ selectedCourse.level || 'All Levels' }}</span>
+              </div>
+              <div class="course-detail-stat-card">
+                <span class="course-meta-label">Language</span>
+                <span class="course-meta-value">{{ selectedCourse.language || 'English' }}</span>
+              </div>
+            </div>
+
+            <div class="lesson-list">
+              <div class="lesson-list-header">
+                <h3>Lessons</h3>
+              </div>
+              <div *ngFor="let lesson of selectedCourse.lessons; let i = index" class="lesson-item">
+                <div class="lesson-item-content">
+                  <p class="lesson-title">{{ lesson.title || 'Lesson ' + (i + 1) }}</p>
+                  <p class="lesson-description">{{ lesson.description || lesson.syllabus || 'No lesson details available.' }}</p>
+                </div>
+                <div class="lesson-actions">
+                  <button
+                    type="button"
+                    class="watch-btn"
+                    [disabled]="!lesson.video || lesson.completed"
+                    (click)="watchLesson(i)">
+                    {{ lesson.completed ? 'Watched' : 'Watch' }}
+                  </button>
+                  <button
+                    *ngIf="!lesson.completed"
+                    type="button"
+                    class="mark-watched-btn"
+                    (click)="markLessonAsWatched(i)">
+                    Mark as Watched
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedLessonVideoIndex !== null" class="lesson-video-preview">
+              <h4>Playing: {{ selectedCourse.lessons[selectedLessonVideoIndex].title || ('Lesson ' + (selectedLessonVideoIndex + 1)) }}</h4>
+              <video controls autoplay [src]="selectedCourse.lessons[selectedLessonVideoIndex].video" class="preview-video" (ended)="onLessonVideoEnded(selectedLessonVideoIndex)">
+                Your browser does not support video playback.
+              </video>
+            </div>
+          </div>
+        }
+
+        <!-- ORDER HISTORY VIEW -->
+        @if (activeTab === 'orders') {
+          <div class="content-header">
+            <div>
+              <h1 class="content-title">Order History</h1>
+              <p class="content-subtitle">Your past purchases and billing details</p>
+            </div>
+          </div>
+          <div class="status-block">
+            <p>No order history available yet.</p>
+          </div>
+        }
+
+        <!-- NOTIFICATIONS VIEW -->
+        @if (activeTab === 'notifications') {
+          <div class="content-header">
+            <div>
+              <h1 class="content-title">Notifications</h1>
+              <p class="content-subtitle">Recent alerts and updates</p>
+            </div>
+          </div>
+          <div class="status-block">
+            <p>No notifications available yet.</p>
+          </div>
+        }
+
+        <!-- PROFILE VIEW -->
+        @if (activeTab === 'profile') {
+          <div class="content-header">
+            <div>
+              <h1 class="content-title">Profile</h1>
+              <p class="content-subtitle">Your account details</p>
+            </div>
+          </div>
+
+          @if (profileLoading) {
+            <div class="status-block"><p>Loading profile...</p></div>
+          } @else if (!profile) {
+            <div class="status-block">
+              <p>No profile found. Please <a routerLink="/skillstorm/mastery-battles" style="color:#7c3aed; font-weight:700;">register for a course</a> first.</p>
+            </div>
+          } @else {
+            <div class="profile-card">
+              <div class="profile-avatar">{{ profile.full_name?.charAt(0)?.toUpperCase() || 'U' }}</div>
+              <h3 class="profile-name">{{ profile.full_name }}</h3>
+              <p class="profile-challenge">{{ profile.challenge_name }}</p>
+              <div class="profile-fields">
+                <div class="profile-field"><span class="field-label">Age</span><span class="field-value">{{ profile.age }}</span></div>
+                <div class="profile-field"><span class="field-label">Country</span><span class="field-value">{{ profile.country }}</span></div>
+                <div class="profile-field"><span class="field-label">City</span><span class="field-value">{{ profile.city }}</span></div>
+                <div class="profile-field"><span class="field-label">Email</span><span class="field-value">{{ profile.email }}</span></div>
+                @if (profile.parent_name) {
+                  <div class="profile-field"><span class="field-label">Parent / Guardian</span><span class="field-value">{{ profile.parent_name }}</span></div>
+                }
+                @if (profile.parent_email) {
+                  <div class="profile-field"><span class="field-label">Parent Email</span><span class="field-value">{{ profile.parent_email }}</span></div>
+                }
+              </div>
+            </div>
+          }
+        }
+
+      </section>
+    </div>
+  </div>
+</div>

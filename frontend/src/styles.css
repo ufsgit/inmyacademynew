@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Variables */
+:root {
+  --theme-color: #F97316; /* Default orange */
+  --font-primary: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+/* Universal font override — applies to ALL elements including inline-styled ones */
+*, *::before, *::after {
+  font-family: var(--font-primary) !important;
+}
+
+html, body {
+  font-family: var(--font-primary);
+  color: #6B7280;
+  -webkit-font-smoothing: antialiased;
+}
