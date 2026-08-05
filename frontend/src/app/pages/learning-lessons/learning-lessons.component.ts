@@ -39,7 +39,8 @@ export class LearningLessonsComponent implements OnInit {
     this.isLoading = true;
     this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
       next: (courses) => {
-        this.track = courses.find(t => getTrackSlug(t.title) === this.slug);
+        const targetSlug = (this.slug || '').replace(/-+/g, '-');
+        this.track = courses.find(t => getTrackSlug(t.title).replace(/-+/g, '-') === targetSlug);
         if (this.track && typeof this.track.lessons === 'string') {
           try {
             this.track.lessons = JSON.parse(this.track.lessons);

@@ -110,5 +110,5 @@ export const MASTERY_TRACKS_DETAILS = [
 ];
 
 export function getTrackSlug(title: string): string {
-  return title.toLowerCase().trim().replace(/\s+/g, '-',).replace(/[^a-z0-9\-]/g, '');
+  return (title || '').toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '').replace(/-+/g, '-');
 }
