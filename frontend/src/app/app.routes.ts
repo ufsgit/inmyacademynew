@@ -7,6 +7,7 @@ export const routes: Routes = [
   { path: 'skillstorm/school-competitions', loadComponent: () => import('./pages/school-competitions/school-competitions.component').then(m => m.SchoolCompetitionsComponent) },
   { path: 'skillstorm/registration-wizard', loadComponent: () => import('./pages/registration-wizard/registration-wizard.component').then(m => m.RegistrationWizardComponent) },
   { path: 'skillstorm/mastery-battles', loadComponent: () => import('./pages/mastery-battles/mastery-battles.component').then(m => m.MasteryBattlesComponent) },
+  { path: 'skillstorm/courses', loadComponent: () => import('./pages/courses-catalog/courses-catalog.component').then(m => m.CoursesCatalogComponent) },
   { path: 'skillstorm/tracks/:slug', loadComponent: () => import('./pages/track-details/track-details.component').then(m => m.TrackDetailsComponent) },
   { path: 'skillstorm/learning-lessons/:slug', loadComponent: () => import('./pages/learning-lessons/learning-lessons.component').then(m => m.LearningLessonsComponent) },
   { path: 'skillstorm/challenges/:slug', loadComponent: () => import('./pages/challenge-details/challenge-details.component').then(m => m.ChallengeDetailsComponent) },

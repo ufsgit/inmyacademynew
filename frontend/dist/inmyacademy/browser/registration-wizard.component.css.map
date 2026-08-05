@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/pages/registration-wizard/registration-wizard.component.css"],
+  "sourcesContent": ["/* Custom style rules for Registration Wizard Component */\na:hover {\n  color: #D20A00 !important;\n}\nbutton:hover {\n  opacity: 0.9;\n}\n\n/* Mobile Responsiveness */\n@media (max-width: 768px) {\n  .wizard-section {\n    padding: 100px 16px 40px 16px !important;\n  }\n  .wizard-card {\n    padding: 24px !important;\n  }\n  .category-row {\n    flex-direction: column !important;\n    gap: 16px !important;\n  }\n  .category-row > div:last-child {\n    align-items: flex-start !important;\n    width: 100%;\n  }\n  /* For form inputs grid, which are display: grid; gap: ... */\n  /* Assuming there might be two-column grids in the step 3/4 */\n  .wizard-card > div[style*=\"display:flex\"] {\n     /* We must be careful not to break everything. */\n  }\n  .form-grid {\n    grid-template-columns: 1fr !important;\n  }\n}\n"],
+  "mappings": ";AACA,CAAC;AACC,SAAO;AACT;AACA,MAAM;AACJ,WAAS;AACX;AAGA,OAAO,CAAC,SAAS,EAAE;AACjB,GAAC;AACC,aAAS,MAAM,KAAK,KAAK;AAC3B;AACA,GAAC;AACC,aAAS;AACX;AACA,GAAC;AACC,oBAAgB;AAChB,SAAK;AACP;AACA,GAJC,aAIa,EAAE,GAAG;AACjB,iBAAa;AACb,WAAO;AACT;AAGA,GAbC,YAaY,EAAE,GAAG,CAAC;AAEnB;AACA,GAAC;AACC,2BAAuB;AACzB;AACF;",
+  "names": []
+}

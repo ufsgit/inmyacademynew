@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;c94e9b730898f16733f56096d858802e0c76087bdcd15793490a06edb0a2b050;C:/ufs/IMA/org/frontend/src/app/components/navbar/navbar.component.ts"],
+  "sourcesContent": ["\n    .nav-dropdown-link { display:block; padding:12px 24px; font-size:14px; font-weight:600; color:#1f2937; text-decoration:none; transition:background 0.1s, color 0.1s; white-space:nowrap; }\n    .nav-dropdown-link:hover { background:#2D3192; color:#ffffff; }\n    .nav-dropdown-link.active-nav-link { background:#2D3192 !important; color:#ffffff !important; font-weight:700; }\n  "],
+  "mappings": ";AACI,CAAC;AAAoB,WAAQ;AAAO,WAAQ,KAAK;AAAM,aAAU;AAAM,eAAY;AAAK,SAAM;AAAS,mBAAgB;AAAM,cAAW,WAAW,IAAI,EAAE,MAAM;AAAM,eAAY;AAAQ;AACzL,CADC,iBACiB;AAAS,cAAW;AAAS,SAAM;AAAS;AAC9D,CAFC,iBAEiB,CAAC;AAAkB,cAAW;AAAoB,SAAM;AAAoB,eAAY;AAAK;",
+  "names": []
+}

@@ -27,7 +27,7 @@ import { filter } from 'rxjs/operators';
               <div class="flex items-center gap-6">
                 <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Home</a>
                 <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">About Us</a>
-                <a routerLink="/skillstorm/mastery-battles" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Courses</a>
+                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Courses</a>
                 
                 <!-- Dropdown Menu -->
                 <div class="relative group h-full flex items-center" (mouseenter)="isDropdownOpen = true" (mouseleave)="isDropdownOpen = false">
@@ -94,7 +94,7 @@ import { filter } from 'rxjs/operators';
            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
              @if (!isDashboardView) {
                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
-               <a routerLink="/skillstorm/mastery-battles" (click)="isMobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Courses</a>
+               <a routerLink="/skillstorm/courses" (click)="isMobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Courses</a>
                
                <div class="px-3 py-2">
                  <div class="text-base font-medium text-gray-900 mb-2">SkillStorm Global Competitions</div>
