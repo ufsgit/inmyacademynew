@@ -38,32 +38,41 @@ export class OpenChallengesComponent {
   getIconSvg(iconName: string): string {
     switch (iconName) {
       case 'book-open':
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>';
+        // Open book icon (Creative Storytelling)
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>';
       case 'message-circle':
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>';
+        // Speech / Oratory chat bubble icon (Global Oratory)
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>';
       case 'lightbulb':
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>';
+        // Lightbulb idea icon (Entrepreneurship)
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>';
       case 'smartphone':
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
+        // Mobile phone / app icon (App Design)
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 18h.01M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>';
       case 'chef-hat':
-        // using an alternative generic icon for chef hat since lucide chef-hat isn't in standard heroicons, let's use a fire or star as fallback, or custom svg.
-        // I will just construct a simple custom chef hat or plate.
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>';
+        // Chef Hat / Culinary icon (QuickChef Culinary)
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 10.58 0A4 4 0 0 1 18 13.87V21H6zM6 17h12"></path>';
       default:
-        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+        return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 13l4 4L19 7"></path>';
     }
   }
 
   getPerkIcon(perkId: number): string {
-    // Return different generic icons based on perk ID
     const icons = {
-      1: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
-      2: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>',
-      3: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>',
-      4: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z"></path>',
-      5: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>',
-      6: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>',
-      7: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>'
+      // 1: £1,000 Cash Prize (Cash Note)
+      1: '<rect x="2" y="6" width="20" height="12" rx="2" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke-width="1.8"/><line x1="6" y1="12" x2="6.01" y2="12" stroke-width="2"/><line x1="18" y1="12" x2="18.01" y2="12" stroke-width="2"/>',
+      // 2: Engraved Trophy (Trophy Cup)
+      2: '<path stroke-width="1.8" d="M6 9H4a2 2 0 0 0-2 2v1a5 5 0 0 0 5 5h.09"/><path stroke-width="1.8" d="M18 9h2a2 2 0 0 1 2 2v1a5 5 0 0 1-5 5h-.09"/><path stroke-width="1.8" d="M6 3h12v10a6 6 0 0 1-12 0V3z"/><path stroke-width="1.8" d="M9 21h6"/><path stroke-width="1.8" d="M12 17v4"/>',
+      // 3: Flagship Course Access (Graduation Cap)
+      3: '<path stroke-width="1.8" d="M22 10L12 5 2 10l10 5 10-5z"/><path stroke-width="1.8" d="M6 12v5c3 3 9 3 12 0v-5"/>',
+      // 4: Scholarship Pathways (Award Ribbon Medal)
+      4: '<circle cx="12" cy="8" r="5" stroke-width="1.8"/><path stroke-width="1.8" d="M15.477 12.89L17 22l-5-3l-5 3l1.523-9.11"/>',
+      // 5: Industry Immersions (Building)
+      5: '<rect x="4" y="2" width="16" height="20" rx="2" stroke-width="1.8"/><path stroke-width="1.8" d="M9 6h2M13 6h2M9 10h2M13 10h2M9 14h2M13 14h2M10 22v-4h4v4"/>',
+      // 6: Digital Certificates (Document Sheet)
+      6: '<path stroke-width="1.8" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline stroke-width="1.8" points="14 2 14 8 20 8"/><line stroke-width="1.8" x1="16" y1="13" x2="8" y2="13"/><line stroke-width="1.8" x1="16" y1="17" x2="8" y2="17"/>',
+      // 7: Sponsorship Pathways (People Mentors)
+      7: '<path stroke-width="1.8" d="M17 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4" stroke-width="1.8"/><path stroke-width="1.8" d="M23 21v-2a4 4 0 0 0-3-3.87"/><path stroke-width="1.8" d="M16 3.13a4 4 0 0 1 0 7.75"/>'
     };
     return icons[perkId as keyof typeof icons] || icons[1];
   }
