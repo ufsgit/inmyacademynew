@@ -98,6 +98,15 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   moduleProjects: any[] = [];
+  adminDocuments: any[] = [];
+
+  docUploadForm: any = {
+    category: 'Open Challenges',
+    courseId: '',
+    moduleName: '',
+    title: '',
+    file: null as File | null
+  };
 
   fetchCourses() {
     this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
@@ -113,6 +122,13 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  fetchAdminDocuments() {
+    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+      next: (data) => { this.adminDocuments = data; },
+      error: (err) => console.error('Error fetching admin documents:', err)
+    });
+  }
+
   deleteModuleProject(id: number) {
     if (!confirm('Are you sure you want to delete this submitted project?')) return;
     this.http.delete(`http://localhost:5001/api/admin/projects/${id}`).subscribe({
@@ -120,6 +136,71 @@ export class AdminDashboardComponent implements OnInit {
         this.fetchModuleProjects();
       },
       error: (err) => console.error('Error deleting project:', err)
+    });
+  }
+
+  deleteAdminDocument(id: number) {
+    if (!confirm('Are you sure you want to delete this document?')) return;
+    this.http.delete(`http://localhost:5001/api/admin/documents/${id}`).subscribe({
+      next: () => {
+        this.fetchAdminDocuments();
+      },
+      error: (err) => console.error('Error deleting document:', err)
+    });
+  }
+
+  onDocFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.docUploadForm.file = input.files[0];
+    }
+  }
+
+  getSelectedCourseModules(): any[] {
+    if (!this.docUploadForm.courseId) return [];
+    const course = this.courses.find(c => c.id == this.docUploadForm.courseId);
+    if (!course) return [];
+    
+    let lessons: any[] = [];
+    if (Array.isArray(course.lessons)) {
+      lessons = course.lessons;
+    } else if (typeof course.lessons === 'string') {
+      try { lessons = JSON.parse(course.lessons); } catch(e) {}
+    }
+    return lessons;
+  }
+
+  uploadAdminDocument() {
+    if (!this.docUploadForm.file) {
+      alert('Please select a document file to upload.');
+      return;
+    }
+
+    let courseTitle = '';
+    if (this.docUploadForm.category === 'Mastery Battles' && this.docUploadForm.courseId) {
+      const selectedCourseObj = this.courses.find(c => c.id == this.docUploadForm.courseId);
+      courseTitle = selectedCourseObj ? selectedCourseObj.title : '';
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.docUploadForm.file);
+    formData.append('category', this.docUploadForm.category);
+    formData.append('courseTitle', courseTitle);
+    formData.append('moduleName', this.docUploadForm.moduleName || '');
+    formData.append('title', this.docUploadForm.title || this.docUploadForm.file.name);
+
+    this.http.post('http://localhost:5001/api/upload/document', formData).subscribe({
+      next: (res: any) => {
+        alert('Document uploaded successfully!');
+        this.docUploadForm.title = '';
+        this.docUploadForm.file = null;
+        this.fetchAdminDocuments();
+      },
+      error: (err) => {
+        console.error('Failed to upload document:', err);
+        const errMsg = err.error?.error || err.error?.message || 'Failed to upload document.';
+        alert(errMsg);
+      }
     });
   }
 
@@ -149,6 +230,9 @@ export class AdminDashboardComponent implements OnInit {
     this.activeTab = tab;
     if (tab === 'projects') {
       this.fetchModuleProjects();
+    } else if (tab === 'docUpload') {
+      this.fetchAdminDocuments();
+      this.fetchCourses();
     }
   }
 

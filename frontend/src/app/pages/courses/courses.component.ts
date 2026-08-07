@@ -247,8 +247,28 @@ export class CoursesComponent implements OnInit {
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').trim();
   }
 
+  adminDocuments: any[] = [];
+
+  getModuleAdminDoc(index: number): any {
+    if (!this.selectedCourse || !this.adminDocuments.length) return null;
+    const lesson = this.selectedCourse.lessons?.[index];
+    const moduleName = lesson?.title ? lesson.title.replace('Lesson', 'Module') : `Module ${index + 1}`;
+    
+    return this.adminDocuments.find(d => 
+      d.category === 'Mastery Battles' && 
+      d.course_title?.toLowerCase().trim() === this.selectedCourse.title?.toLowerCase().trim() &&
+      d.module_name?.toLowerCase().trim() === moduleName.toLowerCase().trim()
+    );
+  }
+
   fetchCourses(): void {
     const userId = this.getCurrentUserId();
+    
+    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+      next: (docs) => { this.adminDocuments = docs || []; },
+      error: () => { this.adminDocuments = []; }
+    });
+
     this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
       next: (allCourses) => {
         if (userId) {

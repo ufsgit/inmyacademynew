@@ -46,6 +46,20 @@ const pool = mysql.createPool({
             )
         `;
         await connection.query(createProjectTable);
+
+        const createAdminDocsTable = `
+            CREATE TABLE IF NOT EXISTS admin_documents (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                category VARCHAR(100) NOT NULL,
+                course_title VARCHAR(255) NULL,
+                module_name VARCHAR(255) NULL,
+                title VARCHAR(255) NOT NULL,
+                file_name VARCHAR(255) NOT NULL,
+                file_path VARCHAR(500) NOT NULL,
+                uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+        await connection.query(createAdminDocsTable);
         
         connection.release();
     } catch (err) {

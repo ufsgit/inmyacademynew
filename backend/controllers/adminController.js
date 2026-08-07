@@ -126,6 +126,32 @@ const deleteModuleProject = async (req, res) => {
     }
 };
 
+// @desc    Get all admin uploaded documents
+// @route   GET /api/admin/documents
+const getAllAdminDocuments = async (req, res) => {
+    try {
+        const query = 'SELECT * FROM admin_documents ORDER BY uploaded_at DESC';
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Error fetching admin documents:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Delete an admin document
+// @route   DELETE /api/admin/documents/:id
+const deleteAdminDocument = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.query('DELETE FROM admin_documents WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Document deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting admin document:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 module.exports = {
     getAllRegistrations,
     getAllUsers,
@@ -133,5 +159,7 @@ module.exports = {
     updateUser,
     deleteRegistration,
     getAllModuleProjects,
-    deleteModuleProject
+    deleteModuleProject,
+    getAllAdminDocuments,
+    deleteAdminDocument
 };

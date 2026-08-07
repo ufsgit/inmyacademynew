@@ -58,6 +58,15 @@
         </span>
         <span>Project Submissions</span>
       </button>
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'docUpload'" 
+        (click)="switchTab('docUpload')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        </span>
+        <span>Document Upload</span>
+      </button>
     </nav>
     <div class="logout-container">
       <button class="logout-btn" (click)="logout()">
@@ -293,6 +302,102 @@
               </tr>
               <tr *ngIf="moduleProjects.length === 0">
                 <td colspan="7" class="empty-state">No module project submissions found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Document Upload Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'docUpload'">
+        <div style="background: #ffffff; border-radius: 16px; padding: 28px; border: 1px solid #e5e7eb; margin-bottom: 28px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+          <h3 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 20px 0;">Upload New Document</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 20px;">
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Category *</label>
+              <select [(ngModel)]="docUploadForm.category" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <option value="Open Challenges">Open Challenges</option>
+                <option value="Mastery Battles">Mastery Battles</option>
+                <option value="School Competitions">School Competitions</option>
+              </select>
+            </div>
+
+            <!-- Course Selection (Shown only when Mastery Battles selected) -->
+            <div *ngIf="docUploadForm.category === 'Mastery Battles'">
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Mastery Course *</label>
+              <select [(ngModel)]="docUploadForm.courseId" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <option value="">-- Choose Course --</option>
+                <option *ngFor="let course of courses" [value]="course.id">{{ course.title }}</option>
+              </select>
+            </div>
+
+            <!-- Module Selection (Shown when course selected) -->
+            <div *ngIf="docUploadForm.category === 'Mastery Battles' && docUploadForm.courseId">
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Module *</label>
+              <select [(ngModel)]="docUploadForm.moduleName" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <option value="">-- Choose Module --</option>
+                <option *ngFor="let mod of getSelectedCourseModules(); let i = index" [value]="mod.title ? mod.title.replace('Lesson', 'Module') : ('Module ' + (i + 1))">
+                  {{ mod.title ? mod.title.replace('Lesson', 'Module') : ('Module ' + (i + 1)) }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Document Title</label>
+              <input type="text" [(ngModel)]="docUploadForm.title" placeholder="e.g. Module Resource Guide" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Document File *</label>
+              <input type="file" (change)="onDocFileSelected($event)" accept=".pdf,.doc,.docx,.zip,.png,.jpg,.mp4" style="font-size: 13px;">
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" (click)="uploadAdminDocument()" style="padding: 10px 24px; font-size: 14px; font-weight: 700; background: #4f46e5; color: #ffffff; border: none; border-radius: 8px; cursor: pointer;">
+            Upload Document
+          </button>
+        </div>
+
+        <div class="table-container">
+          <h3 style="font-size: 18px; font-weight: 700; color: #111827; margin: 0 0 16px 0;">Uploaded Admin Documents</h3>
+          <table class="data-table full-width">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Course / Track</th>
+                <th>Module</th>
+                <th>Title / File Name</th>
+                <th>Uploaded Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let doc of adminDocuments">
+                <td>#{{ doc.id }}</td>
+                <td><span class="badge category-badge">{{ doc.category }}</span></td>
+                <td>{{ doc.course_title || '—' }}</td>
+                <td><strong>{{ doc.module_name || '—' }}</strong></td>
+                <td>
+                  <a [href]="doc.file_path" target="_blank" style="color: #4f46e5; font-weight: 600; text-decoration: underline;">
+                    {{ doc.title || doc.file_name }}
+                  </a>
+                </td>
+                <td>{{ doc.uploaded_at | date:'medium' }}</td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <a [href]="doc.file_path" target="_blank" class="action-btn flex-center" style="color: #4f46e5; text-decoration: none;">
+                      Download
+                    </a>
+                    <button class="action-btn flex-center" (click)="deleteAdminDocument(doc.id)" style="color: #e53e3e; border-color: rgba(229, 62, 62, 0.2); background: rgba(229, 62, 62, 0.05);">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="adminDocuments.length === 0">
+                <td colspan="7" class="empty-state">No uploaded documents found.</td>
               </tr>
             </tbody>
           </table>

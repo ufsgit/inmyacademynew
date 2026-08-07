@@ -171,6 +171,13 @@
                   <div class="lesson-item-content">
                     <p class="lesson-title">{{ (lesson.title ? lesson.title.replace('Lesson', 'Module') : ('Module ' + (i + 1))) }}</p>
                     <p class="lesson-description">{{ lesson.description || lesson.syllabus || 'No module details available.' }}</p>
+                    <!-- Admin Uploaded Module Document -->
+                    <div *ngIf="getModuleAdminDoc(i)" style="margin-top: 8px; font-size: 13px; font-weight: 600; color: #4f46e5; display: flex; align-items: center; gap: 6px;">
+                      <span>📄 Course Resource:</span>
+                      <a [href]="getModuleAdminDoc(i).file_path" target="_blank" style="color: #4f46e5; text-decoration: underline;">
+                        {{ getModuleAdminDoc(i).title || getModuleAdminDoc(i).file_name }}
+                      </a>
+                    </div>
                     <p *ngIf="lesson.projectSubmitted" style="margin-top: 6px; font-size: 13px; color: #10b981; font-weight: 600;">
                       ✓ Project Submitted: {{ lesson.submittedProjectName }}
                     </p>
