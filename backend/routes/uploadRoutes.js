@@ -34,4 +34,42 @@ router.post('/', upload.single('file'), (req, res) => {
     }
 });
 
+router.post('/project', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+        
+        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        const { userId, userName, userEmail, courseTitle, moduleName } = req.body;
+        
+        const db = require('../config/db');
+        
+        const createProjectTable = `
+            CREATE TABLE IF NOT EXISTS module_projects (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                user_name VARCHAR(255),
+                user_email VARCHAR(255),
+                course_title VARCHAR(255),
+                module_name VARCHAR(255),
+                file_name VARCHAR(255),
+                file_path VARCHAR(500),
+                submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+        await db.query(createProjectTable);
+
+        await db.query(
+            `INSERT INTO module_projects (user_id, user_name, user_email, course_title, module_name, file_name, file_path) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [Number(userId) || 0, userName || '', userEmail || '', courseTitle || '', moduleName || '', req.file.originalname, fileUrl]
+        );
+
+        res.json({ message: 'Project uploaded successfully', url: fileUrl, fileName: req.file.originalname });
+    } catch (error) {
+        console.error('Error uploading project:', error);
+        res.status(500).json({ error: 'Failed to upload project: ' + error.message });
+    }
+});
+
 module.exports = router;

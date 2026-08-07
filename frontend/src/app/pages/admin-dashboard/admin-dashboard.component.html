@@ -49,6 +49,15 @@
         </span>
         <span>Courses</span>
       </button>
+      <button 
+        class="nav-item" 
+        [class.active]="activeTab === 'projects'" 
+        (click)="switchTab('projects')">
+        <span class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+        </span>
+        <span>Project Submissions</span>
+      </button>
     </nav>
     <div class="logout-container">
       <button class="logout-btn" (click)="logout()">
@@ -232,6 +241,58 @@
               </tr>
               <tr *ngIf="filteredRegistrations.length === 0">
                 <td colspan="6" class="empty-state">No registrations found for the selected type.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Project Submissions Tab -->
+      <div class="tab-content" *ngIf="activeTab === 'projects'">
+        <div class="table-container">
+          <table class="data-table full-width">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Module</th>
+                <th>File Name</th>
+                <th>Submitted Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proj of moduleProjects">
+                <td>#{{ proj.id }}</td>
+                <td>
+                  <div class="user-details">
+                    <strong>{{ proj.user_name || 'Participant' }}</strong>
+                    <span class="meta">{{ proj.user_email || ('User ID: ' + proj.user_id) }}</span>
+                  </div>
+                </td>
+                <td><span class="badge challenge-badge">{{ proj.course_title || 'N/A' }}</span></td>
+                <td><strong>{{ proj.module_name || 'Module' }}</strong></td>
+                <td>
+                  <a [href]="proj.file_path" target="_blank" style="color: #4f46e5; font-weight: 600; text-decoration: underline;">
+                    {{ proj.file_name }}
+                  </a>
+                </td>
+                <td>{{ proj.submitted_at | date:'medium' }}</td>
+                <td>
+                  <div style="display: flex; gap: 8px;">
+                    <a [href]="proj.file_path" target="_blank" class="action-btn flex-center" style="color: #4f46e5; text-decoration: none;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      Download
+                    </a>
+                    <button class="action-btn flex-center" (click)="deleteModuleProject(proj.id)" style="color: #e53e3e; border-color: rgba(229, 62, 62, 0.2); background: rgba(229, 62, 62, 0.05);">
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="moduleProjects.length === 0">
+                <td colspan="7" class="empty-state">No module project submissions found.</td>
               </tr>
             </tbody>
           </table>

@@ -11,14 +11,46 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Test connection
-pool.getConnection()
-    .then(connection => {
+// Ensure database schema migrations
+(async () => {
+    try {
+        const connection = await pool.getConnection();
         console.log('Successfully connected to the MySQL database.');
+        
+        const alterQueries = [
+            `ALTER TABLE registrations ADD COLUMN parent_name VARCHAR(255) NULL`,
+            `ALTER TABLE registrations ADD COLUMN parent_email VARCHAR(255) NULL`,
+            `ALTER TABLE registrations ADD COLUMN parent_consent BOOLEAN DEFAULT FALSE`,
+            `ALTER TABLE registrations ADD COLUMN teams_data TEXT NULL`
+        ];
+        
+        for (const q of alterQueries) {
+            try {
+                await connection.query(q);
+            } catch (e) {
+                // Column already exists or error ignored
+            }
+        }
+
+        const createProjectTable = `
+            CREATE TABLE IF NOT EXISTS module_projects (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                user_name VARCHAR(255),
+                user_email VARCHAR(255),
+                course_title VARCHAR(255),
+                module_name VARCHAR(255),
+                file_name VARCHAR(255),
+                file_path VARCHAR(500),
+                submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+        await connection.query(createProjectTable);
+        
         connection.release();
-    })
-    .catch(err => {
+    } catch (err) {
         console.error('Error connecting to MySQL:', err.message);
-    });
+    }
+})();
 
 module.exports = pool;

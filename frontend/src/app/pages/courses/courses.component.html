@@ -82,7 +82,7 @@
           </div>
 
           @if (!isLoading) {
-            <!-- Purchased Courses Section -->
+            <!-- Registered / Purchased Courses Section -->
             @if (purchasedCourses.length > 0) {
 
               <div class="course-grid">
@@ -96,7 +96,7 @@
                       <div class="course-card-top-row">
                         <div>
                           <h3 class="course-card-title">{{ course.title }}</h3>
-                          <p class="course-card-lessons">{{ getLessonCount(course) }} Lessons</p>
+                          <p class="course-card-lessons">{{ getLessonCount(course) }} Modules</p>
                         </div>
                         <button class="course-card-menu" type="button" aria-label="Menu">
                           <span></span>
@@ -106,7 +106,7 @@
                       </div>
                       <div class="course-card-progress-info">
                         <div class="course-progress-bar-top">
-                          <span class="course-progress-text">{{ course.completedCount || 0 }} / {{ getLessonCount(course) }} Lessons Completed</span>
+                          <span class="course-progress-text">{{ course.completedCount || 0 }} / {{ getLessonCount(course) }} Modules Completed</span>
                           <span class="course-progress-number">{{ course.progress || 0 }}%</span>
                         </div>
                         <div class="course-progress-bar">
@@ -122,7 +122,7 @@
               </div>
             }
 
-            @if (purchasedCourses.length === 0 && activeTab === 'enrolled') {
+            @if (purchasedCourses.length === 0) {
               <div class="status-block">
                 <p>No enrolled courses yet. <a routerLink="/skillstorm/mastery-battles" style="color:#7c3aed;font-weight:700;">Enroll in a mastery course</a> to get started.</p>
               </div>
@@ -149,7 +149,7 @@
                 <span class="course-meta-value">{{ selectedCourse.progress || 0 }}%</span>
               </div>
               <div class="course-detail-stat-card">
-                <span class="course-meta-label">Lectures</span>
+                <span class="course-meta-label">Modules</span>
                 <span class="course-meta-value">{{ selectedCourse.lessons?.length || 0 }}</span>
               </div>
               <div class="course-detail-stat-card">
@@ -164,36 +164,55 @@
 
             <div class="lesson-list">
               <div class="lesson-list-header">
-                <h3>Lessons</h3>
+                <h3>Modules</h3>
               </div>
-              <div *ngFor="let lesson of selectedCourse.lessons; let i = index" class="lesson-item">
-                <div class="lesson-item-content">
-                  <p class="lesson-title">{{ lesson.title || 'Lesson ' + (i + 1) }}</p>
-                  <p class="lesson-description">{{ lesson.description || lesson.syllabus || 'No lesson details available.' }}</p>
+              <div *ngFor="let lesson of selectedCourse.lessons; let i = index" style="display: flex; flex-direction: column; border-bottom: 1px solid #e5e7eb; padding: 20px 0;">
+                <div class="lesson-item" style="border-bottom: none; padding: 0;">
+                  <div class="lesson-item-content">
+                    <p class="lesson-title">{{ (lesson.title ? lesson.title.replace('Lesson', 'Module') : ('Module ' + (i + 1))) }}</p>
+                    <p class="lesson-description">{{ lesson.description || lesson.syllabus || 'No module details available.' }}</p>
+                    <p *ngIf="lesson.projectSubmitted" style="margin-top: 6px; font-size: 13px; color: #10b981; font-weight: 600;">
+                      ✓ Project Submitted: {{ lesson.submittedProjectName }}
+                    </p>
+                  </div>
+                  <div class="lesson-actions">
+                    <button
+                      type="button"
+                      class="watch-btn"
+                      (click)="selectedLessonVideoIndex = selectedLessonVideoIndex === i ? null : i">
+                      {{ selectedLessonVideoIndex === i ? 'Close Video' : 'Watch' }}
+                    </button>
+                    <button
+                      type="button"
+                      class="submit-project-btn"
+                      (click)="submitModuleProject(i)">
+                      {{ lesson.projectSubmitted ? 'Resubmit Project' : 'Submit Project' }}
+                    </button>
+                    <button
+                      type="button"
+                      class="mark-watched-btn"
+                      [style.background-color]="lesson.completed ? '#10b981' : '#ffffff'"
+                      [style.color]="lesson.completed ? '#ffffff' : '#6b7280'"
+                      [style.border-color]="lesson.completed ? '#10b981' : '#e5e7eb'"
+                      (click)="markLessonAsWatched(i)">
+                      {{ lesson.completed ? 'Completed ✓' : 'Mark as Completed' }}
+                    </button>
+                  </div>
                 </div>
-                <div class="lesson-actions">
-                  <button
-                    type="button"
-                    class="watch-btn"
-                    [disabled]="!lesson.video || lesson.completed"
-                    (click)="watchLesson(i)">
-                    {{ lesson.completed ? 'Watched' : 'Watch' }}
-                  </button>
-                  <button
-                    *ngIf="!lesson.completed"
-                    type="button"
-                    class="mark-watched-btn"
-                    (click)="markLessonAsWatched(i)">
-                    Mark as Watched
-                  </button>
+
+                <!-- Video Preview directly below this Module -->
+                <div *ngIf="selectedLessonVideoIndex === i" class="lesson-video-preview" style="margin-top: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h4 style="margin: 0; font-size: 15px; font-weight: 700; color: #111827;">
+                      Playing: {{ (lesson.title ? lesson.title.replace('Lesson', 'Module') : ('Module ' + (i + 1))) }}
+                    </h4>
+                    <button type="button" class="mark-watched-btn" style="padding: 4px 12px; font-size: 12px;" (click)="selectedLessonVideoIndex = null">Close</button>
+                  </div>
+                  <video controls autoplay [src]="lesson.video || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'" class="preview-video" (ended)="onLessonVideoEnded(i)">
+                    Your browser does not support video playback.
+                  </video>
                 </div>
               </div>
-            </div>
-            <div *ngIf="selectedLessonVideoIndex !== null" class="lesson-video-preview">
-              <h4>Playing: {{ selectedCourse.lessons[selectedLessonVideoIndex].title || ('Lesson ' + (selectedLessonVideoIndex + 1)) }}</h4>
-              <video controls autoplay [src]="selectedCourse.lessons[selectedLessonVideoIndex].video" class="preview-video" (ended)="onLessonVideoEnded(selectedLessonVideoIndex)">
-                Your browser does not support video playback.
-              </video>
             </div>
           </div>
         }
