@@ -39,7 +39,7 @@
     <div class="accordion" style="margin-bottom: 24px;" *ngIf="track.lessons && track.lessons.length > 0">
       <div class="accordion-item-container" *ngFor="let lesson of track.lessons; let i = index">
         <div class="accordion-item" (click)="toggleLesson(i)" [class.open]="openLessonIndex === i">
-          <span>{{ lesson.title || ('Topic ' + (i + 1)) }}</span>
+          <span>{{ (lesson.title ? lesson.title.replace('Lesson', 'Module') : ('Module ' + (i + 1))) }}</span>
           <svg class="chevron" [class.rotated]="openLessonIndex === i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
         </div>
         <div class="accordion-content" *ngIf="openLessonIndex === i">
@@ -88,7 +88,7 @@
 
   <div class="sidebar">
     <div class="enroll-card">
-      <h3 class="price">{{ track?.pricing === 'Free' ? 'Free' : 'Paid' }}</h3>
+      <h3 class="price">{{ track?.pricing === 'Free' ? 'Free' : '$25' }}</h3>
       <button class="enroll-btn" type="button" (click)="purchaseCourse()">Enroll Now</button>
       <p class="access-note">{{ track?.pricing === 'Free' ? 'Free access this course' : 'Premium course' }}</p>
     </div>
@@ -101,7 +101,7 @@
       </div>
       <div class="detail-row">
         <svg class="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        <span class="detail-label">Lectures:</span>
+        <span class="detail-label">Modules:</span>
         <span class="detail-value">{{ track.lectures || 0 }}</span>
       </div>
 

@@ -135,11 +135,11 @@ const registerUser = async (req, res) => {
             `;
             
             await db.query(updateQuery, [
-                age, 
-                country, 
-                city, 
-                email, 
-                password, 
+                age || 0, 
+                country || '', 
+                city || '', 
+                email || '', 
+                password || '', 
                 parentName || null, 
                 parentEmail || null, 
                 parentConsent ? 1 : 0,
@@ -160,16 +160,16 @@ const registerUser = async (req, res) => {
         `;
         
         const [result] = await db.query(query, [
-            fullName, 
-            age, 
-            country, 
-            city, 
-            email, 
-            password, 
+            fullName || '', 
+            age || 0, 
+            country || '', 
+            city || '', 
+            email || '', 
+            password || '', 
             parentName || null, 
             parentEmail || null, 
             parentConsent ? 1 : 0,
-            finalChallengeName,
+            finalChallengeName || '',
             teamsDataStr
         ]);
         

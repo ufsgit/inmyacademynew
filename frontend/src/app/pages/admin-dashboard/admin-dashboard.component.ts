@@ -97,10 +97,29 @@ export class AdminDashboardComponent implements OnInit {
     this.fetchCourses();
   }
 
+  moduleProjects: any[] = [];
+
   fetchCourses() {
     this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
       next: (data) => { this.courses = data; },
       error: (err) => console.error('Error fetching courses:', err)
+    });
+  }
+
+  fetchModuleProjects() {
+    this.http.get<any[]>('http://localhost:5001/api/admin/projects').subscribe({
+      next: (data) => { this.moduleProjects = data; },
+      error: (err) => console.error('Error fetching module projects:', err)
+    });
+  }
+
+  deleteModuleProject(id: number) {
+    if (!confirm('Are you sure you want to delete this submitted project?')) return;
+    this.http.delete(`http://localhost:5001/api/admin/projects/${id}`).subscribe({
+      next: () => {
+        this.fetchModuleProjects();
+      },
+      error: (err) => console.error('Error deleting project:', err)
     });
   }
 
@@ -128,6 +147,9 @@ export class AdminDashboardComponent implements OnInit {
 
   switchTab(tab: string) {
     this.activeTab = tab;
+    if (tab === 'projects') {
+      this.fetchModuleProjects();
+    }
   }
 
   isAddingTopic: boolean = false;

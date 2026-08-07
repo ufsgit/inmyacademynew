@@ -80,7 +80,7 @@ export class CoursesComponent implements OnInit {
   }
 
   getLessonCount(course: any): number {
-    return course.lectures || 0;
+    return course.lectures || (course.lessons ? this.parseLessons(course.lessons).length : 0);
   }
 
   getCompletedLessonCount(course: any): number {
@@ -97,34 +97,47 @@ export class CoursesComponent implements OnInit {
     if (!this.selectedCourse) {
       return;
     }
-    const lesson = this.selectedCourse.lessons?.[index];
-    if (!lesson?.video) {
-      return;
-    }
     this.selectedLessonVideoIndex = index;
   }
 
-  private mapCourse(course: any) {
-    const slug = getTrackSlug(course.title);
-    const watchedLessons = Array.isArray(this.courseWatchedLessons[slug])
-      ? this.courseWatchedLessons[slug]
-      : [];
-    const lessonCount = this.getLessonCount(course);
-    const completedLessons = watchedLessons.length;
-    const progress = lessonCount > 0 ? Math.round((completedLessons / lessonCount) * 100) : 0;
-    const lessonsArray = this.parseLessons(course.lessons);
-    const firstLessonVideo = this.getFirstLessonVideo(course);
+  submitModuleProject(index: number): void {
+    const lesson = this.selectedCourse?.lessons?.[index];
+    const moduleName = lesson?.title ? lesson.title.replace('Lesson', 'Module') : `Module ${index + 1}`;
+    const userId = this.getCurrentUserId() || '0';
+    const userName = localStorage.getItem('openChallengeParticipantName') || this.profile?.full_name || 'Participant';
+    const userEmail = this.profile?.email || '';
+    const courseTitle = this.selectedCourse?.title || 'Mastery Track';
+    
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.doc,.docx,.zip,.png,.jpg,.mp4';
+    fileInput.onchange = (e: any) => {
+      const file = e.target?.files?.[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('userId', userId);
+        formData.append('userName', userName);
+        formData.append('userEmail', userEmail);
+        formData.append('courseTitle', courseTitle);
+        formData.append('moduleName', moduleName);
 
-    return {
-      ...course,
-      slug,
-      image: course.image || 'assets/course-placeholder.jpg',
-      isPurchased: this.purchasedCourseSlugs.includes(slug),
-      completedCount: completedLessons,
-      progress,
-      lessons: lessonsArray,
-      firstLessonVideo
+        this.http.post('http://localhost:5001/api/upload/project', formData).subscribe({
+          next: (res: any) => {
+            alert(`Project "${file.name}" uploaded successfully for ${moduleName}!`);
+            if (lesson) {
+              lesson.projectSubmitted = true;
+              lesson.submittedProjectName = file.name;
+            }
+          },
+          error: (err) => {
+            console.error('Failed to upload project:', err);
+            alert(`Failed to upload project. Please try again.`);
+          }
+        });
+      }
     };
+    fileInput.click();
   }
 
   private sortCourses(): void {
@@ -235,11 +248,32 @@ export class CoursesComponent implements OnInit {
   }
 
   fetchCourses(): void {
+    const userId = this.getCurrentUserId();
     this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
-      next: (data) => {
-        this.courses = data.map(course => this.mapCourse(course));
-        this.sortCourses();
-        this.isLoading = false;
+      next: (allCourses) => {
+        if (userId) {
+          this.http.get<any>(`http://localhost:5001/api/challenges/registration/${userId}`).subscribe({
+            next: (reg) => {
+              if (reg?.challenge_name) {
+                const names = reg.challenge_name.split(',').map((n: string) => n.trim());
+                this.purchasedCourseSlugs = names.map((name: string) => getTrackSlug(name)).filter(Boolean);
+                localStorage.setItem(`purchasedCourses-${userId}`, JSON.stringify(this.purchasedCourseSlugs));
+              } else {
+                this.purchasedCourseSlugs = [];
+              }
+              const watchedRaw = localStorage.getItem(`watchedLessons-${userId}`);
+              this.courseWatchedLessons = watchedRaw ? JSON.parse(watchedRaw) : {};
+              this.applyCourseMapping(allCourses);
+            },
+            error: () => {
+              this.loadPurchasedCourses();
+              this.applyCourseMapping(allCourses);
+            }
+          });
+        } else {
+          this.loadPurchasedCourses();
+          this.applyCourseMapping(allCourses);
+        }
       },
       error: (err) => {
         console.error('Failed to fetch courses:', err);
@@ -247,5 +281,36 @@ export class CoursesComponent implements OnInit {
         this.courses = [];
       }
     });
+  }
+
+  private applyCourseMapping(allCourses: any[]): void {
+    this.courses = allCourses.map(course => {
+      const slug = getTrackSlug(course.title);
+      const isPurchased = this.purchasedCourseSlugs.some(pSlug => {
+        return pSlug === slug || pSlug.replace(/-+/g, '-') === slug.replace(/-+/g, '-');
+      });
+
+      const watchedLessons = Array.isArray(this.courseWatchedLessons[slug])
+        ? this.courseWatchedLessons[slug]
+        : [];
+      const lessonCount = this.getLessonCount(course);
+      const completedLessons = watchedLessons.length;
+      const progress = lessonCount > 0 ? Math.round((completedLessons / lessonCount) * 100) : 0;
+      const lessonsArray = this.parseLessons(course.lessons);
+      const firstLessonVideo = this.getFirstLessonVideo(course);
+
+      return {
+        ...course,
+        slug,
+        image: course.image || 'assets/course-placeholder.jpg',
+        isPurchased,
+        completedCount: completedLessons,
+        progress,
+        lessons: lessonsArray,
+        firstLessonVideo
+      };
+    });
+    this.sortCourses();
+    this.isLoading = false;
   }
 }

@@ -100,10 +100,38 @@ const deleteRegistration = async (req, res) => {
     }
 };
 
+// @desc    Get all submitted module projects
+// @route   GET /api/admin/projects
+const getAllModuleProjects = async (req, res) => {
+    try {
+        const query = 'SELECT * FROM module_projects ORDER BY submitted_at DESC';
+        const [rows] = await db.query(query);
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Error fetching module projects:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// @desc    Delete a module project
+// @route   DELETE /api/admin/projects/:id
+const deleteModuleProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.query('DELETE FROM module_projects WHERE id = ?', [id]);
+        res.status(200).json({ message: 'Module project deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting module project:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 module.exports = {
     getAllRegistrations,
     getAllUsers,
     getDashboardStats,
     updateUser,
-    deleteRegistration
+    deleteRegistration,
+    getAllModuleProjects,
+    deleteModuleProject
 };

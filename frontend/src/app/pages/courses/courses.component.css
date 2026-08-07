@@ -493,6 +493,7 @@
 }
 
 .watch-btn,
+.submit-project-btn,
 .mark-watched-btn {
   border: 1px solid transparent;
   border-radius: 999px;
@@ -509,9 +510,19 @@
   border-color: #c7d2fe;
 }
 
-.watch-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+.watch-btn:hover {
+  background: #4b46e5;
+  color: #ffffff;
+}
+
+.submit-project-btn {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
+}
+
+.submit-project-btn:hover {
+  background: #6d28d9;
 }
 
 .mark-watched-btn {
@@ -764,6 +775,7 @@
   margin: 0 0 12px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

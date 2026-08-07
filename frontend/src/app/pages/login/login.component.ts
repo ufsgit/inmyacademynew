@@ -191,15 +191,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem('openChallengeRegistrationId', 'OC-2026-' + res.user.id);
             localStorage.setItem('openChallengeRegistrationDbId', res.user.id.toString());
             
-            if (this.returnUrl === 'courses_dashboard') {
-              this.router.navigate(['/courses'], { queryParams: { tab: 'all' } });
-            } else if (res.dashboardType === 'mastery') {
-              this.router.navigate(['/skillstorm/mastery-battles-dashboard']);
-            } else if (res.dashboardType === 'school') {
-              this.router.navigate(['/skillstorm/school-dashboard']);
-            } else {
-              this.router.navigate(['/skillstorm/open-challenges-dashboard']);
-            }
+            this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
           }
         },
         error: (err) => {

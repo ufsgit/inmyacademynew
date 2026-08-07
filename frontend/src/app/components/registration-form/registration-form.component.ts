@@ -375,9 +375,10 @@ export class RegistrationFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      const challengeTitle = this.challengeName || 'Course Registration';
       const formValue = {
         ...this.registerForm.value,
-        challengeName: this.challengeName,
+        challengeName: challengeTitle,
         category: this.category || (this.entryFee === 25 ? 'Global Mastery Battles' : 'Global Open Challenges')
       };
       
@@ -385,11 +386,13 @@ export class RegistrationFormComponent implements OnInit {
         next: (response: any) => {
           const participantName = formValue.fullName;
           localStorage.setItem('openChallengeParticipantName', participantName);
-          localStorage.setItem('openChallengeSelectedChallenge', this.challengeName);
+          localStorage.setItem('openChallengeSelectedChallenge', challengeTitle);
           
           const randomId = Math.floor(10000 + Math.random() * 90000);
-          // Always store the real DB ID for uploads
-          localStorage.setItem('openChallengeRegistrationDbId', response.id.toString());
+          const regId = response?.id ? response.id.toString() : (localStorage.getItem('openChallengeRegistrationDbId') || '');
+          if (regId) {
+            localStorage.setItem('openChallengeRegistrationDbId', regId);
+          }
 
           if (this.entryFee === 25) {
             localStorage.setItem('masteryBattleRegistrationId', `MB-2024-${randomId}`);
@@ -399,14 +402,13 @@ export class RegistrationFormComponent implements OnInit {
             localStorage.setItem('dashboardType', 'open');
           }
 
-          const userId = response.id?.toString() || localStorage.getItem('openChallengeRegistrationDbId');
-          if (userId) {
-            const slug = getTrackSlug(this.challengeName);
-            const purchasedRaw = localStorage.getItem(`purchasedCourses-${userId}`);
+          if (regId) {
+            const slug = getTrackSlug(challengeTitle);
+            const purchasedRaw = localStorage.getItem(`purchasedCourses-${regId}`);
             const purchased = purchasedRaw ? JSON.parse(purchasedRaw) : [];
             if (!purchased.includes(slug)) {
               purchased.push(slug);
-              localStorage.setItem(`purchasedCourses-${userId}`, JSON.stringify(purchased));
+              localStorage.setItem(`purchasedCourses-${regId}`, JSON.stringify(purchased));
             }
           }
 
@@ -415,8 +417,8 @@ export class RegistrationFormComponent implements OnInit {
           this.showParentFields = false;
           
           setTimeout(() => {
-            this.router.navigate(['/courses'], { queryParams: { tab: 'all' } });
-          }, 1500);
+            this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
+          }, 1000);
         },
         error: (err) => {
           console.error('Registration failed:', err);
