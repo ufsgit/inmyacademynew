@@ -418,7 +418,7 @@ export class RegistrationFormComponent implements OnInit {
           
           setTimeout(() => {
             if (this.entryFee === 25) {
-              this.router.navigate(['/skillstorm/mastery-battles-dashboard']);
+              this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
             } else {
               this.router.navigate(['/skillstorm/open-challenges-dashboard']);
             }
