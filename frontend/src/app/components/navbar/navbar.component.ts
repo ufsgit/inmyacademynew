@@ -15,27 +15,27 @@ import { filter } from 'rxjs/operators';
   template: `
     <nav class="bg-white shadow-md w-full sticky top-0 z-[9999] transition-transform duration-300"
          [class.-translate-y-full]="isHidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[1366px] mx-auto px-[15px] md:px-[30px] lg:px-[30px] xl:px-[50px]">
         <div class="flex justify-between h-24 items-center">
           <!-- Logo -->
-          <img src="assets/Logo-resized.svg" alt="inmyacademy logo" class="h-[75px] w-auto cursor-pointer" routerLink="/" />
+          <img src="assets/Logo-resized.svg" alt="inmyacademy logo" class="h-[60px] lg:h-[70px] xl:h-[75px] w-auto cursor-pointer flex-shrink-0" routerLink="/" />
           
-          <!-- Right Side: Desktop Menu & Button -->
-          <div class="hidden md:flex items-center gap-10">
+          <!-- Right Side: Desktop Menu & Button (Visible on Large Screens lg+) -->
+          <div class="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-8">
             @if (!isDashboardView) {
               <!-- Navigation Links -->
-              <div class="flex items-center gap-6">
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Home</a>
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">About Us</a>
-                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Courses</a>
+              <div class="flex items-center gap-3 lg:gap-5 xl:gap-6">
+                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Home</a>
+                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">About Us</a>
+                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Courses</a>
                 
                 <!-- Dropdown Menu -->
                 <div class="relative group h-full flex items-center" (mouseenter)="isDropdownOpen = true" (mouseleave)="isDropdownOpen = false">
-                  <button class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors flex items-center gap-1"
+                  <button class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors flex items-center gap-1 whitespace-nowrap"
                           (click)="isDropdownOpen = !isDropdownOpen"
                           [class.text-[#2D3192]]="isDropdownOpen">
                     SkillStorm Global Competitions
-                    <svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="isDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="w-4 h-4 transition-transform duration-200 flex-shrink-0" [class.rotate-180]="isDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                   </button>
                   
                   <!-- Dropdown Panel -->
@@ -65,22 +65,22 @@ import { filter } from 'rxjs/operators';
                   }
                 </div>
                 
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Blog</a>
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[16px] transition-colors">Contact</a>
+                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Blog</a>
+                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Contact</a>
               </div>
               
               <!-- Action Button -->
-              <button class="bg-[#2D3192] hover:bg-opacity-90 text-white px-8 py-2.5 rounded text-[15px] font-bold transition-all shadow-sm">Get Started</button>
+              <button class="bg-[#2D3192] hover:bg-opacity-90 text-white px-5 lg:px-7 xl:px-8 py-2.5 rounded text-[14px] lg:text-[15px] font-bold transition-all shadow-sm whitespace-nowrap">Get Started</button>
             } @else {
               <!-- Action Button for Dashboard -->
-              <button class="bg-[#dc2626] hover:bg-opacity-90 text-white px-8 py-2.5 rounded text-[15px] font-bold transition-all shadow-sm" routerLink="/">Logout</button>
+              <button class="bg-[#dc2626] hover:bg-opacity-90 text-white px-6 lg:px-8 py-2.5 rounded text-[14px] lg:text-[15px] font-bold transition-all shadow-sm whitespace-nowrap" routerLink="/">Logout</button>
             }
           </div>
           
-          <!-- Mobile menu button -->
-          <div class="md:hidden flex items-center">
-             <button class="text-gray-600 hover:text-blue-600 focus:outline-none" (click)="isMobileMenuOpen = !isMobileMenuOpen">
-               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <!-- Tablet / Mobile menu button (Visible below lg screens <1024px) -->
+          <div class="lg:hidden flex items-center">
+             <button class="text-gray-600 hover:text-blue-600 focus:outline-none p-2" (click)="isMobileMenuOpen = !isMobileMenuOpen">
+               <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                </svg>
              </button>
@@ -88,9 +88,9 @@ import { filter } from 'rxjs/operators';
         </div>
       </div>
       
-      <!-- Mobile Menu -->
+      <!-- Tablet & Mobile Menu -->
       @if (isMobileMenuOpen) {
-        <div class="md:hidden bg-white border-t border-gray-100">
+        <div class="lg:hidden bg-white border-t border-gray-100">
            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
              @if (!isDashboardView) {
                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>

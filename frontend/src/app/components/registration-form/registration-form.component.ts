@@ -417,7 +417,11 @@ export class RegistrationFormComponent implements OnInit {
           this.showParentFields = false;
           
           setTimeout(() => {
-            this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
+            if (this.entryFee === 25) {
+              this.router.navigate(['/skillstorm/mastery-battles-dashboard']);
+            } else {
+              this.router.navigate(['/skillstorm/open-challenges-dashboard']);
+            }
           }, 1000);
         },
         error: (err) => {

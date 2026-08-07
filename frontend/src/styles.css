@@ -18,3 +18,56 @@ html, body {
   color: #6B7280;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ============================================================
+   RESPONSIVE HORIZONTAL PADDING & CONTAINER SYSTEM
+   - 360px  -> px: 15px
+   - 768px  -> px: 30px
+   - 1024px -> px: 30px
+   - 1200px -> px: 50px
+   - 1366px -> Container max-width: 1366px auto centered
+   ============================================================ */
+
+.site-container,
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .site-container,
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-container,
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .site-container,
+  .container {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media (min-width: 1366px) {
+  .site-container,
+  .container {
+    max-width: 1366px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
