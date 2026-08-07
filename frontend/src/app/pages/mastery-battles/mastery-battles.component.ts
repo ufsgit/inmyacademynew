@@ -104,23 +104,23 @@ export class MasteryBattlesComponent {
   ];
 
   perks = [
-    { title: 'Cash Awards', subtitle: 'For Champions and top runners-up' },
-    { title: 'Custom Trophies', subtitle: 'And framed certificates' },
-    { title: 'Premium Course Access', subtitle: 'For top teams' },
-    { title: 'Scholarship Pathways', subtitle: 'Via partner schools and programs' },
-    { title: 'Industry Visits', subtitle: 'Virtual or in-person experiences' },
-    { title: 'Digital Certificates', subtitle: 'For all approved participants' },
-    { title: 'Sponsorship Introductions', subtitle: 'For outstanding teams' }
+    { title: '£10,000 Prize Pool', subtitle: 'Shared across tracks and age categories' },
+    { title: 'Cash + Trophy + Certificate', subtitle: 'For each Champion' },
+    { title: 'Premium Course Access', subtitle: 'For top finalists' },
+    { title: 'Scholarship Pathways', subtitle: 'Via partner programs and universities' },
+    { title: 'Industry Immersions', subtitle: 'In law, media, tech, business, and finance' },
+    { title: 'Digital Certificates', subtitle: 'For all approved entries' },
+    { title: 'Sponsorship Introductions', subtitle: 'Linking top talents with mentors and investors' }
   ];
 
   perkIcons = [
-    'M2 6h20v12H2zm10 8a2 2 0 100-4 2 2 0 000 4zm-6 0h.01M18 12h.01',
-    'M9.937 15.5A2 2 0 008.5 14.063l-6.135-1.582a.5.5 0 010-.962L8.5 9.936A2 2 0 009.937 8.5l1.582-6.135a.5.5 0 01.963 0L14.063 8.5A2 2 0 0015.5 9.937l6.135 1.581a.5.5 0 010 .964L15.5 14.063a2 2 0 00-1.437 1.437l-1.582 6.135a.5.5 0 01-.963 0z',
-    'M6 3h12l4 6-10 12-10-12z',
-    'M22 10l-10-5-10 5 10 5zM6 12v5c3 3 9 3 12 0v-5',
-    'M4 8h16v12H4zM8 8V6a2 2 0 012-2h4a2 2 0 012 2v2',
-    'M12 22l-3-3-4 .5.5-4-3-3 3-3-.5-4 4-.5 3-3 3 3 4-.5-.5 4 3 3-3 3 .5 4-4 .5zM9 12l2 2 4-4',
-    'M13 2L3 14h9l-1 8 10-12h-9z'
+    'M2 6h20v12H2zm10 8a2 2 0 100-4 2 2 0 000 4zm-6 0h.01M18 12h.01', // Money / Cash
+    'M6 9H4a2 2 0 00-2 2v1a5 5 0 005 5h.09M18 9h2a2 2 0 012 2v1a5 5 0 01-5 5h-.09M6 3h12v10a6 6 0 01-12 0V3zM9 21h6M12 17v4', // Trophy
+    'M22 10L12 5 2 10l10 5 10-5zM6 12v5c3 3 9 3 12 0v-5', // Graduation Cap / Course
+    'M12 15l-2 5l2-1l2 1l-2-5M12 3a6 6 0 1 0 0 12a6 6 0 0 0 0-12z', // Medal / Ribbon
+    'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', // Building / Industry
+    'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', // Document / Certificate
+    'M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87M12 14a4 4 0 100-8 4 4 0 000 8z' // People / Sponsorship
   ];
 
   scrollToTracks(): void {

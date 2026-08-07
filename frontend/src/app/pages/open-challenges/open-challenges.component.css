@@ -166,15 +166,15 @@
 }
 
 .stat-circle {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: #FFF5E9;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: #FFF7ED;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  color: #FF8C00;
+  color: #EA580C;
   flex-shrink: 0;
 }
 .stat-circle svg { width: 34px; height: 34px; }
@@ -270,16 +270,21 @@
 }
 
 .card-icon-box {
-  width: 56px;
-  height: 56px;
-  background: #fff6e7;
-  border-radius: 15px;
+  width: 48px;
+  height: 48px;
+  background: #FFF7ED;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
-.card-icon-box svg { width: 28px; height: 28px; color: #ff9c31; stroke: #ff9c31; }
+.card-icon-box svg {
+  width: 24px;
+  height: 24px;
+  color: #EA580C;
+  stroke: #EA580C;
+}
 
 .age-badge {
   font-family: 'Kumbh Sans', sans-serif;
