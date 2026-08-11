@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -128,6 +129,63 @@ interface Team {
             <div style="display: flex; gap: 12px; flex-wrap: wrap;">
               <span *ngFor="let cat of categoriesEntered" class="category-badge">{{ cat }}</span>
               <span *ngIf="categoriesEntered.length === 0" style="font-size:14px; color:#999;">No categories registered yet.</span>
+            </div>
+          </div>
+
+          <!-- Competition Documents -->
+          <div style="background: #FFFFFF; border: 1px solid #E8E8E8; border-radius: 12px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 1px 4px rgba(0,0,0,0.02);">
+            <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                <path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              Competition Documents
+            </h3>
+            
+            <div *ngIf="adminDocuments.length === 0" style="font-size: 14px; color: #666666; font-style: italic;">
+              No documents available yet.
+            </div>
+
+            <ul *ngIf="adminDocuments.length > 0" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px;">
+              <li *ngFor="let doc of adminDocuments" style="background: #FAFAFA; border: 1px solid #E5E7EB; border-radius: 8px; padding: 12px 16px;">
+                <a href="javascript:void(0)" (click)="viewDocument(doc, $event)" style="display: flex; align-items: center; gap: 8px; color: #D32F2F; text-decoration: none; font-size: 14px; font-weight: 600;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                    <path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/>
+                  </svg>
+                  {{ doc.title || 'Document' }}
+                </a>
+              </li>
+            </ul>
+
+            <!-- Document Viewer -->
+            <div *ngIf="selectedDocument" style="margin-top: 24px; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; background: #fafafa;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h5 style="margin: 0; font-size: 16px; font-weight: 700; color: #111111;">{{ selectedDocument.title || 'Document View' }}</h5>
+                <button (click)="selectedDocument = null" style="background: transparent; border: none; font-size: 24px; cursor: pointer; color: #6b7280; line-height: 1;">&times;</button>
+              </div>
+              
+              <ng-container *ngIf="isPdf(selectedDocument.file_path)">
+                <iframe [src]="getSafeUrl(selectedDocument.file_path)" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>
+              </ng-container>
+
+              <ng-container *ngIf="isImage(selectedDocument.file_path)">
+                <img [src]="selectedDocument.file_path" style="max-width: 100%; border-radius: 8px;" />
+              </ng-container>
+
+              <ng-container *ngIf="isVideo(selectedDocument.file_path)">
+                <video controls width="100%" style="border-radius: 8px;">
+                  <source [src]="selectedDocument.file_path" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </ng-container>
+
+              <ng-container *ngIf="!isPdf(selectedDocument.file_path) && !isImage(selectedDocument.file_path) && !isVideo(selectedDocument.file_path)">
+                <div style="text-align: center; padding: 40px 20px;">
+                  <p style="color: #666666; margin-bottom: 16px;">Preview not available for this file type.</p>
+                  <a [href]="selectedDocument.file_path" target="_blank" style="display: inline-block; padding: 10px 20px; background: #D32F2F; color: white; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">Download / Open File</a>
+                </div>
+              </ng-container>
             </div>
           </div>
 
@@ -627,7 +685,12 @@ export class SchoolDashboardComponent implements OnInit {
   schoolCity: string = '';
   categoriesEntered: string[] = [];
 
+  adminDocuments: any[] = [];
+  selectedDocument: any = null;
+
   teams: Team[] = [];
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     // 1. Load school info from localStorage (set during registration)
@@ -679,6 +742,43 @@ export class SchoolDashboardComponent implements OnInit {
         error: () => { /* silently ignore, use localStorage fallback */ }
       });
     }
+    
+    this.fetchAdminDocuments();
+  }
+
+  fetchAdminDocuments() {
+    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+      next: (docs) => {
+        const allDocs = docs || [];
+        this.adminDocuments = allDocs.filter(d => d.category === 'School Competitions');
+      },
+      error: (err) => console.error('Error fetching admin documents:', err)
+    });
+  }
+
+  viewDocument(doc: any, event: Event) {
+    event.preventDefault();
+    this.selectedDocument = doc;
+  }
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  isPdf(url: string): boolean {
+    return url ? url.toLowerCase().endsWith('.pdf') : false;
+  }
+
+  isImage(url: string): boolean {
+    if (!url) return false;
+    const lowerUrl = url.toLowerCase();
+    return lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') || lowerUrl.endsWith('.gif') || lowerUrl.endsWith('.webp');
+  }
+
+  isVideo(url: string): boolean {
+    if (!url) return false;
+    const lowerUrl = url.toLowerCase();
+    return lowerUrl.endsWith('.mp4') || lowerUrl.endsWith('.webm') || lowerUrl.endsWith('.ogg') || lowerUrl.endsWith('.mov');
   }
 
   buildTeamsFromData(teamsData: any): void {

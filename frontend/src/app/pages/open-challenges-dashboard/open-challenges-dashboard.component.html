@@ -53,14 +53,6 @@
             <label>Submission Deadline</label>
             <p>2024-04-15</p>
           </div>
-          <div class="info-group">
-            <label>Support Status</label>
-            <span class="badge badge-green">🌱 Growing Support</span>
-          </div>
-          <div class="info-group">
-            <label>Counted Lifts</label>
-            <p style="font-size: 18px; font-weight: 700;">3 / 20</p>
-          </div>
         </div>
       </div>
 
@@ -122,6 +114,50 @@
             <li>• 2nd Place: £500 + Certificate</li>
             <li>• 3rd Place: £250 + Certificate</li>
           </ul>
+        </div>
+
+        <div class="overview-section" *ngIf="adminDocuments.length > 0" style="border: none; margin-bottom: 0;">
+          <h4>Resources & Documents</h4>
+          <ul style="list-style: none; padding: 0; margin-top: 10px;">
+            <li *ngFor="let doc of adminDocuments" style="margin-bottom: 8px;">
+              <a href="javascript:void(0)" (click)="viewDocument(doc, $event)" style="color: #4f46e5; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                  <path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/>
+                </svg>
+                {{ doc.title || 'Document' }}
+              </a>
+            </li>
+          </ul>
+
+          <div *ngIf="selectedDocument" style="margin-top: 20px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; background: #fafafa;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h5 style="margin: 0; font-size: 16px; font-weight: 600;">{{ selectedDocument.title || 'Document View' }}</h5>
+              <button (click)="selectedDocument = null" style="background: transparent; border: none; font-size: 20px; cursor: pointer; color: #6b7280;">&times;</button>
+            </div>
+            
+            <ng-container *ngIf="isPdf(selectedDocument.file_path)">
+              <iframe [src]="getSafeUrl(selectedDocument.file_path)" width="100%" height="600px" style="border: none;"></iframe>
+            </ng-container>
+
+            <ng-container *ngIf="isImage(selectedDocument.file_path)">
+              <img [src]="selectedDocument.file_path" style="max-width: 100%; border-radius: 8px;" />
+            </ng-container>
+
+            <ng-container *ngIf="isVideo(selectedDocument.file_path)">
+              <video controls width="100%" style="border-radius: 8px;">
+                <source [src]="selectedDocument.file_path" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </ng-container>
+
+            <ng-container *ngIf="!isPdf(selectedDocument.file_path) && !isImage(selectedDocument.file_path) && !isVideo(selectedDocument.file_path)">
+              <div style="text-align: center; padding: 40px 20px;">
+                <p>Preview not available for this file type.</p>
+                <a [href]="selectedDocument.file_path" target="_blank" style="display: inline-block; padding: 8px 16px; background: #4f46e5; color: white; border-radius: 6px; text-decoration: none; margin-top: 10px;">Download / Open File</a>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </div>
     </ng-container>

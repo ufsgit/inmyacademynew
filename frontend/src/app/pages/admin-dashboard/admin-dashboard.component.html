@@ -332,6 +332,26 @@
               </select>
             </div>
 
+            <!-- Challenge Selection (Shown only when Open Challenges selected) -->
+            <div *ngIf="docUploadForm.category === 'Open Challenges'">
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Challenge *</label>
+              <select [(ngModel)]="docUploadForm.courseId" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <option value="">-- Choose Challenge --</option>
+                <option *ngFor="let challenge of openChallenges" [value]="challenge.id">{{ challenge.title }}</option>
+              </select>
+            </div>
+
+            <!-- Plan Selection (Shown only when School Competitions selected) -->
+            <div *ngIf="docUploadForm.category === 'School Competitions'">
+              <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Plan *</label>
+              <select [(ngModel)]="docUploadForm.courseId" class="ac-input" style="width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #d1d5db;">
+                <option value="">-- Choose Plan --</option>
+                <option value="Single Team">Single Team</option>
+                <option value="Full Set">Full Set</option>
+                <option value="Additional Team">Additional Team</option>
+              </select>
+            </div>
+
             <!-- Module Selection (Shown when course selected) -->
             <div *ngIf="docUploadForm.category === 'Mastery Battles' && docUploadForm.courseId">
               <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px;">Select Module *</label>

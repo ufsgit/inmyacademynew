@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,6 +16,9 @@ export class OpenChallengesDashboardComponent implements OnInit {
   selectedChallenge = 'Storytelling Challenge';
   registrationId = 'OC-2024-78934';
 
+  adminDocuments: any[] = [];
+  selectedDocument: any = null;
+
   selectedVideo: File | null = null;
   selectedImage: File | null = null;
   summary: string = '';
@@ -25,7 +29,7 @@ export class OpenChallengesDashboardComponent implements OnInit {
   isUploading: boolean = false;
   uploadProgress: number = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const name = localStorage.getItem('openChallengeParticipantName');
@@ -35,6 +39,21 @@ export class OpenChallengesDashboardComponent implements OnInit {
     if (name) this.participantName = name;
     if (challenge) this.selectedChallenge = challenge;
     if (regId) this.registrationId = regId;
+    
+    this.fetchAdminDocuments();
+  }
+
+  fetchAdminDocuments() {
+    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+      next: (docs) => {
+        const allDocs = docs || [];
+        this.adminDocuments = allDocs.filter(d => 
+          d.category === 'Open Challenges' && 
+          (!d.course_track || d.course_track.toLowerCase() === this.selectedChallenge.toLowerCase())
+        );
+      },
+      error: (err) => console.error('Error fetching admin documents:', err)
+    });
   }
 
   onFileSelected(event: any, type: 'video' | 'image'): void {
@@ -83,6 +102,31 @@ export class OpenChallengesDashboardComponent implements OnInit {
     if (fileInput) {
       fileInput.click();
     }
+  }
+
+  viewDocument(doc: any, event: Event) {
+    event.preventDefault();
+    this.selectedDocument = doc;
+  }
+
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  isPdf(url: string): boolean {
+    return url ? url.toLowerCase().endsWith('.pdf') : false;
+  }
+
+  isImage(url: string): boolean {
+    if (!url) return false;
+    const lowerUrl = url.toLowerCase();
+    return lowerUrl.endsWith('.jpg') || lowerUrl.endsWith('.jpeg') || lowerUrl.endsWith('.png') || lowerUrl.endsWith('.gif') || lowerUrl.endsWith('.webp');
+  }
+
+  isVideo(url: string): boolean {
+    if (!url) return false;
+    const lowerUrl = url.toLowerCase();
+    return lowerUrl.endsWith('.mp4') || lowerUrl.endsWith('.webm') || lowerUrl.endsWith('.ogg') || lowerUrl.endsWith('.mov');
   }
 
   onSubmitEntry(): void {

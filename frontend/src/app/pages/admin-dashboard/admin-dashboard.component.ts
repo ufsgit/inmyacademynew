@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { OPEN_CHALLENGES } from '../../data/challenges.data';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,6 +15,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class AdminDashboardComponent implements OnInit {
   stats: any = { totalRegistrations: 0, totalUsers: 0, totalChallenges: 0 };
+  openChallenges = OPEN_CHALLENGES.filter(c => c.entryFee === 1);
   registrations: any[] = [];
   users: any[] = [];
   activeTab: string = 'dashboard';
@@ -180,6 +182,11 @@ export class AdminDashboardComponent implements OnInit {
     if (this.docUploadForm.category === 'Mastery Battles' && this.docUploadForm.courseId) {
       const selectedCourseObj = this.courses.find(c => c.id == this.docUploadForm.courseId);
       courseTitle = selectedCourseObj ? selectedCourseObj.title : '';
+    } else if (this.docUploadForm.category === 'Open Challenges' && this.docUploadForm.courseId) {
+      const selectedChallengeObj = this.openChallenges.find(c => c.id == this.docUploadForm.courseId);
+      courseTitle = selectedChallengeObj ? selectedChallengeObj.title : '';
+    } else if (this.docUploadForm.category === 'School Competitions' && this.docUploadForm.courseId) {
+      courseTitle = this.docUploadForm.courseId;
     }
 
     const formData = new FormData();
