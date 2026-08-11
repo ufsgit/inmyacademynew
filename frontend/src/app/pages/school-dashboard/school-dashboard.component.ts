@@ -380,65 +380,65 @@ interface Team {
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             
             <!-- Card 1 -->
-            <div class="kit-download-card">
-              <div style="flex: 1;">
+            <div class="kit-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
                 <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 6px 0;">Competition Handbook</h3>
                 <p style="font-size: 13px; color: #666666; margin: 0 0 16px 0;">Complete rules, guidelines, and competition overview</p>
                 <span style="font-size: 12px; color: #999999; font-weight: 600; text-transform: uppercase;">PDF • 2.5 MB</span>
               </div>
-              <button class="kit-red-btn">
+              <button class="kit-red-btn" style="margin-top: 20px; width: 100%;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Download
               </button>
             </div>
 
             <!-- Card 2 -->
-            <div class="kit-download-card">
-              <div style="flex: 1;">
+            <div class="kit-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
                 <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 6px 0;">Teacher / Coordinator Kit</h3>
                 <p style="font-size: 13px; color: #666666; margin: 0 0 16px 0;">Resources for educators and coordinators</p>
                 <span style="font-size: 12px; color: #999999; font-weight: 600; text-transform: uppercase;">ZIP • 5.8 MB</span>
               </div>
-              <button class="kit-red-btn">
+              <button class="kit-red-btn" style="margin-top: 20px; width: 100%;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Download
               </button>
             </div>
 
             <!-- Card 3 -->
-            <div class="kit-download-card">
-              <div style="flex: 1;">
+            <div class="kit-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
                 <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 6px 0;">Task Briefs</h3>
                 <p style="font-size: 13px; color: #666666; margin: 0 0 16px 0;">Detailed task descriptions for all categories</p>
                 <span style="font-size: 12px; color: #999999; font-weight: 600; text-transform: uppercase;">PDF • 1.2 MB</span>
               </div>
-              <button class="kit-red-btn">
+              <button class="kit-red-btn" style="margin-top: 20px; width: 100%;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Download
               </button>
             </div>
 
             <!-- Card 4 -->
-            <div class="kit-download-card">
-              <div style="flex: 1;">
+            <div class="kit-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
                 <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 6px 0;">Submission Guidelines</h3>
                 <p style="font-size: 13px; color: #666666; margin: 0 0 16px 0;">How to prepare and submit entries</p>
                 <span style="font-size: 12px; color: #999999; font-weight: 600; text-transform: uppercase;">PDF • 0.8 MB</span>
               </div>
-              <button class="kit-red-btn">
+              <button class="kit-red-btn" style="margin-top: 20px; width: 100%;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Download
               </button>
             </div>
 
             <!-- Card 5 -->
-            <div class="kit-download-card">
-              <div style="flex: 1;">
+            <div class="kit-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
                 <h3 style="font-size: 16px; font-weight: 700; color: #111111; margin: 0 0 6px 0;">Branding / Poster Pack</h3>
                 <p style="font-size: 13px; color: #666666; margin: 0 0 16px 0;">Marketing materials and promotional assets</p>
                 <span style="font-size: 12px; color: #999999; font-weight: 600; text-transform: uppercase;">ZIP • 15.3 MB</span>
               </div>
-              <button class="kit-red-btn">
+              <button class="kit-red-btn" style="margin-top: 20px; width: 100%;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                 Download
               </button>
