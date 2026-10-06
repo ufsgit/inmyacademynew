@@ -60,6 +60,12 @@ import { filter } from 'rxjs/operators';
                            class="nav-dropdown-link">
                            Global School Competitions
                         </a>
+                        <a routerLink="/skillstorm/leaderboard"
+                           routerLinkActive="active-nav-link"
+                           [routerLinkActiveOptions]="{exact: true}"
+                           class="nav-dropdown-link">
+                           SkillStorm Global Leaderboard
+                        </a>
                       </div>
                     </div>
                   }
@@ -108,6 +114,7 @@ import { filter } from 'rxjs/operators';
                    <a routerLink="/skillstorm/open-challenges" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Open Challenges</a>
                    <a routerLink="/skillstorm/mastery-battles" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Mastery Battles</a>
                    <a routerLink="/skillstorm/school-competitions" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global School Competitions</a>
+                   <a routerLink="/skillstorm/leaderboard" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">SkillStorm Global Leaderboard</a>
                  </div>
                </div>
                

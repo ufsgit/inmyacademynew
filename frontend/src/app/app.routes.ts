@@ -5,6 +5,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'skillstorm/open-challenges', pathMatch: 'full' },
   { path: 'skillstorm/open-challenges', loadComponent: () => import('./pages/open-challenges/open-challenges.component').then(m => m.OpenChallengesComponent) },
   { path: 'skillstorm/school-competitions', loadComponent: () => import('./pages/school-competitions/school-competitions.component').then(m => m.SchoolCompetitionsComponent) },
+  { path: 'skillstorm/leaderboard', loadComponent: () => import('./pages/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent) },
   { path: 'skillstorm/registration-wizard', loadComponent: () => import('./pages/registration-wizard/registration-wizard.component').then(m => m.RegistrationWizardComponent) },
   { path: 'skillstorm/mastery-battles', loadComponent: () => import('./pages/mastery-battles/mastery-battles.component').then(m => m.MasteryBattlesComponent) },
   { path: 'skillstorm/courses', loadComponent: () => import('./pages/courses-catalog/courses-catalog.component').then(m => m.CoursesCatalogComponent) },

@@ -1,0 +1,95 @@
+<main class="leaderboard-page-container">
+  <div class="leaderboard-content-wrapper">
+    <div class="leaderboard-header">
+      <h1>SkillStorm Global Leaderboard</h1>
+      <p>Track top performers across all three competition formats. Real-time rankings, live updates, and global recognition for excellence.</p>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="leaderboard-main-tabs">
+      <button [class.active]="activeLeaderboardTab === 'school'" (click)="switchLeaderboardTab('school')">School Competitions</button>
+      <button [class.active]="activeLeaderboardTab === 'mastery'" (click)="switchLeaderboardTab('mastery')">Mastery Battles</button>
+      <button [class.active]="activeLeaderboardTab === 'open'" (click)="switchLeaderboardTab('open')">Open Challenges</button>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="leaderboard-filters">
+      <!-- Phases -->
+      <div class="phase-buttons" *ngIf="activeLeaderboardTab === 'school'">
+        <button [class.active-phase]="leaderboardPhase === 'Online Phase'" (click)="setLeaderboardPhase('Online Phase')">Online Phase</button>
+        <button [class.active-phase]="leaderboardPhase === 'Grand Finale'" (click)="setLeaderboardPhase('Grand Finale')">Grand Finale</button>
+      </div>
+      <div class="phase-buttons" *ngIf="activeLeaderboardTab === 'mastery'">
+        <button [class.active-phase]="leaderboardPhase === 'Online Shortlisting'" (click)="setLeaderboardPhase('Online Shortlisting')">Online Shortlisting</button>
+        <button [class.active-phase]="leaderboardPhase === 'Grand Finale Knockout'" (click)="setLeaderboardPhase('Grand Finale Knockout')">Grand Finale Knockout</button>
+      </div>
+      <div class="phase-buttons" *ngIf="activeLeaderboardTab === 'open'">
+        <!-- Open challenges don't have phases in the DB schema for this view usually, but we keep the structure just in case -->
+      </div>
+
+      <!-- Categories -->
+      <div class="category-select-wrapper" *ngIf="activeLeaderboardTab === 'mastery'">
+        <label class="category-label">Select Professional Track</label>
+        <select [(ngModel)]="leaderboardCategory" (change)="fetchLeaderboardData()">
+          <option value="All">All Tracks</option>
+          <option value="Diplomatic Policy Leadership">Diplomatic Policy Leadership</option>
+          <option value="Legal Advocacy">Legal Advocacy</option>
+          <option value="Advanced Research">Advanced Research</option>
+          <option value="Digital Media Strategy">Digital Media Strategy</option>
+          <option value="Entrepreneurial Vision">Entrepreneurial Vision</option>
+          <option value="Project Management">Project Management</option>
+          <option value="Global Communication">Global Communication</option>
+          <option value="Digital Systems">Digital Systems</option>
+          <option value="Investment Banking">Investment Banking</option>
+        </select>
+      </div>
+
+      <div class="category-select-wrapper" *ngIf="activeLeaderboardTab === 'open'">
+        <label class="category-label">Select Challenge</label>
+        <select [(ngModel)]="leaderboardCategory" (change)="fetchLeaderboardData()">
+          <option value="All">All Challenges</option>
+          <option value="Teen Entrepreneur Challenge">Teen Entrepreneur Challenge</option>
+          <option value="Eco Heroes Innovation">Eco Heroes Innovation</option>
+          <option value="Digital Story Showcase">Digital Story Showcase</option>
+          <option value="Young Leadership Voice">Young Leadership Voice</option>
+          <option value="Tech Innovation Lab">Tech Innovation Lab</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>RANK</th>
+            <th>{{ activeLeaderboardTab === 'school' ? 'SCHOOL' : 'PARTICIPANT' }}</th>
+            <th>COUNTRY</th>
+            <th *ngIf="activeLeaderboardTab === 'school'">TEAMS</th>
+            <th>TOTAL POINTS</th>
+            <th>AWARD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of leaderboardData">
+            <td class="rank-col">#{{ row.Rank }}</td>
+            <td class="name-col">{{ row.ParticipantName }}</td>
+            <td class="country-col">{{ row.Country }}</td>
+            <td class="teams-col" *ngIf="activeLeaderboardTab === 'school'">{{ row.TeamsCount }}</td>
+            <td class="score-col">{{ row.Score | number }}</td>
+            <td class="award-col">
+              <span *ngIf="row.Award === 'Champion'" class="award-badge champion">★ Champion</span>
+              <span *ngIf="row.Award === 'Runner-Up'" class="award-badge runner-up">★ Runner-Up</span>
+              <span *ngIf="row.Award === '3rd Place'" class="award-badge third-place">★ 3rd Place</span>
+              <span *ngIf="row.Award === 'Finalist'" class="award-badge finalist">★ Finalist</span>
+              <span *ngIf="!row.Award" class="no-award">—</span>
+            </td>
+          </tr>
+          <tr *ngIf="leaderboardData.length === 0">
+            <td [attr.colspan]="activeLeaderboardTab === 'school' ? 6 : 5" class="empty-state">No records found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

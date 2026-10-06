@@ -18,6 +18,7 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
+app.use('/api/leaderboard', require('./routes/leaderboardRoutes'));
 
 // Base route
 app.get('/', (req, res) => {

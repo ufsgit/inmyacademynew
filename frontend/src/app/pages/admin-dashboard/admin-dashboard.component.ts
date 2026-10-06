@@ -20,6 +20,19 @@ export class AdminDashboardComponent implements OnInit {
   users: any[] = [];
   activeTab: string = 'dashboard';
   activeCourseTab: string = 'overview';
+  
+  // Leaderboard Management
+  adminLeaderboardData: any[] = [];
+  newLeaderboardEntry: any = {
+    CompetitionFormat: 'SCHOOL',
+    CompetitionPhase: 'Online Phase',
+    CategoryTrack: 'All',
+    ParticipantName: '',
+    Country: '',
+    TeamsCount: null,
+    Score: null,
+    Award: ''
+  };
   courses: any[] = [];
   selectedCourse: any = null;
   editingCourseId: number = -1; // use DB id instead of index
@@ -240,8 +253,70 @@ export class AdminDashboardComponent implements OnInit {
     } else if (tab === 'docUpload') {
       this.fetchAdminDocuments();
       this.fetchCourses();
+    } else if (tab === 'leaderboard') {
+      this.fetchAdminLeaderboard();
     }
   }
+
+  getTabTitle(): string {
+    switch(this.activeTab) {
+      case 'dashboard': return 'Dashboard Overview';
+      case 'registrations': return 'Registration Entries';
+      case 'users': return 'System Users';
+      case 'courses': return 'Course Management';
+      case 'projects': return 'Project Submissions';
+      case 'docUpload': return 'Document Upload';
+      case 'leaderboard': return 'Leaderboard Management';
+      default: return 'Admin Dashboard';
+    }
+  }
+
+
+  // LEADERBOARD ADMIN METHODS
+  fetchAdminLeaderboard() {
+    this.http.get('http://localhost:5001/api/leaderboard/all').subscribe({
+      next: (data: any) => {
+        if (data && data.success) {
+          this.adminLeaderboardData = data.data;
+        }
+      },
+      error: (err) => console.error('Error fetching admin leaderboard data:', err)
+    });
+  }
+
+  addLeaderboardEntry() {
+    if (!this.newLeaderboardEntry.ParticipantName || !this.newLeaderboardEntry.Country || this.newLeaderboardEntry.Score === null) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    this.http.post('http://localhost:5001/api/leaderboard', this.newLeaderboardEntry).subscribe({
+      next: (res: any) => {
+        alert('Entry added successfully!');
+        this.fetchAdminLeaderboard();
+        this.newLeaderboardEntry.ParticipantName = '';
+        this.newLeaderboardEntry.Country = '';
+        this.newLeaderboardEntry.TeamsCount = null;
+        this.newLeaderboardEntry.Score = null;
+        this.newLeaderboardEntry.Award = '';
+      },
+      error: (err) => {
+        console.error('Error adding leaderboard entry:', err);
+        alert('Failed to add entry.');
+      }
+    });
+  }
+
+  deleteLeaderboardEntry(id: number) {
+    if (!confirm('Are you sure you want to delete this leaderboard entry?')) return;
+    this.http.delete(`http://localhost:5001/api/leaderboard/${id}`).subscribe({
+      next: () => {
+        this.fetchAdminLeaderboard();
+      },
+      error: (err) => console.error('Error deleting entry:', err)
+    });
+  }
+
+
 
   isAddingTopic: boolean = false;
   newTopicData: any = {
