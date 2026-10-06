@@ -941,23 +941,23 @@
           <div class="ac-layout">
             <div class="ac-main">
               <div class="ac-block">
-                <label class="ac-label">Description</label>
-                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;">
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px;">Description</label>
+                <div style="background:#ffffff; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); line-height: 1.7; color: #374151; font-size: 15px;">
                   <div [innerHTML]="sanitizeHtml(selectedCourse.description)"></div>
-                  <div *ngIf="selectedCourse.about_the_track" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #cbd5e0;" [innerHTML]="sanitizeHtml(selectedCourse.about_the_track)"></div>
+                  <div *ngIf="selectedCourse.about_the_track" style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed #cbd5e1;" [innerHTML]="sanitizeHtml(selectedCourse.about_the_track)"></div>
                 </div>
               </div>
 
               <div class="ac-block" *ngIf="selectedCourse.lessons && selectedCourse.lessons.length > 0">
-                <label class="ac-label">Topics / Lessons</label>
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px;">Topics / Lessons</label>
                 <div style="display: grid; gap: 16px;">
-                  <div *ngFor="let lesson of selectedCourse.lessons; let j = index" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                  <div *ngFor="let lesson of selectedCourse.lessons; let j = index" style="background: #ffffff; border-left: 4px solid #6366f1; border-top: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <div style="display: flex; justify-content: space-between; gap: 12px; align-items: flex-start;">
                       <div>
-                        <h4 style="margin: 0 0 6px 0; font-size: 16px; font-weight: 700; color: #1f2937;">Lesson {{ j + 1 }}: {{ lesson.title || 'Untitled Topic' }}</h4>
-                        <p style="margin: 0; color: #64748b;">{{ lesson.syllabus || lesson.description || 'No description provided.' }}</p>
+                        <h4 style="margin: 0 0 8px 0; font-size: 17px; font-weight: 700; color: #1f2937;">Lesson {{ j + 1 }}: {{ lesson.title || 'Untitled Topic' }}</h4>
+                        <p style="margin: 0; color: #4b5563; line-height: 1.6; font-size: 14px;">{{ lesson.syllabus || lesson.description || 'No description provided.' }}</p>
                       </div>
-                      <span style="font-size: 13px; color: #4a5568; padding: 8px 12px; border-radius: 999px; background: #f8fafc;">Topic</span>
+                      <span style="font-size: 12px; font-weight: 600; color: #4338ca; padding: 6px 14px; border-radius: 999px; background: #e0e7ff; white-space: nowrap;">Topic</span>
                     </div>
                     <div *ngIf="lesson.video" style="margin-top: 16px;">
                       <video controls style="width: 100%; max-height: 260px; border-radius: 12px; background: #000;">
@@ -970,45 +970,46 @@
               </div>
 
               <div class="ac-block" *ngIf="selectedCourse.phase1">
-                <label class="ac-label">Phase 1</label>
-                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.phase1)"></div>
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px;">Phase 1</label>
+                <div style="background:#ffffff; padding: 20px 24px; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.02); line-height: 1.6; color: #374151; font-size: 15px;" [innerHTML]="sanitizeHtml(selectedCourse.phase1)"></div>
               </div>
 
               <div class="ac-block" *ngIf="selectedCourse.final">
-                <label class="ac-label">Final</label>
-                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.final)"></div>
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px;">Final</label>
+                <div style="background:#ffffff; padding: 20px 24px; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.02); line-height: 1.6; color: #374151; font-size: 15px;" [innerHTML]="sanitizeHtml(selectedCourse.final)"></div>
               </div>
 
               <div class="ac-block" *ngIf="selectedCourse.extras">
-                <label class="ac-label">Extras</label>
-                <div style="background:#f7fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 1.6; color: #4a5568;" [innerHTML]="sanitizeHtml(selectedCourse.extras)"></div>
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px;">Extras</label>
+                <div style="background:#ffffff; padding: 20px 24px; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.02); line-height: 1.6; color: #374151; font-size: 15px;" [innerHTML]="sanitizeHtml(selectedCourse.extras)"></div>
               </div>
             </div>
 
             <div class="ac-sidebar">
-              <div class="ac-card">
-                <label class="ac-label">Course Details</label>
-                <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #718096; font-size: 14px;">Difficulty Level</span>
-                    <span class="badge" [ngClass]="{'challenge-badge': selectedCourse.difficulty === 'Intermediate', 'school-badge': selectedCourse.difficulty === 'Beginner', 'individual-badge': selectedCourse.difficulty === 'Advanced'}">{{ selectedCourse.difficulty }}</span>
+              <div class="ac-card" style="box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: none;">
+                <label class="ac-label" style="font-size: 18px; font-weight: 700; color: #111827; border-bottom: 1px solid #f3f4f6; padding-bottom: 12px; margin-bottom: 16px;">Course Details</label>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Difficulty Level</span>
+                    <span class="badge" [ngClass]="{'challenge-badge': selectedCourse.difficulty === 'Intermediate', 'school-badge': selectedCourse.difficulty === 'Beginner', 'individual-badge': selectedCourse.difficulty === 'Advanced'}" style="font-size: 12px; padding: 4px 12px; border-radius: 6px;">{{ selectedCourse.difficulty }}</span>
                   </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #718096; font-size: 14px;">Pricing Model</span>
-                    <span class="badge" [ngClass]="selectedCourse.pricing === 'Free' ? 'consent-badge' : 'category-badge'">{{ selectedCourse.pricing }}</span>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Pricing Model</span>
+                    <span class="badge" [ngClass]="selectedCourse.pricing === 'Free' ? 'consent-badge' : 'category-badge'" style="font-size: 12px; padding: 4px 12px; border-radius: 6px;">{{ selectedCourse.pricing }}</span>
                   </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #718096; font-size: 14px;">Visibility</span>
-                    <span style="font-size: 14px; font-weight: 500; color: #2d3748;">{{ selectedCourse.visibility }}</span>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Visibility</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 4px 12px; border-radius: 6px;">{{ selectedCourse.visibility }}</span>
                   </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: #718096; font-size: 14px;">Public Course</span>
-                    <span style="font-size: 14px; font-weight: 500; color: #2d3748;">{{ selectedCourse.is_public ? 'Yes' : 'No' }}</span>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Public Course</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 4px 12px; border-radius: 6px;">{{ selectedCourse.is_public ? 'Yes' : 'No' }}</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #6b7280; font-size: 14px; font-weight: 500;">No. of Modules</span>
+                    <span style="font-size: 14px; font-weight: 600; color: #1f2937; background: #f3f4f6; padding: 4px 12px; border-radius: 6px;">{{ selectedCourse.lessons ? selectedCourse.lessons.length : 0 }}</span>
                   </div>
                 </div>
-              </div>
-              <div class="ac-card" *ngIf="selectedCourse.image" style="margin-top: 20px; padding: 0; overflow: hidden;">
-                <img [src]="selectedCourse.image" alt="Course image" style="width: 100%; height: 220px; object-fit: cover; display: block;" />
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@
 </div>
 
 <!-- Hero Section -->
-<section style="background:#FFFFFF; padding:80px 24px 32px; text-align:center; font-family:'Poppins','Inter',sans-serif;">
+<section class="section-pad" style="background:#FFFFFF; text-align:center; font-family:'Poppins','Inter',sans-serif;">
   
   <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; align-items:center;">
     
@@ -46,8 +46,8 @@
 </section>
 
 <!-- Stats Bar -->
-<section style="background:#F9FAFB; padding-bottom:60px; margin-top:100px;">
-  <div style="max-width:1100px; margin:0 auto; padding:0 40px;">
+<section class="section-pad" style="background:#F9FAFB; margin-top:100px;">
+  <div style="max-width:1100px; margin:0 auto;">
     
     <div class="stats-grid" style="display:flex; justify-content:space-between; text-align:center;">
       
@@ -121,8 +121,8 @@
 </section>
 
 <!-- Competition Format Section -->
-<section class="py-16 bg-white font-sans border-t border-gray-100">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-pad gap-fix bg-white font-sans border-t border-gray-100">
+  <div class="max-w-[1200px] mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-[32px] font-extrabold text-[#111827] mb-4">Competition Format</h2>
       <p class="text-[16px] text-[#6B7280]">
@@ -277,8 +277,8 @@
 </section>
 
 <!-- Pricing Packages Section -->
-<section id="pricing-section" style="padding:80px 24px; background:#FFFFFF; font-family:'Poppins','Inter',sans-serif;">
-  <div style="max-width:1100px; margin:0 auto;">
+<section id="pricing-section" class="section-pad" style="background:#FFFFFF; font-family:'Poppins','Inter',sans-serif;">
+  <div class="format-container" style="max-width:1100px; margin:0 auto;">
     
     <!-- Section Title -->
     <div style="text-align:center; margin-bottom:64px;">
@@ -287,7 +287,7 @@
     </div>
 
     <!-- Pricing Grid -->
-    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; align-items:center; margin-bottom:64px;">
+    <div class="pricing-grid">
       
       <!-- Single Team -->
       <div class="pricing-card" [class.active]="activePlan === 'single'" (mouseenter)="activePlan = 'single'" (mouseleave)="activePlan = 'full'">
@@ -384,9 +384,9 @@
 </section>
 
 <!-- What Schools Receive Section -->
-<section class="pb-16 bg-[#FFFFFF] font-sans">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white border border-gray-200 rounded-[24px] p-10 shadow-sm max-w-[1000px] mx-auto">
+<section class="section-pad bg-[#FFFFFF] font-sans">
+  <div class="max-w-[1200px] mx-auto">
+    <div class="format-container bg-white border border-gray-200 rounded-[24px] p-10 shadow-sm max-w-[1000px] mx-auto">
       <div class="flex items-center gap-4 mb-8">
         <div class="w-12 h-12 rounded-xl bg-[#FCE7F3] flex items-center justify-center text-[#DB2777]">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
@@ -421,8 +421,8 @@
 </section>
 
 <!-- Scoring System Section -->
-<section class="py-24 bg-white font-sans">
-  <div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-pad bg-white font-sans">
+  <div class="format-container max-w-[1000px] mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-[32px] font-extrabold text-[#111827] mb-4">Scoring System</h2>
       <p class="text-[16px] text-[#6B7280]">Merit-first scoring with community support</p>
@@ -521,7 +521,7 @@
 </section>
 
 <!-- Prizes Section -->
-<section style="background:#FAF8F5; padding:64px 48px; border-top:1px solid #E8E8E8;">
+<section class="section-pad" style="background:#FAF8F5; border-top:1px solid #E8E8E8;">
   <div style="max-width:1100px; margin:0 auto;">
     <div style="text-align:center; margin-bottom:48px;">
       <span style="display:inline-block; background:#FFF7ED; color:#EA580C; border:1px solid #FED7AA; border-radius:20px; font-size:12px; font-weight:700; padding:4px 16px; margin-bottom:12px;">Total pool: £30,000</span>
@@ -530,7 +530,7 @@
     </div>
 
     <!-- Grid matching exact PDF screenshot -->
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
+    <div class="prizes-opp-grid">
       <!-- Card 1: Cash Awards -->
       <div style="background:#FFFFFF; border:1px solid #F3F0EC; border-radius:16px; padding:24px 20px; display:flex; flex-direction:column; align-items:flex-start;">
         <div style="width:40px; height:40px; background:#FDE8E8; border-radius:10px; margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
@@ -632,8 +632,8 @@
 </section>
 
 <!-- Dates & Rules Section -->
-<section class="py-16 bg-[#F9FAFB] font-sans">
-  <div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<section class="section-pad bg-[#F9FAFB] font-sans">
+  <div class="format-container max-w-[1000px] mx-auto">
     <div class="grid md:grid-cols-2 gap-8 mb-24">
       
       <!-- Key Dates Card -->
@@ -747,11 +747,11 @@
 
 <!-- Footer -->
 <footer class="bg-[#F3F4F6] pt-16 pb-10 font-sans border-t border-gray-200">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-[30px] lg:px-[50px]">
     
     <!-- Contact Banner -->
-    <div class="bg-[#2D3192] rounded-[32px] py-10 px-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 mb-20">
-      <div class="flex items-center gap-5 w-full md:w-1/3">
+    <div class="bg-[#2D3192] rounded-[32px] py-10 px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10 mb-20">
+      <div class="flex items-center gap-5 w-full lg:w-1/3">
         <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-[#2D3192] flex-shrink-0">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
         </div>
@@ -761,7 +761,7 @@
         </div>
       </div>
       
-      <div class="flex items-center gap-5 w-full md:w-1/3">
+      <div class="flex items-center gap-5 w-full lg:w-1/3">
         <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-[#2D3192] flex-shrink-0">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
         </div>
@@ -771,7 +771,7 @@
         </div>
       </div>
       
-      <div class="flex items-center gap-5 w-full md:w-1/3">
+      <div class="flex items-center gap-5 w-full lg:w-1/3">
         <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-[#2D3192] flex-shrink-0">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
         </div>
@@ -783,8 +783,8 @@
     </div>
     
     <!-- Footer Links -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-      <div class="md:col-span-5 pr-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
+      <div class="lg:col-span-5 pr-4">
         <p class="text-[#374151] text-[15px] leading-relaxed mb-8">
           We're more than a platform—we're a global powerhouse redefining education with interactive, real-world mastery that excites, engages, and empowers you to achieve the impossible.
         </p>

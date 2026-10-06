@@ -17,17 +17,25 @@ html, body {
   font-family: var(--font-primary);
   color: #6B7280;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* ============================================================
-   RESPONSIVE HORIZONTAL PADDING & CONTAINER SYSTEM
-   - 360px  -> px: 15px
-   - 768px  -> px: 30px
-   - 1024px -> px: 30px
-   - 1200px -> px: 50px
-   - 1366px -> Container max-width: 1366px auto centered
+   RESPONSIVE PADDING SYSTEM
+   .section-pad — controls section top/bottom & left/right padding
+   .container   — controls horizontal padding only
+
+   Breakpoints:
+   - default  → top/bottom: 40px  | left/right: 15px
+   - 567px    → top/bottom: 50px  | left/right: 15px
+   - 768px    → top/bottom: 70px  | left/right: 30px
+   - 1024px   → top/bottom: 100px | left/right: 30px
+   - 1200px   → top/bottom: 100px | left/right: 50px
+   - 1366px   → container max-width: 1366px auto centered
    ============================================================ */
 
+/* Base (mobile-first) */
 .site-container,
 .container {
   width: 100%;
@@ -38,30 +46,72 @@ html, body {
   box-sizing: border-box;
 }
 
-@media (min-width: 768px) {
+.section-pad {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* 567px */
+@media (min-width: 567px) {
+  .section-pad {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* 768px */
+@media (min-width: 768px) and (max-width: 1023px) {
   .site-container,
   .container {
     padding-left: 30px;
     padding-right: 30px;
   }
-}
 
-@media (min-width: 1024px) {
-  .site-container,
-  .container {
+  .section-pad {
+    padding-top: 70px;
+    padding-bottom: 70px;
     padding-left: 30px;
     padding-right: 30px;
   }
 }
 
-@media (min-width: 1200px) {
+/* 1024px */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .site-container,
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .section-pad {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+/* 1200px */
+@media (min-width: 1200px) and (max-width: 1365px) {
   .site-container,
   .container {
     padding-left: 50px;
     padding-right: 50px;
   }
+
+  .section-pad {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
 }
 
+/* 1366px — max-width clamp */
 @media (min-width: 1366px) {
   .site-container,
   .container {
@@ -70,4 +120,5 @@ html, body {
     margin-right: auto;
   }
 }
+
 

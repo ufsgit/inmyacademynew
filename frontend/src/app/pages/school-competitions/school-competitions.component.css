@@ -40,8 +40,26 @@
   color: #FFFFFF;
 }
 
+/* Pricing Grid */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 64px;
+}
+
+@media (min-width: 1200px) and (max-width: 1365px) {
+  .gap-fix {
+    padding-bottom: 0 !important;
+  }
+  .format-container {
+    max-width: 100% !important;
+  }
+}
+
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hero-buttons {
     flex-direction: column;
   }
@@ -55,4 +73,28 @@
   .phases-grid {
     grid-template-columns: 1fr !important;
   }
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-card {
+    padding: 32px 20px;
+  }
+  .prizes-opp-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
+
+/* Prizes Grid */
+.prizes-opp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .prizes-opp-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+

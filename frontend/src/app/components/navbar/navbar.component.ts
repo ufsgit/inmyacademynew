@@ -15,13 +15,13 @@ import { filter } from 'rxjs/operators';
   template: `
     <nav class="bg-white shadow-md w-full sticky top-0 z-[9999] transition-transform duration-300"
          [class.-translate-y-full]="isHidden">
-      <div class="max-w-[1366px] mx-auto px-[15px] md:px-[30px] lg:px-[30px] xl:px-[50px]">
+      <div class="max-w-[1366px] mx-auto px-[15px] lg:px-[50px] xl:px-[50px]">
         <div class="flex justify-between h-24 items-center">
           <!-- Logo -->
           <img src="assets/Logo-resized.svg" alt="inmyacademy logo" class="h-[60px] lg:h-[70px] xl:h-[75px] w-auto cursor-pointer flex-shrink-0" routerLink="/" />
           
-          <!-- Right Side: Desktop Menu & Button (Visible on Large Screens lg+) -->
-          <div class="hidden lg:flex items-center gap-4 lg:gap-6 xl:gap-8">
+          <!-- Right Side: Desktop Menu & Button (Visible on Large Screens xl+) -->
+          <div class="hidden xl:flex items-center gap-8">
             @if (!isDashboardView) {
               <!-- Navigation Links -->
               <div class="flex items-center gap-3 lg:gap-5 xl:gap-6">
@@ -77,12 +77,18 @@ import { filter } from 'rxjs/operators';
             }
           </div>
           
-          <!-- Tablet / Mobile menu button (Visible below lg screens <1024px) -->
-          <div class="lg:hidden flex items-center">
+          <!-- Tablet / Mobile menu button (Visible below xl screens <1280px) -->
+          <div class="xl:hidden flex items-center">
              <button class="text-gray-600 hover:text-blue-600 focus:outline-none p-2" (click)="isMobileMenuOpen = !isMobileMenuOpen">
-               <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-               </svg>
+               @if (!isMobileMenuOpen) {
+                 <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                 </svg>
+               } @else {
+                 <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                 </svg>
+               }
              </button>
           </div>
         </div>
@@ -90,7 +96,7 @@ import { filter } from 'rxjs/operators';
       
       <!-- Tablet & Mobile Menu -->
       @if (isMobileMenuOpen) {
-        <div class="lg:hidden bg-white border-t border-gray-100">
+        <div class="xl:hidden bg-white border-t border-gray-100">
            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
              @if (!isDashboardView) {
                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
