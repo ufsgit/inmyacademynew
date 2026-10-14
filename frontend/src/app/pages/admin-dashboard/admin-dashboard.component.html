@@ -189,8 +189,8 @@
       <!-- Registrations Tab -->
       <div class="tab-content" *ngIf="activeTab === 'registrations'">
         
-        <!-- Registration Type Filters -->
-        <div class="type-filters">
+        <!-- Registration Type Filters (Hidden when viewing a registration) -->
+        <div class="type-filters" *ngIf="!selectedParticipant">
           <button class="type-filter-btn" [class.active]="selectedTypeFilter === 'all'" (click)="setTypeFilter('all')">
             All Registrations <span class="count-badge">{{ registrationsCount.all }}</span>
           </button>
@@ -202,7 +202,8 @@
           </button>
         </div>
 
-        <div class="table-container" style="margin-top: 20px;">
+        <!-- Registrations Table (Hidden when viewing a registration) -->
+        <div class="table-container" style="margin-top: 20px;" *ngIf="!selectedParticipant">
           <table class="data-table full-width">
             <thead>
               <tr>
@@ -254,6 +255,300 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- Registration View Page (Clean, Perfect Alignment & Ultra-Attractive) -->
+        <div *ngIf="selectedParticipant" class="reg-view-page fade-in">
+          
+          <!-- Top Navigation / Breadcrumb Bar -->
+          <div class="reg-view-topbar">
+            <button class="back-nav-btn" (click)="closeModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Back to Registrations</span>
+            </button>
+
+            <div class="reg-view-top-actions">
+              <span class="reg-id-pill">Entry #{{ selectedParticipant.id }}</span>
+              <button class="delete-reg-btn" (click)="deleteParticipant(selectedParticipant.id)" title="Delete this registration">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Delete</span>
+              </button>
+              <button class="close-view-btn" (click)="closeModal()" title="Close view">×</button>
+            </div>
+          </div>
+
+          <!-- Hero Profile Banner Card -->
+          <div class="reg-hero-card">
+            <div class="reg-hero-main">
+              <div class="reg-avatar" [ngClass]="selectedParticipant.registration_type === 'school' ? 'school-avatar' : 'individual-avatar'">
+                <svg *ngIf="selectedParticipant.registration_type === 'school'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"></path>
+                </svg>
+                <svg *ngIf="selectedParticipant.registration_type !== 'school'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+
+              <div class="reg-hero-info">
+                <div class="reg-title-row">
+                  <h2 class="reg-entity-name">{{ selectedParticipant.full_name }}</h2>
+                  <span class="type-pill" [ngClass]="selectedParticipant.registration_type === 'school' ? 'school-pill' : 'individual-pill'">
+                    {{ selectedParticipant.registration_type === 'school' ? 'School Registration' : 'Individual Registration' }}
+                  </span>
+                  <span class="category-pill-badge" *ngIf="selectedParticipant.category">
+                    {{ selectedParticipant.category }}
+                  </span>
+                </div>
+
+                <div class="reg-meta-chips">
+                  <span class="meta-chip">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <a [href]="'mailto:' + selectedParticipant.email" class="meta-link">{{ selectedParticipant.email }}</a>
+                  </span>
+                  <span class="meta-chip" *ngIf="selectedParticipant.city || selectedParticipant.country">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <span>{{ selectedParticipant.city }}{{ selectedParticipant.city && selectedParticipant.country ? ', ' : '' }}{{ selectedParticipant.country }}</span>
+                  </span>
+                  <span class="meta-chip">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <span>Registered {{ selectedParticipant.created_at | date:'medium' }}</span>
+                  </span>
+                  <span class="meta-chip" *ngIf="selectedParticipant.registration_type === 'individual' && selectedParticipant.age">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                    <span>Age: {{ selectedParticipant.age }} years</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Grid: 2 Balanced Columns -->
+          <div class="reg-details-grid">
+            
+            <!-- Card 1: Challenge & Competition Info -->
+            <div class="reg-card">
+              <div class="reg-card-header">
+                <div class="reg-card-icon trophy-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9H4a2 2 0 0 0-2 2v1a5 5 0 0 0 5 5h.09M18 9h2a2 2 0 0 1 2 2v1a5 5 0 0 1-5 5h-.09M6 3h12v10a6 6 0 0 1-12 0V3zM9 21h6M12 17v4"></path>
+                  </svg>
+                </div>
+                <h3>Challenge & Program Details</h3>
+              </div>
+              <div class="reg-card-body">
+                <div class="field-item">
+                  <span class="field-label">Registered Challenge / Track</span>
+                  <p class="field-value highlight-value">{{ selectedParticipant.challenge_name || 'N/A' }}</p>
+                </div>
+                <div class="field-item">
+                  <span class="field-label">Competition Category</span>
+                  <p class="field-value">{{ selectedParticipant.category || 'N/A' }}</p>
+                </div>
+                <div class="field-item">
+                  <span class="field-label">Location (City, Country)</span>
+                  <p class="field-value">{{ selectedParticipant.city || '-' }}, {{ selectedParticipant.country || '-' }}</p>
+                </div>
+                <div class="field-item">
+                  <span class="field-label">Date & Time Joined</span>
+                  <p class="field-value">{{ selectedParticipant.created_at | date:'medium' }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Coordinator or Parent/Guardian Info -->
+            <div class="reg-card">
+              <div class="reg-card-header">
+                <div class="reg-card-icon user-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <h3>{{ selectedParticipant.registration_type === 'school' ? 'Coordinator Information' : 'Parent / Guardian Information' }}</h3>
+              </div>
+              <div class="reg-card-body">
+                <div class="field-item">
+                  <span class="field-label">{{ selectedParticipant.registration_type === 'school' ? 'Coordinator Name' : 'Parent / Guardian Name' }}</span>
+                  <p class="field-value">{{ selectedParticipant.parent_name || 'Not Provided' }}</p>
+                </div>
+                <div class="field-item">
+                  <span class="field-label">{{ selectedParticipant.registration_type === 'school' ? 'Coordinator Email' : 'Parent / Guardian Email' }}</span>
+                  <p class="field-value">
+                    <a *ngIf="selectedParticipant.parent_email" [href]="'mailto:' + selectedParticipant.parent_email" class="email-link">
+                      {{ selectedParticipant.parent_email }}
+                    </a>
+                    <span *ngIf="!selectedParticipant.parent_email">Not Provided</span>
+                  </p>
+                </div>
+                <div class="field-item" *ngIf="selectedParticipant.registration_type === 'individual'">
+                  <span class="field-label">Parental Consent</span>
+                  <div class="consent-status" [ngClass]="selectedParticipant.parent_consent ? 'consent-yes' : 'consent-pending'">
+                    <svg *ngIf="selectedParticipant.parent_consent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>{{ selectedParticipant.parent_consent ? 'Consent Granted' : 'Pending Approval' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Section 3: Registered Teams (for School Registrations) -->
+          <div class="reg-section-card" *ngIf="selectedParticipant.registration_type === 'school' && selectedParticipant.parsedTeams">
+            <div class="reg-card-header">
+              <div class="reg-card-icon teams-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <circle cx="19" cy="8" r="3"></circle>
+                  <path d="M22 17v-1.5a3 3 0 0 0-3-3h-1"></path>
+                </svg>
+              </div>
+              <div class="header-titles">
+                <h3>Registered Competition Teams</h3>
+                <span class="team-count-pill">
+                  {{ (selectedParticipant.parsedTeams.trailblazersCount || 0) + (selectedParticipant.parsedTeams.visioneersCount || 0) + (selectedParticipant.parsedTeams.strategistsCount || 0) }} Total Team(s)
+                </span>
+              </div>
+            </div>
+
+            <!-- Team Category Counter Tiles -->
+            <div class="teams-stat-grid">
+              <div class="team-stat-tile" [class.has-teams]="selectedParticipant.parsedTeams.trailblazersCount > 0">
+                <div class="tile-top">
+                  <span class="tile-category">Trailblazers</span>
+                  <span class="tile-age">Age ≤ 10</span>
+                </div>
+                <div class="tile-count">{{ selectedParticipant.parsedTeams.trailblazersCount || 0 }}</div>
+                <div class="tile-meta">Capacity: {{ (selectedParticipant.parsedTeams.trailblazersCount || 0) * 5 }} students</div>
+              </div>
+
+              <div class="team-stat-tile" [class.has-teams]="selectedParticipant.parsedTeams.visioneersCount > 0">
+                <div class="tile-top">
+                  <span class="tile-category">Visioneers</span>
+                  <span class="tile-age">Age 11–14</span>
+                </div>
+                <div class="tile-count">{{ selectedParticipant.parsedTeams.visioneersCount || 0 }}</div>
+                <div class="tile-meta">Capacity: {{ (selectedParticipant.parsedTeams.visioneersCount || 0) * 5 }} students</div>
+              </div>
+
+              <div class="team-stat-tile" [class.has-teams]="selectedParticipant.parsedTeams.strategistsCount > 0">
+                <div class="tile-top">
+                  <span class="tile-category">Strategists</span>
+                  <span class="tile-age">Age 15–19</span>
+                </div>
+                <div class="tile-count">{{ selectedParticipant.parsedTeams.strategistsCount || 0 }}</div>
+                <div class="tile-meta">Capacity: {{ (selectedParticipant.parsedTeams.strategistsCount || 0) * 5 }} students</div>
+              </div>
+            </div>
+
+            <!-- Student Member Rosters -->
+            <div class="rosters-section" *ngIf="selectedParticipant.parsedTeams.studentNames && objectKeys(selectedParticipant.parsedTeams.studentNames).length > 0">
+              <h4 class="rosters-heading">Student Team Rosters</h4>
+              <div class="rosters-grid">
+                <div class="roster-card" *ngFor="let team of getGroupedTeams(selectedParticipant.parsedTeams.studentNames)">
+                  <div class="roster-header">
+                    <span class="roster-name">{{ team.teamName }}</span>
+                    <span class="roster-members-count">{{ team.members.length }} Member(s)</span>
+                  </div>
+                  <ul class="roster-members-list">
+                    <li *ngFor="let member of team.members" class="roster-member-item">
+                      <span class="member-tag">{{ member.label }}</span>
+                      <strong class="member-name">{{ member.name }}</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="no-roster-note" *ngIf="!selectedParticipant.parsedTeams.studentNames || objectKeys(selectedParticipant.parsedTeams.studentNames).length === 0">
+              <p>No student names have been submitted for this school's teams yet.</p>
+            </div>
+          </div>
+
+          <!-- Section 4: Attachments / Media (if present) -->
+          <div class="reg-section-card" *ngIf="selectedParticipant.video_path || selectedParticipant.summary || selectedParticipant.poster_path">
+            <div class="reg-card-header">
+              <div class="reg-card-icon media-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                  <line x1="7" y1="2" x2="7" y2="22"></line>
+                  <line x1="17" y1="2" x2="17" y2="22"></line>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                </svg>
+              </div>
+              <h3>Entry Details & Attachments</h3>
+            </div>
+
+            <div class="media-content-container">
+              <!-- Summary -->
+              <div class="summary-box" *ngIf="selectedParticipant.summary">
+                <span class="summary-label">Participant's Statement / Summary:</span>
+                <blockquote class="summary-text">"{{ selectedParticipant.summary }}"</blockquote>
+              </div>
+
+              <!-- Media Grid: Video & Poster -->
+              <div class="media-grid">
+                <div class="media-card" *ngIf="selectedParticipant.video_path">
+                  <div class="media-card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    <span>Uploaded Video Submission</span>
+                  </div>
+                  <div class="video-container">
+                    <video controls style="width: 100%; max-height: 280px; border-radius: 10px; background: #000;">
+                      <source [src]="'http://localhost:5001' + selectedParticipant.video_path" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                  <a [href]="'http://localhost:5001' + selectedParticipant.video_path" target="_blank" class="media-open-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <span>Open / Download Video</span>
+                  </a>
+                </div>
+
+                <div class="media-card" *ngIf="selectedParticipant.poster_path">
+                  <div class="media-card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>Poster / Cover Image</span>
+                  </div>
+                  <div class="poster-container">
+                    <img [src]="'http://localhost:5001' + selectedParticipant.poster_path" alt="Entry Poster" style="width: 100%; max-height: 280px; object-fit: contain; border-radius: 10px;">
+                  </div>
+                  <a [href]="'http://localhost:5001' + selectedParticipant.poster_path" target="_blank" class="media-open-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <span>Open / Download Image</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Actions Bar -->
+          <div class="reg-view-bottom-bar">
+            <button class="action-btn primary-btn" (click)="closeModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Back to Registrations</span>
+            </button>
+            <button class="action-btn delete-btn" (click)="deleteParticipant(selectedParticipant.id)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Delete Registration</span>
+            </button>
+          </div>
+
         </div>
       </div>
 
@@ -873,15 +1168,19 @@
         <div *ngIf="isAddingCourse" class="add-course-container fade-in">
           
           <div class="ac-header">
-            <button class="action-btn flex-center" (click)="toggleAddCourse(false)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-              Back to Courses
-            </button>
-            <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #2d3748;">{{ editingCourseIndex >= 0 ? 'Edit Course' : 'Add New Course' }}</h3>
-            <button class="action-btn primary-btn flex-center" (click)="saveCourse()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              {{ editingCourseIndex >= 0 ? 'Update Course' : 'Publish Course' }}
-            </button>
+            <div class="ac-header-left">
+              <button class="action-btn back-btn" (click)="toggleAddCourse(false)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                <span>Back to Courses</span>
+              </button>
+              <h3 class="ac-page-title">{{ editingCourseIndex >= 0 ? 'Edit Course' : 'Add New Course' }}</h3>
+            </div>
+            <div class="ac-header-right">
+              <button class="action-btn primary-btn flex-center" (click)="saveCourse()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>{{ editingCourseIndex >= 0 ? 'Update Course' : 'Publish Course' }}</span>
+              </button>
+            </div>
           </div>
 
           <div class="ac-layout">
@@ -893,7 +1192,8 @@
                 <label class="ac-label">Title <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
                 <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.title" placeholder="e.g. Introduction to Programming">
                 <p class="ac-url-preview">
-                  Course URL: <a href="#">https://ufs.net.in/inmyacademy/courses/{{ newCourseData.title.toLowerCase().replace(' ', '-') }}</a>
+                  <span>Course URL:</span>
+                  <a href="#" (click)="$event.preventDefault()">https://ufs.net.in/inmyacademy/courses/{{ newCourseData.title ? newCourseData.title.toLowerCase().replace(' ', '-') : '' }}</a>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px; color: #a0aec0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 </p>
               </div>
@@ -903,80 +1203,73 @@
                 <label class="ac-label">Description <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
                 
                 <div class="ac-editor">
-                  <div class="ac-editor-top-actions">
-                  </div>
-                  
                   <div class="ac-editor-toolbar">
-                    <div class="ac-toolbar-divider"></div>
-                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('bold')"><b>B</b></button>
-                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('italic')"><i>I</i></button>
-                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('underline')"><span style="text-decoration: underline;">U</span></button>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('bold')" title="Bold"><b>B</b></button>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('italic')" title="Italic"><i>I</i></button>
+                    <button class="ac-icon-btn" (mousedown)="$event.preventDefault(); saveSelection()" (click)="handleEditorCommand('underline')" title="Underline"><span style="text-decoration: underline;">U</span></button>
                   </div>
-                  <div contenteditable="true" #editorRef class="ac-editor-content" (input)="onEditorInput()" (mouseup)="saveSelection()" (keyup)="saveSelection()" (focus)="saveSelection()" style="min-height: 200px; padding: 12px; font-family: inherit; font-size: 14px; outline: none;"></div>
+                  <div contenteditable="true" #editorRef class="ac-editor-content" (input)="onEditorInput()" (mouseup)="saveSelection()" (keyup)="saveSelection()" (focus)="saveSelection()" style="min-height: 180px; padding: 14px; font-family: inherit; font-size: 14px; outline: none; line-height: 1.6;"></div>
                 </div>
               </div>
 
               <div class="ac-block">
                 <label class="ac-label">What Will I Learn?</label>
                 <textarea
-                  class="ac-input"
+                  class="ac-textarea"
                   [(ngModel)]="newCourseData.what_will_i_learn"
                   placeholder="Define the key takeaways from this course (list one benefit per line)"
                   rows="4"
-                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
                 ></textarea>
               </div>
 
+              <!-- Milestones / Phases Block -->
               <div class="ac-block">
-                <label class="ac-label">Phase 1</label>
-                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.phase1" placeholder="e.g. Submit a policy pitch or debate video for shortlisting">
+                <label class="ac-label">Course Milestones & Highlights</label>
+                <div class="ac-milestones-grid">
+                  <div class="ac-field">
+                    <label class="ac-field-label">Phase 1</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.phase1" placeholder="e.g. Submit a policy pitch or debate video for shortlisting">
+                  </div>
+                  <div class="ac-field">
+                    <label class="ac-field-label">Final</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.final" placeholder="e.g. Shine in live negotiations and panel diplomacy rounds">
+                  </div>
+                  <div class="ac-field">
+                    <label class="ac-field-label">Extras</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.extras" placeholder="e.g. Policy templates and access to virtual youth summits">
+                  </div>
+                </div>
               </div>
-
-              <div class="ac-block">
-                <label class="ac-label">Final</label>
-                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.final" placeholder="e.g. Shine in live negotiations and panel diplomacy rounds">
-              </div>
-
-              <div class="ac-block">
-                <label class="ac-label">Extras</label>
-                <input type="text" class="ac-input ac-title-input" [(ngModel)]="newCourseData.extras" placeholder="e.g. Policy templates and access to virtual youth summits">
-              </div>
-
 
               <div class="ac-block">
                 <label class="ac-label">Target Audience</label>
                 <textarea
-                  class="ac-input"
+                  class="ac-textarea"
                   [(ngModel)]="newCourseData.target_audience"
                   placeholder="Specify the target audience that will benefit the most from the course. (One Line Per target audience)"
                   rows="3"
-                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
                 ></textarea>
               </div>
-
 
               <div class="ac-block">
                 <label class="ac-label">Materials Included</label>
                 <textarea
-                  class="ac-input"
+                  class="ac-textarea"
                   [(ngModel)]="newCourseData.materials_included"
                   placeholder="A list of assets you will be providing for the students in this course (One Per Line)"
                   rows="4"
-                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
                 ></textarea>
               </div>
 
               <div class="ac-block">
                 <label class="ac-label">Requirements/Instructions</label>
                 <textarea
-                  class="ac-input"
+                  class="ac-textarea"
                   [(ngModel)]="newCourseData.requirements"
                   placeholder="Additional requirements or special instructions for the students (One Per Line)"
                   rows="3"
-                  style="width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; font-family: inherit; resize: vertical;"
                 ></textarea>
               </div>
-
 
             </div> <!-- End Main Content -->
 
@@ -985,31 +1278,25 @@
               <!-- Visibility Card -->
               <div class="ac-card">
                 <label class="ac-label">Visibility</label>
-                <div class="ac-field">
-                  <select class="ac-input" style="font-weight: 500;" [(ngModel)]="newCourseData.visibility">
+                <div class="ac-field" style="margin-bottom: 8px;">
+                  <select class="ac-input ac-select" [(ngModel)]="newCourseData.visibility">
                     <option value="Public">👁 Public</option>
                     <option value="Private">🔒 Private</option>
                   </select>
                 </div>
                 <p class="ac-subtext">Last updated on 28th July, 2026</p>
-                <div class="ac-field ac-schedule-field">
-                  <span style="font-size: 14px; font-weight: 500; color: #4a5568;">Schedule</span>
-                  <div class="ac-toggle-switch" [class.on]="false">
-                    <div class="ac-toggle-knob"></div>
-                  </div>
-                </div>
               </div>
 
               <!-- Featured Image Card -->
               <div class="ac-card">
                 <label class="ac-label">Featured Image <span style="color: #d53f8c; margin-left: 4px;">✨</span></label>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; align-items: stretch;">
                   <input type="text" class="ac-input" [(ngModel)]="newCourseData.image" placeholder="Image URL (e.g. https://images.unsplash.com/...)" style="flex: 1;">
                   <input type="file" #featuredImageUpload style="display:none" (change)="onFeaturedImageUpload($event)" accept="image/*">
-                  <button class="ac-btn-small" style="background: #e2e8f0; color: #4a5568; padding: 0 12px; height: 42px;" (click)="triggerFeaturedImageUpload(featuredImageUpload)">Upload</button>
+                  <button class="action-btn upload-btn" (click)="triggerFeaturedImageUpload(featuredImageUpload)">Upload</button>
                 </div>
-                <div *ngIf="newCourseData.image" style="margin-top: 12px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
-                  <img [src]="newCourseData.image" style="width: 100%; height: auto; display: block;" />
+                <div *ngIf="newCourseData.image" style="margin-top: 14px; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                  <img [src]="newCourseData.image" style="width: 100%; max-height: 220px; object-fit: cover; display: block;" alt="Featured Image Preview" />
                 </div>
               </div>
 
@@ -1017,54 +1304,31 @@
               <div class="ac-card">
                 <label class="ac-label">Course Meta</label>
                 
-                <div class="ac-field">
-                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Duration (Hours)</label>
-                  <input type="number" class="ac-input" [(ngModel)]="newCourseData.duration_hours" placeholder="e.g. 120">
-                </div>
+                <div class="ac-meta-grid">
+                  <div class="ac-field">
+                    <label class="ac-field-label">Duration (Hours)</label>
+                    <input type="number" class="ac-input" [(ngModel)]="newCourseData.duration_hours" placeholder="e.g. 120">
+                  </div>
 
-                <div class="ac-field">
-                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Lectures</label>
-                  <input type="number" class="ac-input" [(ngModel)]="newCourseData.lectures" placeholder="e.g. 11">
-                </div>
-                
-                <div class="ac-field">
-                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Level</label>
-                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.level" placeholder="e.g. All Levels">
-                </div>
-                
-                <div class="ac-field">
-                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Language</label>
-                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.language" placeholder="e.g. English">
-                </div>
-                
-                <div class="ac-field">
-                  <label style="font-size: 12px; color: #718096; margin-bottom: 4px; display: block;">Certificate</label>
-                  <input type="text" class="ac-input" [(ngModel)]="newCourseData.certificate" placeholder="e.g. Yes">
-                </div>
-              </div>
-
-
-
-              <!-- Pricing Model Card -->
-              <div class="ac-card">
-                <label class="ac-label">Pricing Model</label>
-                <div class="ac-radio-group">
-                  <label class="ac-radio-label">
-                    <input type="radio" name="pricing" value="Free" [(ngModel)]="newCourseData.pricing">
-                    <span class="ac-radio-custom"></span> Free
-                  </label>
-                  <label class="ac-radio-label">
-                    <input type="radio" name="pricing" value="Paid" [(ngModel)]="newCourseData.pricing">
-                    <span class="ac-radio-custom"></span> Paid
-                  </label>
-                </div>
-              </div>
-
-              <!-- Categories Card -->
-              <div class="ac-card" style="margin-bottom: 0;">
-                <label class="ac-label">Categories</label>
-                <div class="ac-upload-box" style="padding: 24px;">
-                  <div class="ac-spinner"></div>
+                  <div class="ac-field">
+                    <label class="ac-field-label">Lectures</label>
+                    <input type="number" class="ac-input" [(ngModel)]="newCourseData.lectures" placeholder="e.g. 11">
+                  </div>
+                  
+                  <div class="ac-field">
+                    <label class="ac-field-label">Level</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.level" placeholder="e.g. All Levels">
+                  </div>
+                  
+                  <div class="ac-field">
+                    <label class="ac-field-label">Language</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.language" placeholder="e.g. English">
+                  </div>
+                  
+                  <div class="ac-field" style="grid-column: 1 / -1; margin-bottom: 0;">
+                    <label class="ac-field-label">Certificate</label>
+                    <input type="text" class="ac-input" [(ngModel)]="newCourseData.certificate" placeholder="e.g. Yes">
+                  </div>
                 </div>
               </div>
 
@@ -1174,151 +1438,7 @@
 
 
 
-    <!-- Participant Modal -->
-    <div class="modal-overlay" *ngIf="selectedParticipant" (click)="closeModal()">
-      <div class="modal-content" (click)="$event.stopPropagation()">
-        <button class="close-btn" (click)="closeModal()">×</button>
-        <div class="modal-header">
-          <h2>{{ selectedParticipant.registration_type === 'school' ? 'School Details' : 'Participant Details' }}</h2>
-          <span class="badge category-badge">{{ selectedParticipant.category || 'No Category' }}</span>
-        </div>
-        <div class="modal-body">
-          <div class="detail-group">
-            <label>{{ selectedParticipant.registration_type === 'school' ? 'School Name' : 'Full Name' }}</label>
-            <p>{{ selectedParticipant.full_name }}</p>
-          </div>
-          <div class="detail-group">
-            <label>{{ selectedParticipant.registration_type === 'school' ? 'School Email' : 'Email Address' }}</label>
-            <p>{{ selectedParticipant.email }}</p>
-          </div>
-          <div class="detail-group" *ngIf="selectedParticipant.registration_type === 'individual'">
-            <label>Age</label>
-            <p>{{ selectedParticipant.age }} years old</p>
-          </div>
-          <div class="detail-group">
-            <label>Location</label>
-            <p>{{ selectedParticipant.city }}, {{ selectedParticipant.country }}</p>
-          </div>
-          <div class="detail-group">
-            <label>Registered Challenge</label>
-            <p class="highlight-text">{{ selectedParticipant.challenge_name }}</p>
-          </div>
-          <div class="detail-group">
-            <label>Registration Date</label>
-            <p>{{ selectedParticipant.created_at | date:'medium' }}</p>
-          </div>
-          <div class="detail-group">
-            <label>Registration Type</label>
-            <p>
-              <span class="type-badge" style="margin-left:0; font-size: 13px;" [ngClass]="selectedParticipant.registration_type === 'school' ? 'school-badge' : 'individual-badge'">
-                {{ selectedParticipant.registration_type === 'school' ? 'School Registration' : 'Individual Registration' }}
-              </span>
-            </p>
-          </div>
 
-          <!-- Entry Details Section -->
-          <div class="entry-info-section" *ngIf="selectedParticipant.video_path || selectedParticipant.summary || selectedParticipant.poster_path">
-            <h3 style="margin: 0; font-size: 18px; color: #2d3748; font-weight: 600;">Entry Details & Attachments</h3>
-            
-            <div class="detail-group" *ngIf="selectedParticipant.summary" style="margin-top: 8px;">
-              <label>Participant's Short Summary</label>
-              <p style="background: #fff; padding: 16px; border-radius: 8px; font-style: italic; border: 1px solid #e2e8f0; line-height: 1.5; color: #4a5568;">
-                "{{ selectedParticipant.summary }}"
-              </p>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 12px;">
-              <div class="detail-group" *ngIf="selectedParticipant.video_path">
-                <label>Uploaded Video</label>
-                <div style="margin-top: 8px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #000; display: flex; align-items: center; justify-content: center;">
-                  <video controls style="width: 100%; max-height: 300px; outline: none;">
-                    <source [src]="'http://localhost:5001' + selectedParticipant.video_path" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-                <a [href]="'http://localhost:5001' + selectedParticipant.video_path" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 14px; color: #ed8936; font-weight: 500; text-decoration: none;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                  Open Video
-                </a>
-              </div>
-
-              <div class="detail-group" *ngIf="selectedParticipant.poster_path">
-                <label>Poster / Cover Image</label>
-                <div style="margin-top: 8px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: #f7fafc; display: flex; align-items: center; justify-content: center; height: 100%; min-height: 200px;">
-                  <img [src]="'http://localhost:5001' + selectedParticipant.poster_path" alt="Entry Poster" style="width: 100%; max-height: 300px; object-fit: contain;">
-                </div>
-                <a [href]="'http://localhost:5001' + selectedParticipant.poster_path" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 14px; color: #ed8936; font-weight: 500; text-decoration: none;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                  Open Image
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="parent-info-section" *ngIf="selectedParticipant.registration_type === 'individual' && selectedParticipant.parent_name">
-            <h3>Parent / Guardian Information</h3>
-            <div class="detail-group">
-              <label>Parent Name</label>
-              <p>{{ selectedParticipant.parent_name }}</p>
-            </div>
-            <div class="detail-group">
-              <label>Parent Email</label>
-              <p>{{ selectedParticipant.parent_email }}</p>
-            </div>
-            <div class="detail-group">
-              <label>Parental Consent</label>
-              <p>
-                <span class="badge" [ngClass]="selectedParticipant.parent_consent ? 'consent-badge' : 'role-badge'">
-                  {{ selectedParticipant.parent_consent ? 'Consent Granted' : 'Pending' }}
-                </span>
-              </p>
-            </div>
-          </div>
-
-          <div class="parent-info-section" *ngIf="selectedParticipant.registration_type === 'school' && selectedParticipant.parent_name">
-            <h3>Coordinator Information</h3>
-            <div class="detail-group">
-              <label>Coordinator Name</label>
-              <p>{{ selectedParticipant.parent_name }}</p>
-            </div>
-            <div class="detail-group">
-              <label>Coordinator Email</label>
-              <p>{{ selectedParticipant.parent_email }}</p>
-            </div>
-          </div>
-
-          <div class="parent-info-section" *ngIf="selectedParticipant.parsedTeams && (selectedParticipant.parsedTeams.trailblazersCount > 0 || selectedParticipant.parsedTeams.visioneersCount > 0 || selectedParticipant.parsedTeams.strategistsCount > 0)">
-            <h3>Registered Teams</h3>
-            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.trailblazersCount > 0">
-              <label>Trailblazers Teams</label>
-              <p>{{ selectedParticipant.parsedTeams.trailblazersCount }}</p>
-            </div>
-            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.visioneersCount > 0">
-              <label>Visioneers Teams</label>
-              <p>{{ selectedParticipant.parsedTeams.visioneersCount }}</p>
-            </div>
-            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.strategistsCount > 0">
-              <label>Strategists Teams</label>
-              <p>{{ selectedParticipant.parsedTeams.strategistsCount }}</p>
-            </div>
-            <div class="detail-group" *ngIf="selectedParticipant.parsedTeams.studentNames && objectKeys(selectedParticipant.parsedTeams.studentNames).length > 0" style="grid-column: 1 / -1;">
-              <label>Student Names</label>
-              <div *ngFor="let team of getGroupedTeams(selectedParticipant.parsedTeams.studentNames)" style="margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin: 0 0 8px 0; color: #2d3748; font-size: 15px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">{{ team.teamName }}</h4>
-                <ul style="list-style-type: none; padding: 0; margin: 0;">
-                  <li *ngFor="let member of team.members" style="margin-bottom: 6px; font-size: 14px; color: #4a5568; display: flex;">
-                    <strong style="width: 80px; flex-shrink: 0;">{{ member.label }}:</strong> <span>{{ member.name }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="action-btn primary-btn" (click)="closeModal()">Close</button>
-        </div>
-      </div>
-    </div>
 
     <!-- Edit User Modal -->
     <div class="modal-overlay" *ngIf="selectedUser" (click)="closeUserModal()">
