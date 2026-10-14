@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.45, for Win64 (x86_64)
 --
--- Host: localhost    Database: skillstorm_db
+-- Host: 127.0.0.1    Database: skillstorm_db
 -- ------------------------------------------------------
--- Server version	8.0.43
+-- Server version	9.6.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,15 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+
+--
+-- GTID state at the beginning of the backup 
+--
+
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '209751e0-37b8-11f1-bfed-40c2ba987f8c:1-52509,
+35f1f18e-371f-11f1-80d5-5cb47e3771c9:1-1565';
 
 --
 -- Table structure for table `admin_documents`
@@ -122,6 +131,41 @@ INSERT INTO `courses` VALUES (2,'Diplomatic Policy Leadership','<h2><br></h2><i>
 UNLOCK TABLES;
 
 --
+-- Table structure for table `leaderboard`
+--
+
+DROP TABLE IF EXISTS `leaderboard`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `leaderboard` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `CompetitionFormat` varchar(20) NOT NULL,
+  `CompetitionPhase` varchar(50) DEFAULT NULL,
+  `CategoryTrack` varchar(100) DEFAULT NULL,
+  `ParticipantName` varchar(150) NOT NULL,
+  `Country` varchar(100) NOT NULL,
+  `TeamsCount` int DEFAULT NULL,
+  `Score` int NOT NULL,
+  `Award` varchar(50) DEFAULT NULL,
+  `CreatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `UpdatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`Id`),
+  KEY `idx_leaderboard_filter` (`CompetitionFormat`,`CompetitionPhase`,`CategoryTrack`),
+  KEY `idx_leaderboard_score` (`Score` DESC)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `leaderboard`
+--
+
+LOCK TABLES `leaderboard` WRITE;
+/*!40000 ALTER TABLE `leaderboard` DISABLE KEYS */;
+INSERT INTO `leaderboard` VALUES (24,'SCHOOL','Online Phase','All','aalma','india',1,5,'Champion','2026-10-06 07:33:48','2026-10-06 07:33:48'),(26,'OPEN','Online Shortlisting','Eco Heroes Innovation','salman','saudi',NULL,30,'Finalist','2026-10-06 07:38:27','2026-10-06 07:38:27'),(27,'MASTERY','Online Shortlisting','Advanced Research','nandan','india',NULL,5,'Runner-Up','2026-10-06 08:43:23','2026-10-06 08:43:23');
+/*!40000 ALTER TABLE `leaderboard` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `module_projects`
 --
 
@@ -178,7 +222,7 @@ CREATE TABLE `registrations` (
   `parent_email` varchar(255) DEFAULT NULL,
   `parent_consent` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +231,7 @@ CREATE TABLE `registrations` (
 
 LOCK TABLES `registrations` WRITE;
 /*!40000 ALTER TABLE `registrations` DISABLE KEYS */;
-INSERT INTO `registrations` VALUES (1,'ss',22,'Algeria','kollam','ma@gmail.com','123456',1.00,'Advanced Research Publication, Diplomatic Policy Leadership','2026-08-06 12:32:26','{}',NULL,NULL,NULL,NULL,NULL,0),(2,'swaroop',22,'Algeria','samb','sw@gmail.com','123456',1.00,'Legal Advocacy Professional','2026-08-07 04:10:58',NULL,NULL,NULL,NULL,NULL,NULL,0),(3,'Alma Yousuf',23,'India','Alappuzha','al@gmail.com','123456',1.00,'Entrepreneurial Visionary Accelerator, Digital Systems Architecture','2026-08-07 05:05:09','{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}',NULL,NULL,NULL,NULL,NULL,0),(4,'Riju ',23,'Cabo Verde','sab','ri@gmail.com','123456',1.00,'Diplomatic Policy Leadership, Legal Advocacy Professional','2026-08-07 06:24:10','{}',NULL,NULL,NULL,NULL,NULL,0),(5,'Salman',21,'Brazil','ron','sam@gmail.com','123456',1.00,'Global Oratory and Communication Certificate','2026-08-07 10:12:51',NULL,NULL,NULL,NULL,NULL,NULL,0),(6,'TEST',0,'INDIA','KOTTAYAM','tes@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-07 10:21:26','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"shi\",\"trailblazers-0-2\":\"shy\",\"trailblazers-0-3\":\"shu\",\"trailblazers-0-4\":\"sha\",\"trailblazers-0-5\":\"sho\"}}',NULL,NULL,NULL,'Alma Yousuf','alm@gmail.com',0),(7,'sabu',25,'Fiji','edathvaa','sabu@gmail.com','123456',1.00,'Entrepreneurship and Innovation Accelerator','2026-08-07 10:47:42',NULL,NULL,NULL,NULL,NULL,NULL,0),(8,'minnu',20,'Czechia','edatva','min@gmail.com','123456',1.00,'Digital Media Strategy','2026-08-07 11:38:50',NULL,NULL,NULL,NULL,NULL,NULL,0),(9,'Renjini Sabu',25,'Colombia','kuttanad','ren@gmail.com','123456',1.00,'Entrepreneurship and Innovation Accelerator','2026-08-11 04:28:16',NULL,NULL,NULL,NULL,NULL,NULL,0),(10,'Thengha',0,'India','idukki','te@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-11 05:41:08','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"am\",\"trailblazers-0-2\":\"um\",\"trailblazers-0-3\":\"em\",\"trailblazers-0-4\":\"om\",\"trailblazers-0-5\":\"qm\"}}',NULL,NULL,NULL,'King','ki@gmail.com',0),(11,'varthath',0,'angola','tambak','va@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-11 08:27:21','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"tu\",\"trailblazers-0-2\":\"ti\",\"trailblazers-0-3\":\"ta\",\"trailblazers-0-4\":\"to\",\"trailblazers-0-5\":\"te\"}}',NULL,NULL,NULL,'Salman ','sa@gmail.com',0);
+INSERT INTO `registrations` VALUES (1,'ss',22,'Algeria','kollam','ma@gmail.com','123456',1.00,'Advanced Research Publication, Diplomatic Policy Leadership','2026-08-06 12:32:26','{}',NULL,NULL,NULL,NULL,NULL,0),(2,'swaroop',22,'Algeria','samb','sw@gmail.com','123456',1.00,'Legal Advocacy Professional','2026-08-07 04:10:58',NULL,NULL,NULL,NULL,NULL,NULL,0),(3,'Alma Yousuf',23,'India','Alappuzha','al@gmail.com','123456',1.00,'Entrepreneurial Visionary Accelerator, Digital Systems Architecture','2026-08-07 05:05:09','{\"trailblazersCount\":0,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{}}',NULL,NULL,NULL,NULL,NULL,0),(4,'Riju ',23,'Cabo Verde','sab','ri@gmail.com','123456',1.00,'Diplomatic Policy Leadership, Legal Advocacy Professional','2026-08-07 06:24:10','{}',NULL,NULL,NULL,NULL,NULL,0),(5,'Salman',21,'Brazil','ron','sam@gmail.com','123456',1.00,'Global Oratory and Communication Certificate','2026-08-07 10:12:51',NULL,NULL,NULL,NULL,NULL,NULL,0),(6,'TEST',0,'INDIA','KOTTAYAM','tes@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-07 10:21:26','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"shi\",\"trailblazers-0-2\":\"shy\",\"trailblazers-0-3\":\"shu\",\"trailblazers-0-4\":\"sha\",\"trailblazers-0-5\":\"sho\"}}',NULL,NULL,NULL,'Alma Yousuf','alm@gmail.com',0),(7,'sabu',25,'Fiji','edathvaa','sabu@gmail.com','123456',1.00,'Entrepreneurship and Innovation Accelerator','2026-08-07 10:47:42',NULL,NULL,NULL,NULL,NULL,NULL,0),(8,'minnu',20,'Czechia','edatva','min@gmail.com','123456',1.00,'Digital Media Strategy','2026-08-07 11:38:50',NULL,NULL,NULL,NULL,NULL,NULL,0),(9,'Renjini Sabu',25,'Colombia','kuttanad','ren@gmail.com','123456',1.00,'Entrepreneurship and Innovation Accelerator','2026-08-11 04:28:16',NULL,NULL,NULL,NULL,NULL,NULL,0),(10,'Thengha',0,'India','idukki','te@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-11 05:41:08','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"am\",\"trailblazers-0-2\":\"um\",\"trailblazers-0-3\":\"em\",\"trailblazers-0-4\":\"om\",\"trailblazers-0-5\":\"qm\"}}',NULL,NULL,NULL,'King','ki@gmail.com',0),(11,'varthath',0,'angola','tambak','va@gmail.com','school_default_password',1.00,'School Competition - Single Team','2026-08-11 08:27:21','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"tu\",\"trailblazers-0-2\":\"ti\",\"trailblazers-0-3\":\"ta\",\"trailblazers-0-4\":\"to\",\"trailblazers-0-5\":\"te\"}}',NULL,NULL,NULL,'Salman ','sa@gmail.com',0),(12,'alosh',33,'India','Alappuzha','rijusabu89@gmail.com','123456',1.00,'School Competition - Single Team, Legal Advocacy Professional','2026-10-06 04:44:43','{\"trailblazersCount\":1,\"visioneersCount\":0,\"strategistsCount\":0,\"studentNames\":{\"trailblazers-0-1\":\"w\",\"trailblazers-0-2\":\"e\",\"trailblazers-0-3\":\"er\",\"trailblazers-0-4\":\"rrff\",\"trailblazers-0-5\":\"rf\"}}',NULL,NULL,NULL,NULL,NULL,0),(13,'Test Runner',20,'United Kingdom','London','test_runner_99@example.com','password123',1.00,'Legal Advocacy Professional','2026-10-14 09:13:09',NULL,NULL,NULL,NULL,NULL,NULL,0),(14,'John Doe',25,'United Kingdom','London','johndoe_test@example.com','Password123!',1.00,'Legal Advocacy Professional','2026-10-14 09:30:34',NULL,NULL,NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `registrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,6 +294,7 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'admin','admin123','superadmin','2026-08-06 12:13:51');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -260,4 +305,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-06  9:46:43
+-- Dump completed on 2026-10-14 15:36:24
