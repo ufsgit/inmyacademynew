@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-open-challenges-dashboard',
@@ -44,7 +45,7 @@ export class OpenChallengesDashboardComponent implements OnInit {
   }
 
   fetchAdminDocuments() {
-    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/admin/documents`).subscribe({
       next: (docs) => {
         const allDocs = docs || [];
         this.adminDocuments = allDocs.filter(d => 
@@ -154,7 +155,7 @@ export class OpenChallengesDashboardComponent implements OnInit {
     // Importing HttpEventType locally to avoid changing the main imports block if not needed
     // or we can assume 1 is UploadProgress and 4 is Response based on Angular source code
     // Actually, we'll just check event.type
-    this.http.post(`http://localhost:5001/api/challenges/upload/${dbRegId}`, formData, {
+    this.http.post(`${environment.apiUrl}/challenges/upload/${dbRegId}`, formData, {
       reportProgress: true,
       observe: 'events'
     }).subscribe({

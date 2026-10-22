@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -180,7 +181,7 @@ export class LoginComponent implements OnInit {
       this.errorMessage = '';
       const { username, password } = this.loginForm.value;
 
-      this.http.post('http://localhost:5001/api/auth/login', { username, password }).subscribe({
+      this.http.post(`${environment.apiUrl}/auth/login`, { username, password }).subscribe({
         next: (res: any) => {
           if (res.role === 'superadmin' || res.role === 'admin') {
             this.router.navigate(['/admin/dashboard']);

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-registration-wizard',
@@ -240,7 +241,7 @@ export class RegistrationWizardComponent implements OnInit {
           }
         };
 
-        this.http.post('http://localhost:5001/api/challenges/register', payload).subscribe({
+        this.http.post(`${environment.apiUrl}/challenges/register`, payload).subscribe({
           next: (res: any) => {
             const registrationData = {
               schoolName: this.schoolName,

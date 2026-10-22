@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { OPEN_CHALLENGES } from '../../data/challenges.data';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,6 +15,21 @@ import { OPEN_CHALLENGES } from '../../data/challenges.data';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+  environment = environment;
+  uploadsUrl = environment.uploadsUrl;
+
+  getMediaUrl(path: string | null | undefined): string {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    if (cleanPath.startsWith('/uploads/')) {
+      return `${environment.uploadsUrl}${cleanPath.substring(8)}`;
+    }
+    return `${environment.uploadsUrl}${cleanPath}`;
+  }
+
   stats: any = { totalRegistrations: 0, totalUsers: 0, totalChallenges: 0 };
   openChallenges = OPEN_CHALLENGES.filter(c => c.entryFee === 1);
   registrations: any[] = [];
@@ -92,7 +108,7 @@ export class AdminDashboardComponent implements OnInit {
 
   fetchData() {
     this.isLoading = true;
-    const apiUrl = 'http://localhost:5001/api/admin';
+    const apiUrl = `${environment.apiUrl}/admin`;
     
     this.http.get(`${apiUrl}/stats`).subscribe((data: any) => {
       this.stats = data;
@@ -124,21 +140,21 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   fetchCourses() {
-    this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe({
       next: (data) => { this.courses = data; },
       error: (err) => console.error('Error fetching courses:', err)
     });
   }
 
   fetchModuleProjects() {
-    this.http.get<any[]>('http://localhost:5001/api/admin/projects').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/admin/projects`).subscribe({
       next: (data) => { this.moduleProjects = data; },
       error: (err) => console.error('Error fetching module projects:', err)
     });
   }
 
   fetchAdminDocuments() {
-    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/admin/documents`).subscribe({
       next: (data) => { this.adminDocuments = data; },
       error: (err) => console.error('Error fetching admin documents:', err)
     });
@@ -146,7 +162,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteModuleProject(id: number) {
     if (!confirm('Are you sure you want to delete this submitted project?')) return;
-    this.http.delete(`http://localhost:5001/api/admin/projects/${id}`).subscribe({
+    this.http.delete(`${environment.apiUrl}/admin/projects/${id}`).subscribe({
       next: () => {
         this.fetchModuleProjects();
       },
@@ -156,7 +172,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteAdminDocument(id: number) {
     if (!confirm('Are you sure you want to delete this document?')) return;
-    this.http.delete(`http://localhost:5001/api/admin/documents/${id}`).subscribe({
+    this.http.delete(`${environment.apiUrl}/admin/documents/${id}`).subscribe({
       next: () => {
         this.fetchAdminDocuments();
       },
@@ -209,7 +225,7 @@ export class AdminDashboardComponent implements OnInit {
     formData.append('moduleName', this.docUploadForm.moduleName || '');
     formData.append('title', this.docUploadForm.title || this.docUploadForm.file.name);
 
-    this.http.post('http://localhost:5001/api/upload/document', formData).subscribe({
+    this.http.post(`${environment.apiUrl}/upload/document`, formData).subscribe({
       next: (res: any) => {
         alert('Document uploaded successfully!');
         this.docUploadForm.title = '';
@@ -274,7 +290,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // LEADERBOARD ADMIN METHODS
   fetchAdminLeaderboard() {
-    this.http.get('http://localhost:5001/api/leaderboard/all').subscribe({
+    this.http.get(`${environment.apiUrl}/leaderboard/all`).subscribe({
       next: (data: any) => {
         if (data && data.success) {
           this.adminLeaderboardData = data.data;
@@ -289,7 +305,7 @@ export class AdminDashboardComponent implements OnInit {
       alert('Please fill out all required fields.');
       return;
     }
-    this.http.post('http://localhost:5001/api/leaderboard', this.newLeaderboardEntry).subscribe({
+    this.http.post(`${environment.apiUrl}/leaderboard`, this.newLeaderboardEntry).subscribe({
       next: (res: any) => {
         alert('Entry added successfully!');
         this.fetchAdminLeaderboard();
@@ -308,7 +324,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteLeaderboardEntry(id: number) {
     if (!confirm('Are you sure you want to delete this leaderboard entry?')) return;
-    this.http.delete(`http://localhost:5001/api/leaderboard/${id}`).subscribe({
+    this.http.delete(`${environment.apiUrl}/leaderboard/${id}`).subscribe({
       next: () => {
         this.fetchAdminLeaderboard();
       },
@@ -425,7 +441,7 @@ export class AdminDashboardComponent implements OnInit {
     formData.append('file', file);
 
     const lessonIndex = this.activeLessonVideoIndex;
-    this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+    this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
       next: (response) => {
         if (lessonIndex !== null) {
           this.selectedCourseForTopic.lessons[lessonIndex].video = response.url;
@@ -509,7 +525,7 @@ export class AdminDashboardComponent implements OnInit {
       certificate: this.selectedCourseForTopic.certificate || 'Yes'
     };
 
-    this.http.put(`http://localhost:5001/api/courses/${this.selectedCourseForTopic.id}`, payload).subscribe({
+    this.http.put(`${environment.apiUrl}/courses/${this.selectedCourseForTopic.id}`, payload).subscribe({
       next: () => {
         this.fetchCourses();
         this.isAddingTopic = false;
@@ -647,7 +663,7 @@ export class AdminDashboardComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', file);
 
-      this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+      this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
         next: (response) => {
           this.execCommand('insertImage', response.url);
           input.value = ''; // Reset input
@@ -667,7 +683,7 @@ export class AdminDashboardComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', file);
 
-      this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+      this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
         next: (response) => {
           this.newTopicData.video = response.url;
           input.value = ''; // Reset input
@@ -687,7 +703,7 @@ export class AdminDashboardComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', file);
 
-      this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+      this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
         next: (response) => {
           this.newTopicData.image = response.url;
           input.value = ''; // Reset input
@@ -711,7 +727,7 @@ export class AdminDashboardComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', file);
 
-      this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+      this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
         next: (response) => {
           const lesson = this.newCourseData.lessons[lessonIndex];
           if (lesson) {
@@ -751,7 +767,7 @@ export class AdminDashboardComponent implements OnInit {
       const formData = new FormData();
       formData.append('image', file);
 
-      this.http.post<any>('http://localhost:5001/api/upload', formData).subscribe({
+      this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
         next: (response) => {
           this.newCourseData.image = response.url;
           input.value = ''; // Reset input
@@ -796,7 +812,7 @@ export class AdminDashboardComponent implements OnInit {
 
     if (this.editingCourseId >= 0) {
       // Update existing
-      this.http.put(`http://localhost:5001/api/courses/${this.editingCourseId}`, payload).subscribe({
+      this.http.put(`${environment.apiUrl}/courses/${this.editingCourseId}`, payload).subscribe({
         next: () => {
           this.fetchCourses();
           this.editingCourseId = -1;
@@ -810,7 +826,7 @@ export class AdminDashboardComponent implements OnInit {
       });
     } else {
       // Create new
-      this.http.post('http://localhost:5001/api/courses', payload).subscribe({
+      this.http.post(`${environment.apiUrl}/courses`, payload).subscribe({
         next: () => {
           this.fetchCourses();
           this.isAddingCourse = false;
@@ -910,7 +926,7 @@ export class AdminDashboardComponent implements OnInit {
   deleteCourse(index: number) {
     const course = this.courses[index];
     if (confirm(`Are you sure you want to delete "${course.title}"? This cannot be undone.`)) {
-      this.http.delete(`http://localhost:5001/api/courses/${course.id}`).subscribe({
+      this.http.delete(`${environment.apiUrl}/courses/${course.id}`).subscribe({
         next: () => this.fetchCourses(),
         error: (err) => {
           console.error('Failed to delete course:', err);
@@ -982,7 +998,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteParticipant(id: number) {
     if (confirm('Are you sure you want to delete this registration? This action cannot be undone.')) {
-      this.http.delete(`http://localhost:5001/api/admin/registrations/${id}`).subscribe({
+      this.http.delete(`${environment.apiUrl}/admin/registrations/${id}`).subscribe({
         next: () => {
           this.fetchData();
         },
@@ -1009,7 +1025,7 @@ export class AdminDashboardComponent implements OnInit {
   saveUser(role: string) {
     if (!this.selectedUser) return;
     
-    this.http.put(`http://localhost:5001/api/admin/users/${this.selectedUser.id}`, { role }).subscribe({
+    this.http.put(`${environment.apiUrl}/admin/users/${this.selectedUser.id}`, { role }).subscribe({
       next: () => {
         this.fetchData();
         this.closeUserModal();

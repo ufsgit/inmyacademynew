@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-leaderboard',
@@ -42,7 +43,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   fetchLeaderboardData() {
-    let url = `http://localhost:5001/api/leaderboard?format=${encodeURIComponent(this.leaderboardFormat)}`;
+    let url = `${environment.apiUrl}/leaderboard?format=${encodeURIComponent(this.leaderboardFormat)}`;
     if (this.leaderboardPhase) {
       url += `&phase=${encodeURIComponent(this.leaderboardPhase)}`;
     }

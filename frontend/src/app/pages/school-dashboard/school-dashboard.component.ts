@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface Team {
   name: string;
@@ -727,7 +728,7 @@ export class SchoolDashboardComponent implements OnInit {
     // 4. If we have a numeric registration ID, fetch from backend for fresh data
     const numId = this.registrationId ? this.registrationId.split('-').pop() : null;
     if (numId && /^\d+$/.test(numId)) {
-      this.http.get<any>(`http://localhost:5001/api/challenges/registration/${numId}`).subscribe({
+      this.http.get<any>(`${environment.apiUrl}/challenges/registration/${numId}`).subscribe({
         next: (res) => {
           if (res.full_name) this.schoolName = res.full_name;
           if (res.country) this.schoolCountry = res.country;
@@ -747,7 +748,7 @@ export class SchoolDashboardComponent implements OnInit {
   }
 
   fetchAdminDocuments() {
-    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/admin/documents`).subscribe({
       next: (docs) => {
         const allDocs = docs || [];
         this.adminDocuments = allDocs.filter(d => d.category === 'School Competitions');

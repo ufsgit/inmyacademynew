@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 import { getTrackSlug } from '../../data/mastery-tracks.data';
 
 @Component({
@@ -382,7 +383,7 @@ export class RegistrationFormComponent implements OnInit {
         category: this.category || (this.entryFee === 25 ? 'Global Mastery Battles' : 'Global Open Challenges')
       };
       
-      this.http.post('http://localhost:5001/api/challenges/register', formValue).subscribe({
+      this.http.post(`${environment.apiUrl}/challenges/register`, formValue).subscribe({
         next: (response: any) => {
           const participantName = formValue.fullName;
           localStorage.setItem('openChallengeParticipantName', participantName);

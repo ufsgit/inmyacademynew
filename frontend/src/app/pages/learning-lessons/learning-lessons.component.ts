@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { getTrackSlug } from '../../data/mastery-tracks.data';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-learning-lessons',
@@ -37,7 +38,7 @@ export class LearningLessonsComponent implements OnInit {
 
   private loadTrack(): void {
     this.isLoading = true;
-    this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe({
       next: (courses) => {
         const targetSlug = (this.slug || '').replace(/-+/g, '-');
         this.track = courses.find(t => getTrackSlug(t.title).replace(/-+/g, '-') === targetSlug);

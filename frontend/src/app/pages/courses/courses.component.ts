@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { getTrackSlug } from '../../data/mastery-tracks.data';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-courses',
@@ -122,7 +123,7 @@ export class CoursesComponent implements OnInit {
         formData.append('courseTitle', courseTitle);
         formData.append('moduleName', moduleName);
 
-        this.http.post('http://localhost:5001/api/upload/project', formData).subscribe({
+        this.http.post(`${environment.apiUrl}/upload/project`, formData).subscribe({
           next: (res: any) => {
             alert(`Project "${file.name}" uploaded successfully for ${moduleName}!`);
             if (lesson) {
@@ -231,7 +232,7 @@ export class CoursesComponent implements OnInit {
     const dbId = localStorage.getItem('openChallengeRegistrationDbId');
     if (!dbId) return;
     this.profileLoading = true;
-    this.http.get<any>(`http://localhost:5001/api/challenges/registration/${dbId}`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/challenges/registration/${dbId}`).subscribe({
       next: (data) => {
         this.profile = data;
         this.profileLoading = false;
@@ -264,15 +265,15 @@ export class CoursesComponent implements OnInit {
   fetchCourses(): void {
     const userId = this.getCurrentUserId();
     
-    this.http.get<any[]>('http://localhost:5001/api/admin/documents').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/admin/documents`).subscribe({
       next: (docs) => { this.adminDocuments = docs || []; },
       error: () => { this.adminDocuments = []; }
     });
 
-    this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe({
       next: (allCourses) => {
         if (userId) {
-          this.http.get<any>(`http://localhost:5001/api/challenges/registration/${userId}`).subscribe({
+          this.http.get<any>(`${environment.apiUrl}/challenges/registration/${userId}`).subscribe({
             next: (reg) => {
               if (reg?.challenge_name) {
                 const names = reg.challenge_name.split(',').map((n: string) => n.trim());

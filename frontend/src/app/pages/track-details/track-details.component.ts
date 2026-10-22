@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { getTrackSlug } from '../../data/mastery-tracks.data';
 import { RegistrationFormComponent } from '../../components/registration-form/registration-form.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-track-details',
@@ -35,7 +36,7 @@ export class TrackDetailsComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.slug = params.get('slug') || '';
       
-      this.http.get<any[]>('http://localhost:5001/api/courses').subscribe({
+      this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe({
         next: (courses) => {
           const targetSlug = (this.slug || '').replace(/-+/g, '-');
           this.track = courses.find(t => getTrackSlug(t.title).replace(/-+/g, '-') === targetSlug);
