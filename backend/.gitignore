@@ -1,4 +1,10 @@
 # Node
 /node_modules
 
+# Uploads
 uploads/
+
+# Environment variables
+.env
+.env.*
+!.env.example
