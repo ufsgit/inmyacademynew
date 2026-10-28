@@ -158,19 +158,13 @@ export class TrackDetailsComponent implements OnInit {
   }
 
   purchaseCourse(): void {
-    const userId = this.getCurrentUserId();
-    if (!userId) {
-      console.warn('Cannot purchase course without a logged-in user');
-      return;
-    }
-
-    const purchased = this.getPurchasedCourses();
-    if (!purchased.includes(this.slug)) {
-      purchased.push(this.slug);
-      localStorage.setItem(`purchasedCourses-${userId}`, JSON.stringify(purchased));
-    }
-    this.loadTrackState();
     this.router.navigate([], { queryParams: { register: 'true' } });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  exitRegistration(): void {
+    this.registerOnly = false;
+    this.router.navigate([], { queryParams: {} });
   }
 
   goBack(): void {

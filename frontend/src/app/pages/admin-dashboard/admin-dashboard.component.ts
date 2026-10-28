@@ -59,6 +59,7 @@ export class AdminDashboardComponent implements OnInit {
   @ViewChild('editorRef') editorRef!: ElementRef;
   @ViewChild('lessonVideoUploadInput') lessonVideoUploadInput!: ElementRef<HTMLInputElement>;
   activeLessonVideoIndex: number | null = null;
+  isUploadingLessonVideo: boolean = false;
 
   newCourseData: any = {
     title: 'New Course',
@@ -110,19 +111,37 @@ export class AdminDashboardComponent implements OnInit {
     this.isLoading = true;
     const apiUrl = `${environment.apiUrl}/admin`;
     
-    this.http.get(`${apiUrl}/stats`).subscribe((data: any) => {
-      this.stats = data;
-      this.checkLoading();
+    this.http.get(`${apiUrl}/stats`).subscribe({
+      next: (data: any) => {
+        this.stats = data;
+        this.checkLoading();
+      },
+      error: (err) => {
+        console.error('Error fetching stats:', err);
+        this.checkLoading();
+      }
     });
 
-    this.http.get(`${apiUrl}/registrations`).subscribe((data: any) => {
-      this.registrations = data;
-      this.checkLoading();
+    this.http.get(`${apiUrl}/registrations`).subscribe({
+      next: (data: any) => {
+        this.registrations = data;
+        this.checkLoading();
+      },
+      error: (err) => {
+        console.error('Error fetching registrations:', err);
+        this.checkLoading();
+      }
     });
 
-    this.http.get(`${apiUrl}/users`).subscribe((data: any) => {
-      this.users = data;
-      this.checkLoading();
+    this.http.get(`${apiUrl}/users`).subscribe({
+      next: (data: any) => {
+        this.users = data;
+        this.checkLoading();
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+        this.checkLoading();
+      }
     });
 
     this.fetchCourses();
@@ -245,9 +264,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   checkLoading() {
-    if (this.stats && this.registrations && this.users) {
-      this.isLoading = false;
-    }
+    this.isLoading = false;
   }
 
   sanitizeHtml(html: string): SafeHtml {
@@ -430,6 +447,17 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  getAttachedVideosCount(): number {
+    if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) return 0;
+    return this.selectedCourseForTopic.lessons.filter((l: any) => !!l.video).length;
+  }
+
+  removeLessonVideo(index: number) {
+    if (this.selectedCourseForTopic && Array.isArray(this.selectedCourseForTopic.lessons) && this.selectedCourseForTopic.lessons[index]) {
+      this.selectedCourseForTopic.lessons[index].video = '';
+    }
+  }
+
   onTopicLessonVideoUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -441,15 +469,21 @@ export class AdminDashboardComponent implements OnInit {
     formData.append('file', file);
 
     const lessonIndex = this.activeLessonVideoIndex;
+    this.isUploadingLessonVideo = true;
+
     this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
       next: (response) => {
-        if (lessonIndex !== null) {
-          this.selectedCourseForTopic.lessons[lessonIndex].video = response.url;
+        if (lessonIndex !== null && this.selectedCourseForTopic && Array.isArray(this.selectedCourseForTopic.lessons)) {
+          if (this.selectedCourseForTopic.lessons[lessonIndex]) {
+            this.selectedCourseForTopic.lessons[lessonIndex].video = response.url;
+          }
         }
         this.activeLessonVideoIndex = null;
+        this.isUploadingLessonVideo = false;
         input.value = '';
       },
       error: (err) => {
+        this.isUploadingLessonVideo = false;
         console.error('Failed to upload topic lesson video', err);
         alert('Failed to upload lesson video');
       }
@@ -518,7 +552,9 @@ export class AdminDashboardComponent implements OnInit {
       duration_mins: Number(this.selectedCourseForTopic.duration_mins) || 0,
       materials_included: this.selectedCourseForTopic.materials_included || '',
       requirements: this.selectedCourseForTopic.requirements || '',
-      lectures: Number(this.selectedCourseForTopic.lectures) || 0,
+      lectures: (this.selectedCourseForTopic.lessons && this.selectedCourseForTopic.lessons.length) 
+        ? this.selectedCourseForTopic.lessons.length 
+        : (Number(this.selectedCourseForTopic.lectures) || 0),
       students_max: Number(this.selectedCourseForTopic.students_max) || 0,
       level: this.selectedCourseForTopic.level || 'All Levels',
       language: this.selectedCourseForTopic.language || 'English',
@@ -839,6 +875,11 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  getSlug(title: string): string {
+    if (!title) return '';
+    return title.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+  }
+
   viewCourse(course: any) {
     this.selectedCourse = { ...course };
     if (this.selectedCourse && typeof this.selectedCourse.lessons === 'string') {
@@ -852,6 +893,7 @@ export class AdminDashboardComponent implements OnInit {
     if (!Array.isArray(this.selectedCourse.lessons)) {
       this.selectedCourse.lessons = [];
     }
+    this.isAddingCourse = false;
     this.isViewingCourse = true;
   }
 

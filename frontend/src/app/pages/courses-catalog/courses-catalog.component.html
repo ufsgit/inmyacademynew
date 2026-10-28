@@ -24,7 +24,7 @@
             <div class="course-card-top-row">
               <div>
                 <h3 class="course-card-title">{{ course.title }}</h3>
-                <p class="course-card-lessons">{{ course.lessons }} Lessons</p>
+                <p class="course-card-lessons">{{ getLessonCount(course) }} {{ getLessonCount(course) === 1 ? 'Lesson' : 'Lessons' }}</p>
               </div>
             </div>
 

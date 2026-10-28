@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-mastery-battles',
@@ -9,7 +11,8 @@ import { RouterModule } from '@angular/router';
   templateUrl: './mastery-battles.component.html',
   styleUrls: ['./mastery-battles.component.css']
 })
-export class MasteryBattlesComponent {
+export class MasteryBattlesComponent implements OnInit {
+  private http = inject(HttpClient);
   tracks = [
     {
       id: 1,
@@ -122,6 +125,46 @@ export class MasteryBattlesComponent {
     'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', // Document / Certificate
     'M17 21v-2a4 4 0 00-3-3.87M7 21v-2a4 4 0 013-3.87M12 14a4 4 0 100-8 4 4 0 000 8z' // People / Sponsorship
   ];
+
+  ngOnInit(): void {
+    this.fetchTracks();
+  }
+
+  fetchTracks(): void {
+    this.http.get<any[]>(`${environment.apiUrl}/courses`).subscribe({
+      next: (apiTracks) => {
+        if (Array.isArray(apiTracks) && apiTracks.length > 0) {
+          this.tracks = apiTracks.map(t => {
+            const defaultMatch = this.tracks.find(
+              dt => dt.title.trim().toLowerCase() === t.title.trim().toLowerCase()
+            );
+            return {
+              ...defaultMatch,
+              ...t,
+              id: t.id,
+              title: t.title,
+              description: t.description || defaultMatch?.description || '',
+              image: t.image || defaultMatch?.image || 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=500&q=80',
+              lectures: this.getLessonCount(t)
+            };
+          });
+        }
+      },
+      error: (err) => console.error('Failed to fetch tracks:', err)
+    });
+  }
+
+  getLessonCount(track: any): number {
+    if (!track) return 0;
+    if (Array.isArray(track.lessons)) return track.lessons.length;
+    if (typeof track.lessons === 'string' && track.lessons.trim()) {
+      try {
+        const parsed = JSON.parse(track.lessons);
+        if (Array.isArray(parsed)) return parsed.length;
+      } catch {}
+    }
+    return Number(track.lectures) || 0;
+  }
 
   scrollToTracks(): void {
     const el = document.getElementById('tracks-section');

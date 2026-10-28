@@ -25,11 +25,11 @@ import { filter } from 'rxjs/operators';
             @if (!isDashboardView) {
               <!-- Navigation Links -->
               <div class="flex items-center gap-3 lg:gap-5 xl:gap-6">
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Home</a>
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">About Us</a>
-                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Courses</a>
-                
-                <!-- Dropdown Menu -->
+                <a href="https://inmyacademy.com/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Home</a>
+                <a href="https://inmyacademy.com/about-us/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">About Us</a>
+                                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Courses</a>
+
+                  <!-- Dropdown Menu -->
                 <div class="relative group h-full flex items-center" (mouseenter)="isDropdownOpen = true" (mouseleave)="isDropdownOpen = false">
                   <button class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors flex items-center gap-1 whitespace-nowrap"
                           (click)="isDropdownOpen = !isDropdownOpen"
@@ -70,9 +70,12 @@ import { filter } from 'rxjs/operators';
                     </div>
                   }
                 </div>
+              
+                <a href="https://inmyacademy.com/blog/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Blog</a>
+                <a href="https://inmyacademy.com/contact/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Contact</a>
+
                 
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Blog</a>
-                <a href="#" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Contact</a>
+              
               </div>
               
               <!-- Action Button -->

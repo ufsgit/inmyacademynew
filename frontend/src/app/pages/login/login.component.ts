@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { getTrackSlug } from '../../data/mastery-tracks.data';
 
 @Component({
   selector: 'app-login',
@@ -183,15 +184,33 @@ export class LoginComponent implements OnInit {
 
       this.http.post(`${environment.apiUrl}/auth/login`, { username, password }).subscribe({
         next: (res: any) => {
-          if (res.role === 'superadmin' || res.role === 'admin') {
+          const user = res.user || {};
+          const userId = (user.id || '1').toString();
+          const fullName = user.fullName || user.username || 'Student';
+          const role = res.role || 'user';
+          const challengeName = user.challengeName || '';
+
+          // Store session data in localStorage
+          localStorage.setItem('currentUserRole', role);
+          localStorage.setItem('openChallengeParticipantName', fullName);
+          localStorage.setItem('openChallengeRegistrationDbId', userId);
+          localStorage.setItem('openChallengeRegistrationId', 'OC-2026-' + userId);
+          localStorage.setItem('userEmail', username);
+          localStorage.setItem('isLoggedIn', 'true');
+
+          if (challengeName) {
+            localStorage.setItem('openChallengeSelectedChallenge', challengeName);
+            const names = challengeName.split(',').map((n: string) => n.trim());
+            const slugs = names.map((name: string) => getTrackSlug(name)).filter(Boolean);
+            if (slugs.length > 0) {
+              localStorage.setItem(`purchasedCourses-${userId}`, JSON.stringify(slugs));
+            }
+          }
+
+          // Redirect admins to Admin Dashboard, students/users to Courses dashboard
+          if (role === 'superadmin' || role === 'admin') {
             this.router.navigate(['/admin/dashboard']);
           } else {
-            // It's a participant
-            localStorage.setItem('openChallengeParticipantName', res.user.fullName);
-            localStorage.setItem('openChallengeSelectedChallenge', res.user.challengeName || 'General Challenge');
-            localStorage.setItem('openChallengeRegistrationId', 'OC-2026-' + res.user.id);
-            localStorage.setItem('openChallengeRegistrationDbId', res.user.id.toString());
-            
             this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
           }
         },

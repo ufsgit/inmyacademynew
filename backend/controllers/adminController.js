@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { deleteFromR2 } = require('../config/r2');
 
 // @desc    Get all registrations
 // @route   GET /api/admin/registrations
@@ -86,7 +87,14 @@ const deleteRegistration = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // Delete related submission first
+        // Delete related submission files from Cloudflare R2
+        const [subs] = await db.query('SELECT video_path, poster_path FROM submissions WHERE registration_id = ?', [id]);
+        for (const sub of subs) {
+            if (sub.video_path) try { await deleteFromR2(sub.video_path); } catch(e) {}
+            if (sub.poster_path) try { await deleteFromR2(sub.poster_path); } catch(e) {}
+        }
+
+        // Delete related submission record
         await db.query('DELETE FROM submissions WHERE registration_id = ?', [id]);
         
         // Delete registration
@@ -118,6 +126,10 @@ const getAllModuleProjects = async (req, res) => {
 const deleteModuleProject = async (req, res) => {
     try {
         const { id } = req.params;
+        const [rows] = await db.query('SELECT file_path FROM module_projects WHERE id = ?', [id]);
+        if (rows.length > 0 && rows[0].file_path) {
+            try { await deleteFromR2(rows[0].file_path); } catch (e) { console.warn('Could not delete R2 object:', e.message); }
+        }
         await db.query('DELETE FROM module_projects WHERE id = ?', [id]);
         res.status(200).json({ message: 'Module project deleted successfully' });
     } catch (error) {
@@ -144,6 +156,10 @@ const getAllAdminDocuments = async (req, res) => {
 const deleteAdminDocument = async (req, res) => {
     try {
         const { id } = req.params;
+        const [rows] = await db.query('SELECT file_path FROM admin_documents WHERE id = ?', [id]);
+        if (rows.length > 0 && rows[0].file_path) {
+            try { await deleteFromR2(rows[0].file_path); } catch (e) { console.warn('Could not delete R2 object:', e.message); }
+        }
         await db.query('DELETE FROM admin_documents WHERE id = ?', [id]);
         res.status(200).json({ message: 'Document deleted successfully' });
     } catch (error) {

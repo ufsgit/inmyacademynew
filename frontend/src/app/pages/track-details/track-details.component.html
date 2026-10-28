@@ -89,7 +89,7 @@
   <div class="sidebar">
     <div class="enroll-card">
       <h3 class="price">{{ track?.pricing === 'Free' ? 'Free' : '$25' }}</h3>
-      <button class="enroll-btn" type="button" (click)="purchaseCourse()">Enroll Now</button>
+      <button class="enroll-btn" type="button" (click)="purchaseCourse()">Enroll Course</button>
       <p class="access-note">{{ track?.pricing === 'Free' ? 'Free access this course' : 'Premium course' }}</p>
     </div>
 
@@ -125,9 +125,14 @@
 </div>
 </div>
 } @else {
-  <app-registration-form 
-    [entryFee]="track?.pricing === 'Free' ? 0 : 25" 
-    [challengeName]="track?.title || 'Course Registration'" 
-    category="Global Mastery Battles">
-  </app-registration-form>
+  <div style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+    <button type="button" class="back-btn" (click)="exitRegistration()" style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; color: #374151;">
+      ← Back to Course Details
+    </button>
+    <app-registration-form 
+      [entryFee]="track?.pricing === 'Free' ? 0 : 25" 
+      [challengeName]="track?.title || 'Course Registration'" 
+      category="Global Mastery Battles">
+    </app-registration-form>
+  </div>
 }

@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const { uploadToR2 } = require('../config/r2');
 
 // @desc    Get all challenges
 // @route   GET /api/challenges
@@ -192,8 +193,26 @@ const uploadEntry = async (req, res) => {
             return res.status(400).json({ message: 'Video file is required.' });
         }
 
-        const videoPath = `/uploads/${videoFile.filename}`;
-        const posterPath = posterFile ? `/uploads/${posterFile.filename}` : null;
+        // Upload video directly to Cloudflare R2
+        const videoResult = await uploadToR2({
+            fileBuffer: videoFile.buffer,
+            originalName: videoFile.originalname,
+            mimeType: videoFile.mimetype,
+            folder: 'challenges/videos'
+        });
+        const videoPath = videoResult.url;
+
+        // Upload poster if provided
+        let posterPath = null;
+        if (posterFile) {
+            const posterResult = await uploadToR2({
+                fileBuffer: posterFile.buffer,
+                originalName: posterFile.originalname,
+                mimeType: posterFile.mimetype,
+                folder: 'challenges/posters'
+            });
+            posterPath = posterResult.url;
+        }
 
         const checkQuery = `SELECT id FROM submissions WHERE registration_id = ?`;
         const [existing] = await db.query(checkQuery, [registrationId]);
@@ -224,10 +243,10 @@ const uploadEntry = async (req, res) => {
             await db.query(insertQuery, [registrationId, videoPath, posterPath, summary, challengeName, category]);
         }
 
-        res.status(200).json({ message: 'Entry uploaded successfully!' });
+        res.status(200).json({ message: 'Entry uploaded successfully!', videoUrl: videoPath, posterUrl: posterPath });
     } catch (error) {
-        console.error('Error uploading entry:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Error uploading entry to Cloudflare R2:', error);
+        res.status(500).json({ message: 'Server error: ' + error.message });
     }
 };
 

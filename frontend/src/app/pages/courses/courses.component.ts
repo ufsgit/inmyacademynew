@@ -305,9 +305,12 @@ export class CoursesComponent implements OnInit {
   }
 
   private applyCourseMapping(allCourses: any[]): void {
+    const userRole = localStorage.getItem('currentUserRole');
+    const isAdmin = userRole === 'admin' || userRole === 'superadmin';
+
     this.courses = allCourses.map(course => {
       const slug = getTrackSlug(course.title);
-      const isPurchased = this.purchasedCourseSlugs.some(pSlug => {
+      const isPurchased = isAdmin || this.purchasedCourseSlugs.some(pSlug => {
         return pSlug === slug || pSlug.replace(/-+/g, '-') === slug.replace(/-+/g, '-');
       });
 
