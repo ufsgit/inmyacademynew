@@ -176,6 +176,6 @@ export class LearningLessonsComponent implements OnInit {
   }
 
   get backLink(): string[] {
-    return ['/skillstorm/tracks', this.slug];
+    return ['/tracks', this.slug];
   }
 }

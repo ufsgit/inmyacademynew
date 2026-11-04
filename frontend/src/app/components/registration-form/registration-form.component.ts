@@ -421,7 +421,7 @@ export class RegistrationFormComponent implements OnInit {
             if (this.entryFee === 25) {
               this.router.navigate(['/courses'], { queryParams: { tab: 'enrolled' } });
             } else {
-              this.router.navigate(['/skillstorm/open-challenges-dashboard']);
+              this.router.navigate(['/open-challenges-dashboard']);
             }
           }, 1000);
         },

@@ -29,7 +29,7 @@ interface Team {
       <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
         
         <!-- Logo -->
-        <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" routerLink="/skillstorm/open-challenges">
+        <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" routerLink="/open-challenges">
           <div style="width: 32px; height: 32px; background: #D32F2F; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-weight: 900; font-size: 18px;">
             S
           </div>
@@ -56,7 +56,7 @@ interface Team {
       <div style="max-width: 1000px; margin: 0 auto;">
         
         <!-- Back Link -->
-        <a routerLink="/skillstorm/school-competitions" style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #D32F2F; text-decoration: none; margin-bottom: 24px;">
+        <a routerLink="/school-competitions" style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #D32F2F; text-decoration: none; margin-bottom: 24px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back to School Competitions
         </a>

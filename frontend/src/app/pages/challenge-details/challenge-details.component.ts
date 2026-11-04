@@ -92,9 +92,9 @@ export class ChallengeDetailsComponent implements OnInit {
 
   goBack(): void {
     if (this.challenge && this.challenge.entryFee === 25) {
-      this.router.navigate(['/skillstorm/mastery-battles']);
+      this.router.navigate(['/mastery-battles']);
     } else {
-      this.router.navigate(['/skillstorm/open-challenges']);
+      this.router.navigate(['/open-challenges']);
     }
   }
 }

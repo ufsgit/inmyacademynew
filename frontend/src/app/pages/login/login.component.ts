@@ -77,7 +77,7 @@ import { getTrackSlug } from '../../data/mastery-tracks.data';
         <!-- Don't have an account Row -->
         <div style="margin-top: 28px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; color: #666666;">
           <span>Don't have an account?</span>
-          <button type="button" routerLink="/skillstorm/open-challenges" class="simple-link">
+          <button type="button" routerLink="/open-challenges" class="simple-link">
             Register Now
           </button>
         </div>

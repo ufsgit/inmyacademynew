@@ -29,8 +29,8 @@ export class AppComponent {
       const url = event.urlAfterRedirects || event.url;
       const hideRoutes = [
         '/login',
-        '/skillstorm/registration-wizard',
-        '/skillstorm/school-dashboard',
+        '/registration-wizard',
+        '/school-dashboard',
         '/admin/dashboard'
       ];
       this.showNavbar = !hideRoutes.some(route => url.includes(route));

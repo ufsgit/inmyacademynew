@@ -124,7 +124,7 @@
 
             @if (purchasedCourses.length === 0) {
               <div class="status-block">
-                <p>No enrolled courses yet. <a routerLink="/skillstorm/mastery-battles" style="color:#7c3aed;font-weight:700;">Enroll in a mastery course</a> to get started.</p>
+                <p>No enrolled courses yet. <a routerLink="/mastery-battles" style="color:#7c3aed;font-weight:700;">Enroll in a mastery course</a> to get started.</p>
               </div>
             }
 
@@ -263,7 +263,7 @@
             <div class="status-block"><p>Loading profile...</p></div>
           } @else if (!profile) {
             <div class="status-block">
-              <p>No profile found. Please <a routerLink="/skillstorm/mastery-battles" style="color:#7c3aed; font-weight:700;">register for a course</a> first.</p>
+              <p>No profile found. Please <a routerLink="/mastery-battles" style="color:#7c3aed; font-weight:700;">register for a course</a> first.</p>
             </div>
           } @else {
             <div class="profile-card">

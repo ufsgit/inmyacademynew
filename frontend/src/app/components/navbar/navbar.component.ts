@@ -27,7 +27,7 @@ import { filter } from 'rxjs/operators';
               <div class="flex items-center gap-3 lg:gap-5 xl:gap-6">
                 <a href="https://inmyacademy.com/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Home</a>
                 <a href="https://inmyacademy.com/about-us/" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">About Us</a>
-                                <a routerLink="/skillstorm/courses" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Courses</a>
+                                <a routerLink="/courses-catalog" class="text-gray-800 hover:text-[#2D3192] font-bold text-[14px] lg:text-[15px] xl:text-[16px] transition-colors whitespace-nowrap">Courses</a>
 
                   <!-- Dropdown Menu -->
                 <div class="relative group h-full flex items-center" (mouseenter)="isDropdownOpen = true" (mouseleave)="isDropdownOpen = false">
@@ -42,25 +42,25 @@ import { filter } from 'rxjs/operators';
                   @if (isDropdownOpen) {
                     <div style="position:absolute; left:0; top:100%; width:260px; background:#ffffff; border-radius:0; box-shadow:0 8px 24px rgba(0,0,0,0.15); overflow:hidden; z-index:10000;">
                       <div style="display:flex; flex-direction:column;">
-                        <a routerLink="/skillstorm/open-challenges"
+                        <a routerLink="/open-challenges"
                            routerLinkActive="active-nav-link"
                            [routerLinkActiveOptions]="{exact: true}"
                            class="nav-dropdown-link">
                            Global Open Challenges
                         </a>
-                        <a routerLink="/skillstorm/mastery-battles"
+                        <a routerLink="/mastery-battles"
                            routerLinkActive="active-nav-link"
                            [routerLinkActiveOptions]="{exact: true}"
                            class="nav-dropdown-link">
                            Global Mastery Battles
                         </a>
-                        <a routerLink="/skillstorm/school-competitions"
+                        <a routerLink="/school-competitions"
                            routerLinkActive="active-nav-link"
                            [routerLinkActiveOptions]="{exact: true}"
                            class="nav-dropdown-link">
                            Global School Competitions
                         </a>
-                        <a routerLink="/skillstorm/leaderboard"
+                        <a routerLink="/skillstorm-leaderboard"
                            routerLinkActive="active-nav-link"
                            [routerLinkActiveOptions]="{exact: true}"
                            class="nav-dropdown-link">
@@ -109,15 +109,15 @@ import { filter } from 'rxjs/operators';
            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
              @if (!isDashboardView) {
                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
-               <a routerLink="/skillstorm/courses" (click)="isMobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Courses</a>
+               <a routerLink="/courses-catalog" (click)="isMobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Courses</a>
                
                <div class="px-3 py-2">
                  <div class="text-base font-medium text-gray-900 mb-2">SkillStorm Global Competitions</div>
                  <div class="pl-4 space-y-2 border-l-2 border-gray-200">
-                   <a routerLink="/skillstorm/open-challenges" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Open Challenges</a>
-                   <a routerLink="/skillstorm/mastery-battles" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Mastery Battles</a>
-                   <a routerLink="/skillstorm/school-competitions" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global School Competitions</a>
-                   <a routerLink="/skillstorm/leaderboard" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">SkillStorm Global Leaderboard</a>
+                   <a routerLink="/open-challenges" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Open Challenges</a>
+                   <a routerLink="/mastery-battles" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global Mastery Battles</a>
+                   <a routerLink="/school-competitions" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">Global School Competitions</a>
+                   <a routerLink="/skillstorm-leaderboard" class="block text-sm text-gray-600 hover:text-blue-600" (click)="isMobileMenuOpen = false">SkillStorm Global Leaderboard</a>
                  </div>
                </div>
                

@@ -358,7 +358,12 @@ export class AdminDashboardComponent implements OnInit {
     video: '',
     image: ''
   };
-  
+
+  // Module builder state
+  expandedModules: Set<number> = new Set();
+  activeModuleVideoIndex: number | null = null;
+  activeSyllabusVideoIndex: number | null = null;
+
   selectedCourseForTopic: any = null;
   selectedCourseForAdditional: any = null;
   viewingAdditionalCourse: any = null;
@@ -389,12 +394,33 @@ export class AdminDashboardComponent implements OnInit {
       this.selectedCourseForTopic.lessons = [];
     }
 
-    const firstLesson = Array.isArray(this.selectedCourseForTopic.lessons)
-      ? this.selectedCourseForTopic.lessons.find((lesson: any) => lesson.image)
-      : null;
-    const firstLessonImage = firstLesson ? firstLesson.image : '';
-    this.selectedCourseForTopic.displayImage = firstLessonImage || this.selectedCourseForTopic.image || '';
-    this.isAddingTopic = false; // Reset to empty state when selecting
+    // Backwards-compat: migrate old flat lesson format [{title, duration, syllabus, video}]
+    // to new module format [{moduleTitle, syllabusItems:[...]}]
+    if (
+      this.selectedCourseForTopic.lessons.length > 0 &&
+      this.selectedCourseForTopic.lessons[0] !== null &&
+      typeof this.selectedCourseForTopic.lessons[0] === 'object' &&
+      !this.selectedCourseForTopic.lessons[0].hasOwnProperty('moduleTitle')
+    ) {
+      const oldLessons = this.selectedCourseForTopic.lessons;
+      this.selectedCourseForTopic.lessons = [
+        {
+          moduleTitle: 'Module 1',
+          syllabusItems: oldLessons.map((l: any) => ({
+            title: l.title || '',
+            duration: l.duration || '',
+            description: l.syllabus || l.description || '',
+            video: l.video || ''
+          }))
+        }
+      ];
+    }
+
+    // Expand all modules by default
+    this.expandedModules = new Set(
+      this.selectedCourseForTopic.lessons.map((_: any, i: number) => i)
+    );
+    this.isAddingTopic = false;
   }
 
   selectCourseForAdditional(course: any) {
@@ -402,22 +428,66 @@ export class AdminDashboardComponent implements OnInit {
     // We could pre-fill additionalData here if it was fetched from the backend
   }
 
-  addTopicLessonTab() {
-    if (!this.selectedCourseForTopic) {
-      return;
-    }
+  // ── Module-level operations ──────────────────────────────
 
+  addModule() {
+    if (!this.selectedCourseForTopic) return;
     if (!Array.isArray(this.selectedCourseForTopic.lessons)) {
       this.selectedCourseForTopic.lessons = [];
     }
-
+    const newIndex = this.selectedCourseForTopic.lessons.length;
     this.selectedCourseForTopic.lessons.push({
-      title: '',
-      duration: '',
-      syllabus: '',
-      video: '',
-      image: ''
+      moduleTitle: `Module ${newIndex + 1}`,
+      syllabusItems: []
     });
+    this.expandedModules.add(newIndex);
+  }
+
+  removeModule(moduleIndex: number) {
+    if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) return;
+    this.selectedCourseForTopic.lessons.splice(moduleIndex, 1);
+    // Rebuild expanded set
+    const newExpanded = new Set<number>();
+    this.expandedModules.forEach(i => { if (i < moduleIndex) newExpanded.add(i); else if (i > moduleIndex) newExpanded.add(i - 1); });
+    this.expandedModules = newExpanded;
+  }
+
+  toggleModule(moduleIndex: number) {
+    if (this.expandedModules.has(moduleIndex)) {
+      this.expandedModules.delete(moduleIndex);
+    } else {
+      this.expandedModules.add(moduleIndex);
+    }
+  }
+
+  isModuleExpanded(moduleIndex: number): boolean {
+    return this.expandedModules.has(moduleIndex);
+  }
+
+  // ── Syllabus Item operations ─────────────────────────────
+
+  addSyllabusItem(moduleIndex: number) {
+    if (!this.selectedCourseForTopic) return;
+    const mod = this.selectedCourseForTopic.lessons[moduleIndex];
+    if (!mod) return;
+    if (!Array.isArray(mod.syllabusItems)) mod.syllabusItems = [];
+    mod.syllabusItems.push({ title: '', duration: '', description: '', video: '' });
+  }
+
+  removeSyllabusItem(moduleIndex: number, itemIndex: number) {
+    if (!this.selectedCourseForTopic) return;
+    const mod = this.selectedCourseForTopic.lessons[moduleIndex];
+    if (!mod || !Array.isArray(mod.syllabusItems)) return;
+    mod.syllabusItems.splice(itemIndex, 1);
+  }
+
+  // Legacy method kept for backward compat calls in HTML
+  addTopicLessonTab() {
+    this.addModule();
+  }
+
+  removeTopicLesson(index: number) {
+    this.removeModule(index);
   }
 
   toggleAddTopic(val: boolean) {
@@ -432,12 +502,7 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  removeTopicLesson(index: number) {
-    if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) {
-      return;
-    }
-    this.selectedCourseForTopic.lessons.splice(index, 1);
-  }
+
 
   openTopicLessonVideoUploader(index: number) {
     this.activeLessonVideoIndex = index;
@@ -447,9 +512,58 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  // New: open uploader for a specific syllabus item within a module
+  openSyllabusVideoUploader(moduleIndex: number, itemIndex: number) {
+    // encode both indices into a single number for the legacy upload handler
+    this.activeModuleVideoIndex = moduleIndex;
+    this.activeSyllabusVideoIndex = itemIndex;
+    if (this.lessonVideoUploadInput?.nativeElement) {
+      this.lessonVideoUploadInput.nativeElement.value = '';
+      this.lessonVideoUploadInput.nativeElement.click();
+    }
+  }
+
+  removeSyllabusVideo(moduleIndex: number, itemIndex: number) {
+    const mod = this.selectedCourseForTopic?.lessons?.[moduleIndex];
+    if (mod && Array.isArray(mod.syllabusItems) && mod.syllabusItems[itemIndex]) {
+      mod.syllabusItems[itemIndex].video = '';
+    }
+  }
+
   getAttachedVideosCount(): number {
     if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) return 0;
-    return this.selectedCourseForTopic.lessons.filter((l: any) => !!l.video).length;
+    let count = 0;
+    for (const mod of this.selectedCourseForTopic.lessons) {
+      if (Array.isArray(mod.syllabusItems)) {
+        count += mod.syllabusItems.filter((s: any) => !!s.video).length;
+      }
+    }
+    return count;
+  }
+
+  getModulesCount(): number {
+    if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) return 0;
+    return this.selectedCourseForTopic.lessons.length;
+  }
+
+  getTotalSyllabusCount(): number {
+    if (!this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) return 0;
+    let count = 0;
+    for (const mod of this.selectedCourseForTopic.lessons) {
+      if (Array.isArray(mod.syllabusItems)) count += mod.syllabusItems.length;
+    }
+    return count;
+  }
+
+  isUploadingForModule(moduleIndex: number, itemIndex: number): boolean {
+    return this.isUploadingLessonVideo &&
+      this.activeModuleVideoIndex === moduleIndex &&
+      this.activeSyllabusVideoIndex === itemIndex;
+  }
+
+  hasModuleVideos(mod: any): boolean {
+    if (!mod || !Array.isArray(mod.syllabusItems)) return false;
+    return mod.syllabusItems.some((s: any) => s.video && s.video.startsWith('http'));
   }
 
   removeLessonVideo(index: number) {
@@ -461,23 +575,25 @@ export class AdminDashboardComponent implements OnInit {
   onTopicLessonVideoUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (!file || this.activeLessonVideoIndex === null || !this.selectedCourseForTopic || !Array.isArray(this.selectedCourseForTopic.lessons)) {
-      return;
-    }
+    if (!file || !this.selectedCourseForTopic) return;
 
     const formData = new FormData();
     formData.append('file', file);
 
-    const lessonIndex = this.activeLessonVideoIndex;
+    const modIdx = this.activeModuleVideoIndex;
+    const sylIdx = this.activeSyllabusVideoIndex;
     this.isUploadingLessonVideo = true;
 
     this.http.post<any>(`${environment.apiUrl}/upload`, formData).subscribe({
       next: (response) => {
-        if (lessonIndex !== null && this.selectedCourseForTopic && Array.isArray(this.selectedCourseForTopic.lessons)) {
-          if (this.selectedCourseForTopic.lessons[lessonIndex]) {
-            this.selectedCourseForTopic.lessons[lessonIndex].video = response.url;
+        if (modIdx !== null && sylIdx !== null) {
+          const mod = this.selectedCourseForTopic?.lessons?.[modIdx];
+          if (mod && Array.isArray(mod.syllabusItems) && mod.syllabusItems[sylIdx]) {
+            mod.syllabusItems[sylIdx].video = response.url;
           }
         }
+        this.activeModuleVideoIndex = null;
+        this.activeSyllabusVideoIndex = null;
         this.activeLessonVideoIndex = null;
         this.isUploadingLessonVideo = false;
         input.value = '';
@@ -552,9 +668,7 @@ export class AdminDashboardComponent implements OnInit {
       duration_mins: Number(this.selectedCourseForTopic.duration_mins) || 0,
       materials_included: this.selectedCourseForTopic.materials_included || '',
       requirements: this.selectedCourseForTopic.requirements || '',
-      lectures: (this.selectedCourseForTopic.lessons && this.selectedCourseForTopic.lessons.length) 
-        ? this.selectedCourseForTopic.lessons.length 
-        : (Number(this.selectedCourseForTopic.lectures) || 0),
+      lectures: this.getTotalSyllabusCount() || Number(this.selectedCourseForTopic.lectures) || 0,
       students_max: Number(this.selectedCourseForTopic.students_max) || 0,
       level: this.selectedCourseForTopic.level || 'All Levels',
       language: this.selectedCourseForTopic.language || 'English',

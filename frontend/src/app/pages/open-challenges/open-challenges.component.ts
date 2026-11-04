@@ -79,7 +79,7 @@ export class OpenChallengesComponent {
 
   enterChallenge(challenge: any) {
     this.router.navigate([
-      '/skillstorm/challenges',
+      '/challenges',
       challenge.slug
     ]);
   }
