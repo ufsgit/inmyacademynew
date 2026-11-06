@@ -1159,7 +1159,7 @@
                   </div>
 
                   <!-- Module Cards List -->
-                  <div *ngFor="let mod of selectedCourseForTopic.lessons; let mi = index" class="tb-module-card">
+                  <div *ngFor="let mod of selectedCourseForTopic.lessons; let mi = index" class="tb-module-card" [id]="'module-card-' + mi">
 
                     <!-- Module Header (always visible) -->
                     <div class="tb-module-header" (click)="toggleModule(mi)">
@@ -1169,6 +1169,7 @@
                           <span class="tb-card-sublabel">MODULE {{ mi + 1 }}</span>
                           <input type="text"
                                  class="tb-module-title-input"
+                                 [id]="'module-title-input-' + mi"
                                  [(ngModel)]="mod.moduleTitle"
                                  placeholder="e.g. Module 1: Introduction"
                                  (click)="$event.stopPropagation()" />

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/environments/environment.ts"],
+  "sourcesContent": ["export const environment = {\r\n  production: false,\r\n\r\n  apiUrl: 'http://localhost:4401/api',\r\n  // uploadsUrl: 'http://localhost:5001/uploads',\r\n  // apiUrl: 'https://inmyacademyapi.ufstech.co.in/api',\r\n  uploadsUrl: 'https://storage.ufstech.co.in'\r\n};\r\n"],
+  "mappings": ";AAAO,IAAM,cAAc;EACzB,YAAY;EAEZ,QAAQ;;;EAGR,YAAY;;",
+  "names": []
+}

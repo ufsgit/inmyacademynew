@@ -441,6 +441,22 @@ export class AdminDashboardComponent implements OnInit {
       syllabusItems: []
     });
     this.expandedModules.add(newIndex);
+
+    // Automatically redirect and scroll to the newly created module
+    setTimeout(() => {
+      const moduleCard = document.getElementById(`module-card-${newIndex}`);
+      if (moduleCard) {
+        moduleCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        moduleCard.classList.add('newly-created');
+        setTimeout(() => moduleCard.classList.remove('newly-created'), 2500);
+
+        const titleInput = document.getElementById(`module-title-input-${newIndex}`) as HTMLInputElement | null;
+        if (titleInput) {
+          titleInput.focus();
+          titleInput.select();
+        }
+      }
+    }, 100);
   }
 
   removeModule(moduleIndex: number) {
